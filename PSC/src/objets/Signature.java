@@ -18,11 +18,11 @@ public class Signature {
 
 	public Signature() {
 		
-		// Initialiser à false si MAC OS X + Tongseng
+		// Initialiser a false si MAC OS X + Tongseng
 		boolean Windows = false;
 		
 		if (Windows == true){
-		//Variables utilisées lors de l'enregistrement
+		//Variables utilisees lors de l'enregistrement
 		LinkedList<Coordonnees> positions, vitesse;
 		LinkedList<Long> temps;
 	    positions = new LinkedList<Coordonnees>();
@@ -33,13 +33,13 @@ public class Signature {
 		Pave pave = new PaveScreen();
 		
 		
-		//On attend que l'utilisateur pose son doigt sur le pav�
+		//On attend que l'utilisateur pose son doigt sur le pavé
 		while(!pave.pose()){
 			attendre(10);
 		}
 		Coordonnees p, l= new Coordonnees(0,0);
 		long t0 = System.currentTimeMillis();
-		//On enregistre le trac� tant que le doigt est sur le pav�
+		//On enregistre le trace tant que le doigt est sur le pave
 		while(pave.pose()){
 			
 			p=pave.position();
@@ -52,7 +52,7 @@ public class Signature {
 			attendre(1);
 		}
 		
-		// On enregistre les vecteurs vitesse � partir de calculs effectu�s sur positions et temps
+		// On enregistre les vecteurs vitesse a partir de calculs effectues sur positions et temps
 		boolean premier = true;
 		Coordonnees c;
 		for (int i=0; i<positions.size();i++) {
@@ -67,11 +67,11 @@ public class Signature {
 		}
 		vitesse.addLast(new Coordonnees(0,0));
 						
-		//On supprime le pav� cr�� pour la saisie d'une nouvelle signature
+		//On supprime le pave cree pour la saisie d'une nouvelle signature
 		pave.destroy();
 		
 				
-		//Initialisation du champ donnees, caract�ristique de la signature
+		//Initialisation du champ donnees, caracteristique de la signature
 		this.donnees = new DonneesPoint[temps.size()];
 		for (int i=0; i<this.donnees.length;i++) {
 			int j = donnees.length - i-1;
@@ -93,11 +93,11 @@ public class Signature {
 			while (demo.getY() == 0) {
 				attendre(1);
 			}
-			System.out.print("caca");
 			client.disconnect();
 			this.donnees=demo.getSignature();
 			
 			this.recalibrerDonnees();
+			this.calculs();
 		}
 	}
 	
@@ -106,14 +106,12 @@ public class Signature {
 	}
 
 	
-//Fonction d'attente pour éviter boucle infinie
+//Fonction d'attente pour eviter boucle infinie
 	void attendre(long t) {
 		
 		try {
 			Thread.sleep(t);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -136,7 +134,7 @@ public class Signature {
 	}
 	
 	public void calculs() {
-		// D�claration des variables
+		// Declaration des variables
 		double M = 0, distanceEqui = 0;
 		DonneesPoint[] temp = new DonneesPoint[N];
 		
