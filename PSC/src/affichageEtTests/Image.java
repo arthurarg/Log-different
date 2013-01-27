@@ -3,6 +3,14 @@ import java.awt.image.BufferedImage;
 
 import objets.Coordonnees;
 
+
+/* Classe Image
+ * ---------------
+ * Role : 
+ * --------------
+ */
+
+
 public class Image extends BufferedImage {
 
 	public Image(int width, int height, int imageType) {

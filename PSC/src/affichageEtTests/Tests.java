@@ -1,5 +1,4 @@
 package affichageEtTests;
-import gestionIO.Enregistrement;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,6 +12,13 @@ import objets.Signature;
 
 import comparaison.Analyse;
 
+
+/* Classe Tests
+ * ---------------
+ * Role : Tester des modifications avant le commit (voir le push)
+ *        Demonstration aux autres developpeurs des nouvelles avancees
+ * --------------
+ */
 
 public class Tests {
 

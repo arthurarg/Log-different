@@ -54,6 +54,12 @@ import comparaison.Analyse;
 import java.awt.Color;
 
 
+/* Classe Main
+ * ---------------
+ * Role : Implemente l'interface graphique du programme
+ * --------------
+ */
+
 
 public class Main extends JFrame {
 	
@@ -328,7 +334,7 @@ public class Main extends JFrame {
 		lblScorePositions.setBounds(6, 315, 115, 16);
 		layeredPane_1.add(lblScorePositions);
 		
-		label = new JLabel("θ   -   λ");
+		label = new JLabel("��   -   ��");
 		label.setBounds(6, 338, 61, 16);
 		layeredPane_1.add(label);
 		

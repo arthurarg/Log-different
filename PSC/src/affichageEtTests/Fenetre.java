@@ -8,12 +8,20 @@ import javax.swing.JLabel;
 import objets.Coordonnees;
 import objets.Signature;
 
+
+/* Classe Fenetre
+ * ---------------
+ * Role : Affichage graphique de signatures et/ou de texte
+ * --------------
+ */
+
 public class Fenetre extends JFrame {
 	
 	public int taille_signature, taille;
 	JLabel texte;
 	Image points;
 	
+	//Construit une fenêtre vide, prete a afficher une signature et du texte
 	public Fenetre() {
 		taille=500;
 		this.setTitle("Signatures");
@@ -35,30 +43,23 @@ public class Fenetre extends JFrame {
 		
 		this.getContentPane().add(texte);
 		this.getContentPane().add(new ImageComponent(points));
-		
-		
-		//texte.setVisible(true);//setVisible(true);
 	}
 	
+	//Vide la fenêtre de tout contenu
 	public void vider() {
 		this.getContentPane().removeAll();
 		points=new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
 		this.getContentPane().add(texte);
 		this.getContentPane().add(new ImageComponent(points));
-		
-		//setVisible(true);
 	}
 	
+	//Renvoie l'image de la signature pour affichage
 	Image conversion(Signature s, int rgb){
 		
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
 		
 		Coordonnees l=new Coordonnees(s.donnees[0].x, s.donnees[0].y);
 		
-		//for(Coordonnees x:s.positions){
-			//r.tracerSegment(l.fois(taille_signature), x.fois(taille_signature), rgb);
-			//l=new Coordonnees(x.x, x.y);
-		//}
 		for(int i=0; i<s.donnees.length-1; i++){
 			Coordonnees a = new Coordonnees(s.donnees[i].x, s.donnees[i].y);
 			Coordonnees b = new Coordonnees(s.donnees[i+1].x, s.donnees[i+1].y);
@@ -69,6 +70,8 @@ public class Fenetre extends JFrame {
 		return r;
 	}
 	
+	//Role inconnu
+	//TODO ameliorer le commentaire de la ligne au-dessus
 	Image conversionVariations(Signature s){
 		
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
@@ -97,6 +100,9 @@ public class Fenetre extends JFrame {
 		return r;
 	}
 	
+	
+	//Role inconnu
+	//TODO ameliorer le commentaire de la ligne au-dessus
 	static int couleur(double t){
 		int r, b;
 		
@@ -111,11 +117,14 @@ public class Fenetre extends JFrame {
 		return b+r*0x010000;
 	}
 	
+	
+	//Ajoute la signature a la fenetre, avec la couleur rgb
 	public void ajouter(Signature s, int rgb){
 		this.getContentPane().add(new ImageComponent(conversion(s, rgb)));
 		this.setVisible(true);
 	}
 	
+	//Ajoute la signature a la fenetre, couleur noire
 	public void ajouter(Signature s){
 		ajouter(s, 0xff000000);
 	}
@@ -126,17 +135,11 @@ public class Fenetre extends JFrame {
 	}
 	
 	public void setPixel2(Coordonnees p, int rgb){
-		
 		points.setRGB((int)p.x, (int)p.y, rgb);
-		
-		/*this.getContentPane().add(new ImageComponent(points));
-		this.getContentPane().add(texte);*/
-		
 		this.setVisible(true);
 	}
 	
 	public void setPixel1(Coordonnees p, int rgb){
-		
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
 		r.setRGB((int)p.x, (int)p.y, rgb);
 		this.getContentPane().add(new ImageComponent(r));
@@ -158,6 +161,7 @@ public class Fenetre extends JFrame {
 		this.setVisible(true);
 	}
 	
+	//Affiche du texte dans la fenetre
 	public void setText(String t){
 		texte.setText(t);
 		texte.setVisible(true);

@@ -10,11 +10,18 @@ import objets.DonneesPoint;
 import objets.Signature;
 
 
+/* Classe Enregistrement
+ * ---------------
+ * Role : Gestion du stockage des donnees sur le disque dur (ecriture et lecture)
+ * --------------
+ */
+
+
 public class Enregistrement {
 	public static final String NEW_LINE = System.getProperty("line.separator" );
 	
 	
-	
+	//Enregistre une signature sur le disque dur
 	public static void enregistrer (String login, Signature s) {
 		try {
 			//Ouverture du fichier .txt
@@ -38,16 +45,9 @@ public class Enregistrement {
 		
 	}
 	
-	public static Signature recupererSignature () {
-		Scanner sc = new Scanner(System.in);
-		System.out.print("Veuillez rentrer votre login :");
-		
-		String login = sc.nextLine();
-		return Enregistrement.ouvrir(login);
-	}
-	
+	//Recupere une signature deja enregistree sur le disque dur
 	public static Signature ouvrir (String login) {
-		//D�claration du tableau et variable temporaire de lecture
+		//Declaration du tableau et variable temporaire de lecture
 		DonneesPoint[] tab;
 		String[] nombres;
 		
@@ -80,7 +80,7 @@ public class Enregistrement {
 			return null;
 		}
 		
-		//Cr�ation de la signature a partir du tableau
+		//Creation de la signature a partir du tableau
 		return new Signature(tab);
 	}
 }

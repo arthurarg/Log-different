@@ -6,7 +6,17 @@ import objets.DonneesPoint;
 import objets.Signature;
 
 
+/* Classe Analyse
+ * ---------------
+ * Role : ensemble des fonctions auxiliaires utilisees pour la comparaison de signatures
+ * --------------
+ */
+
+
+
 public class Analyse {
+	//Definition de seuils decomparaisons
+	//TODO Definir seuils et méthode dans la classe Comparaison
 	public static final double angleSeuil = Math.PI/2;
 	public static final double ecartRelatifVitesseMoyenne = 0.50;
 	public static final double ScorePositionsSeuil = 0.9;
@@ -78,11 +88,11 @@ public class Analyse {
 	}
 	
 	
-	//Calcule le score de comparaison point e point
+	//Calcule le score de comparaison point par point
 	public static double scorePositions (Signature sTest, Signature sRef) {
 		double d = 0;
 		int taille = sTest.donnees.length;
-		//On suppose que le traitement-reparsing a deja ete fait
+
 		for (int j=0; j<sTest.donnees.length;j++)
 			d+= sTest.donnees[j].distance(sRef.donnees[j])/(taille*Math.sqrt(2));
 		
@@ -102,18 +112,18 @@ public class Analyse {
 	public static double scoreVitesses (Signature sTest, Signature sRef) {
 		double d = 0;
 		int taille = sTest.donnees.length;
-		//On suppose que le traitement-reparsing a deja ete fait
+		
 		for (int j=0; j<sTest.donnees.length;j++)
 			d+= sTest.donnees[j].differenceVitesses(sRef.donnees[j])/(sTest.donnees[j].normeVitesse()+sRef.donnees[j].normeVitesse());
-			//d+= sTest.donnees[j].distance(sRef.donnees[j])/taille*Math.sqrt(2);
 		
 		return 1-d/taille;
 	}
 	
+	//Calcule le score de temps point par point
 	public static double scoreTemps (Signature sTest, Signature sRef) {
 		double d = 0, a,b;
 		int taille = sTest.donnees.length;
-		//On suppose que le traitement-reparsing a deja �t� fait
+		
 		for (int j=1; j<sTest.donnees.length;j++){
 			a=sTest.donnees[j].t-sTest.donnees[j-1].t;
 			b=sRef.donnees[j].t-sRef.donnees[j-1].t;
@@ -122,7 +132,7 @@ public class Analyse {
 		return 1-d/taille;
 	}
 	
-	//Compare le score des vitesses au seuil d�fini
+	//Compare le score des vitesses au seuil defini
 	public static boolean compareVitesses (Signature sTest, Signature sRef) {
 		if (scoreVitesses (sTest,sRef) > ScoreVitessesSeuil) 
 			return false;
@@ -131,7 +141,7 @@ public class Analyse {
 	}
 	
 
-	//Modifie sRef (coupe des points) et sTest (coupe des points, homothetie, rotation, translation) de sorte que scorePositions soit minimisé
+	//Modifie sRef (coupe des points) et sTest (coupe des points, homothetie, rotation, translation) de sorte que scorePositions soit minimis��
 	public static double[] similitudes(Signature sRef, Signature sTest){
 		sRef.calculs();
 		sTest.calculs();
@@ -150,7 +160,7 @@ public class Analyse {
 	    double[] start = {0, 1, 0, 0, 0, 0};
 	    // convergence tolerance
 	    double ftol = 1e-10;
-	 // initial step sizes
+	    // initial step sizes
         double[] step = {0.2, 0.1, 0.05, 0.05, 0.05, 0.05};
         
 	    // Nelder and Mead minimisation procedure
@@ -172,7 +182,7 @@ public class Analyse {
 	    
 	    // get the minimum value
 	    double minimum = min.getMinimum();	
-	    // valeur des param�tres au minimum
+	    // valeur des param���tres au minimum
 	    double[] param = min.getParamValues();
 	    // resultat
 	    double[] params = {minimum, param[0], param[1], param[2], param[3], param[4], param[5]};
@@ -201,6 +211,8 @@ public class Analyse {
 		return res;
 	}
 	
+	
+	//Renvoi max(a,b)
 	static double max( double a, double b){
 		if(a>=b)
 			return a;

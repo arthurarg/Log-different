@@ -1,5 +1,12 @@
 package objets;
 
+/* Classe DonneesPoint
+ * ---------------
+ * Role : Objet qui regroupe toutes les informations inhérentes a un point
+ * --------------
+ */
+
+
 public class DonneesPoint {
  
 	public double x, y, t, vx, vy;
@@ -16,6 +23,8 @@ public class DonneesPoint {
 	public String toString() {
 		return ("("+this.x + "," + this.y + "," + this.t + "," + this.vx + "," + this.vy +")");
 	}
+	
+	//Renvoie true s'il s'agit du meme point
 	public boolean equals(DonneesPoint c) {
 		return (this.x==c.x && this.y==c.y && this.t==c.t && this.vx==c.vx && this.vy==c.vy);
 	}
@@ -29,11 +38,9 @@ public class DonneesPoint {
 	public double differenceVitesses (DonneesPoint a) {
 		return Math.sqrt(Math.pow(this.vx - a.vx,2) + Math.pow(this.vy - a.vy,2));
 	}
-	
 	public double normeVitesse () {
 		return Math.sqrt(Math.pow(this.vx,2) + Math.pow(this.vy,2));
 	}
-	
 	public double angleVecteurVitesse() {
 		if (this.vx==0)
 			if (this.vy!=0)

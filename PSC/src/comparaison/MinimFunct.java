@@ -4,6 +4,14 @@ import objets.DonneesPoint;
 import objets.Signature;
 import flanagan.math.MinimisationFunction;
 
+
+/* Classe MinimFunct 
+ * ---------------
+ * Role : 
+ * --------------
+ */
+
+
 public class MinimFunct implements MinimisationFunction{
     private Signature sRef;
     private Signature sTest;

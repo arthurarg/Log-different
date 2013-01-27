@@ -4,6 +4,14 @@ import java.util.LinkedList;
 
 import objets.Signature;
 
+
+/* Classe Minuties
+ * ---------------
+ * Role : Recensement des differentes minuties presentes dans une signature
+ * --------------
+ */
+
+
 public class Minuties {
 	double vmax, vmin;
 	Signature s;
@@ -11,6 +19,7 @@ public class Minuties {
 	
 	
 	//Constructeur
+	//TODO Placer cette classe minuties dans le package objets ? Ou pas ?
 	Minuties(Signature s){
 		this.s=s;
 		m=new LinkedList<Integer>();
@@ -27,8 +36,8 @@ public class Minuties {
 	}
 	
 	
-	//Détecte les différentes minuties et les stocke dans this.m
-	//TODO détecter les autres types de minuties
+	//Detecte les differentes minuties et les stocke dans this.m
+	//TODO detecter les autres types de minuties
 	public void detection(){
 		double t;
 		boolean b=false;

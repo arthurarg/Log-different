@@ -1,5 +1,11 @@
 package objets;
 
+/* Classe Coordonnees
+ * ---------------
+ * Role : ??
+ * --------------
+ */
+
 public class Coordonnees {
 	
 	public double x, y;
