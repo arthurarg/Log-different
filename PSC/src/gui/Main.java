@@ -2,56 +2,39 @@ package gui;
 
 import gestionIO.Enregistrement;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.awt.AWTException;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JComponent;
-import javax.swing.JTabbedPane;
-import javax.swing.JLayeredPane;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import objets.Coordonnees;
 import objets.Signature;
-
-
-import java.nio.file.AccessMode;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.awt.Component;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-
-
-import affichageEtTests.Fenetre;
 import affichageEtTests.Image;
 
-
-import java.awt.GridLayout;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
-import java.awt.image.BufferedImage;
-import javax.swing.JInternalFrame;
-import javax.swing.JDesktopPane;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.Box;
-
 import comparaison.Analyse;
-import java.awt.Color;
 
 
 /* Classe Main

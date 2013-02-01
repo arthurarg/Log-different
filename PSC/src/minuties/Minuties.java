@@ -1,9 +1,8 @@
 package minuties;
-import affichageEtTests.Image;
 import java.util.LinkedList;
 
-import objets.Coordonnees;
 import objets.Signature;
+import affichageEtTests.Image;
 
 public class Minuties {
 	double vmax, vmin;
@@ -16,7 +15,7 @@ public class Minuties {
 	Minuties(Signature s){
 		this.s=s;
 		
-		s.inv();
+		//s.inv();
 		
 		length=s.donnees.length;
 		m=new LinkedList<DonneesMinutie>();
@@ -219,7 +218,7 @@ public class Minuties {
 				f=j;
 			}
 			j++;
-		}// à la fin de la boucle i=n si "s.donnees.length" suffisamment grand ; dans tous les cas, i minuities détectées
+		}// ï¿½ la fin de la boucle i=n si "s.donnees.length" suffisamment grand ; dans tous les cas, i minuities dï¿½tectï¿½es
 		
 		double t=(1-m[i-1].c)/i;
 		for(int k=0;k<i;k++)
@@ -248,7 +247,7 @@ public class Minuties {
 				f=j;
 			}
 			j++;
-		}// à la fin de la boucle i=n si "s.donnees.length" suffisamment grand ; dans tous les cas, i minuities détectées
+		}// ï¿½ la fin de la boucle i=n si "s.donnees.length" suffisamment grand ; dans tous les cas, i minuities dï¿½tectï¿½es
 		
 		double t=(m[i-1].c)/i;
 		for(int k=0;k<i;k++)
@@ -277,7 +276,7 @@ public class Minuties {
 				f=j;
 			}
 			j++;
-		}// à la fin de la boucle i=n si "s.donnees.length" suffisamment grand ; dans tous les cas, i minuities détectées
+		}// ï¿½ la fin de la boucle i=n si "s.donnees.length" suffisamment grand ; dans tous les cas, i minuities dï¿½tectï¿½es
 		
 		double t=(1-m[i-1].c)/i;
 		for(int k=0;k<i;k++)

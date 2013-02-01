@@ -11,7 +11,7 @@ import objets.DonneesPoint;
 import objets.Signature;
 
 import comparaison.Analyse;
-
+import java.awt.AWTException;
 
 /* Classe Tests
  * ---------------
@@ -23,7 +23,7 @@ import comparaison.Analyse;
 public class Tests {
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws AWTException {
 		Signature sRef = new Signature();
 		Signature sTest = new Signature();
 		
