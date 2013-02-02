@@ -149,16 +149,18 @@ public class Main extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String login = textField.getText();
-				Signature s = new Signature();
-				Enregistrement.enregistrer(login,s);
-				 layeredPane.remove(panel_3);
-				 panel_3 = new JPanel();
-				 panel_3.setBounds(74, 34, 271, 271);
-				 ImageComponent img = new ImageComponent(conversion_taille_337(s, 0xff000000));
-				 panel_3.add(img);
-				 layeredPane.add(panel_3);
-				 panel_3.setOpaque(false);
 				
+				if (login!=null && login.matches("[a-z0-9_-]{1,}")) {
+					Signature s = new Signature();
+					Enregistrement.enregistrer(login,s);
+					layeredPane.remove(panel_3);
+				 	panel_3 = new JPanel();
+				 	panel_3.setBounds(74, 34, 271, 271);
+				 	ImageComponent img = new ImageComponent(conversion_taille_337(s, 0xff000000));
+				 	panel_3.add(img);
+				 	layeredPane.add(panel_3);
+				 	panel_3.setOpaque(false);
+				}
 			}
 		});
 		btnNewButton.setBounds(296, 1, 117, 29);
