@@ -2,15 +2,17 @@ package affichageEtTests;
 
 import gestionIO.PaveTUIO;
 
-
+import java.awt.Cursor;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -25,7 +27,7 @@ public class FenetreTempsReel {
 	private final int window_height = 480;
 
 	static private PaveTUIO Courant;
-	private JFrame frame;
+	public JFrame frame;
 	private GraphicsDevice device;
 
 
@@ -44,6 +46,12 @@ public class FenetreTempsReel {
 
 		frame.setTitle("Signatures en Temps Reel");
 		frame.setResizable(false);
+		
+		// Rend le curseur transparent
+		BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+		    cursorImg, new Point(0, 0), "blank cursor");
+		frame.getContentPane().setCursor(blankCursor);
 
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {

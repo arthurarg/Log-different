@@ -3,11 +3,14 @@ package objets;
 import gestionIO.Pave;
 import gestionIO.PaveScreen;
 import gestionIO.PaveTUIO;
-//import java.awt.Robot;
+
+import java.awt.Robot;
 import java.util.LinkedList;
-//import java.awt.AWTException;
+
 import TUIO.TuioClient;
 import affichageEtTests.FenetreTempsReel;
+//import java.awt.Robot;
+//import java.awt.AWTException;
 
 /* Classe Signature
  * ---------------
@@ -18,13 +21,14 @@ import affichageEtTests.FenetreTempsReel;
 public class Signature {
 	public static boolean AffichageTpsReel = true;
 	public static final int N = 50;
+	
 	public DonneesPoint[] donnees;
-	//public Robot r=null;
+	
+	
 	public Signature() {
 		
 		// IMPORTANT : Initialiser a false si MAC OS X + Tongseng
 		boolean Windows = false;
-		//r=new Robot();
 		if (Windows == true) {
 			// Variables utilisees lors de l'enregistrement
 			LinkedList<Coordonnees> positions, vitesse;
@@ -94,13 +98,22 @@ public class Signature {
 			client.removeAllTuioListeners();
 			client.addTuioListener(demo);
 			FenetreTempsReel F = null;
-			//r.mouseMove(0, 0);
-			if (AffichageTpsReel)
+			Robot r=null;
+			
+			//Prepare la fenetre et le robot qui fixe la souris
+			if (AffichageTpsReel) {
 				F = new FenetreTempsReel(demo);
-			client.connect();
-			while (demo.getY() == 0) {
-				attendre(1);
+				try {r = new Robot();}
+				catch (Exception e){}
 			}
+			client.connect();
+			
+			while (demo.getY() == 0) {
+				if (AffichageTpsReel)
+					r.mouseMove(F.frame.getX()+F.frame.getWidth()/2,F.frame.getY()+F.frame.getHeight()/2);
+				attendre(1);				
+			}
+			
 			client.disconnect();
 			if (AffichageTpsReel)
 				F.destroyWindow();
