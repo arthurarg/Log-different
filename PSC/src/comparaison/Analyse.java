@@ -145,9 +145,9 @@ public class Analyse {
 	public static double[] similitudes(Signature sRef, Signature sTest){
 		sRef.calculs();
 		sTest.calculs();
-		double angleMax=45*Math.PI/180;
-		double rapportMax=5;
-		double pourcentagePointsAvantApresCoupes = 0.1;
+		double angleMax=5*Math.PI/180;
+		double rapportMax=2;
+		double pourcentagePointsAvantApresCoupes = 0.05;
 		
 	    //Create instance of Minimisation
 	    Minimisation min = new Minimisation();
