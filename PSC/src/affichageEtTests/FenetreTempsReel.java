@@ -23,8 +23,8 @@ import javax.swing.JFrame;
  */
 
 public class FenetreTempsReel {
-	private final int window_width = 640;
-	private final int window_height = 480;
+	private final int window_width = 271;
+	private final int window_height = 271;
 
 	static private PaveTUIO Courant;
 	public JFrame frame;
