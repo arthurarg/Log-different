@@ -23,7 +23,7 @@ import java.awt.AWTException;
 public class Tests {
 
 
-	public static void main(String[] args) throws AWTException {
+	public static void main(String[] args) {
 		Signature sRef = new Signature();
 		Signature sTest = new Signature();
 		
