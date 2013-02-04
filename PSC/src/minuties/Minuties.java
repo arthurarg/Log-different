@@ -15,7 +15,7 @@ public class Minuties {
 	Minuties(Signature s){
 		this.s=s;
 		
-		//s.inv();
+		s.inverserDonnees();
 		
 		length=s.donnees.length;
 		m=new LinkedList<DonneesMinutie>();

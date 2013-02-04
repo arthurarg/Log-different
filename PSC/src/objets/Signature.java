@@ -129,6 +129,17 @@ public class Signature {
 	public Signature(DonneesPoint[] tab) {
 		this.donnees = tab;
 	}
+	
+	// Remet les donnees dans l'ordre du tracé
+	public void inverserDonnees(){
+		int l=donnees.length;
+		DonneesPoint t;
+		for(int i=0;i<(int)(l/2);i++){
+			t=donnees[l-1-i];
+			donnees[l-1-i]=donnees[i];
+			donnees[i]=t;
+		}
+	}
 
 	// Fonction d'attente pour eviter boucle infinie
 	void attendre(long t) {
