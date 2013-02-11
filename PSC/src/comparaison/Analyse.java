@@ -8,21 +8,17 @@ import objets.Signature;
 
 /* Classe Analyse
  * ---------------
- * Role : ensemble des fonctions auxiliaires utilisees pour la comparaison de signatures
+ * Role : ensemble des fonctions auxiliaires utilisees pour la comparaison de signatures 
+ *         et du traitement de l'image test (rotation, translation, etc)
  * --------------
  */
 
 
 
 public class Analyse {
-	//Definition de seuils decomparaisons
-	//TODO Definir seuils et méthode dans la classe Comparaison
+	//Definition de seuils
 	public static final double angleSeuil = Math.PI/2;
 	public static final double ecartRelatifVitesseMoyenne = 0.50;
-	public static final double ScorePositionsSeuil = 0.9;
-	public static final double ScoreVitessesSeuil = 3E-4; // En cours de test, pas de raison que la valeur soit entre 0 et 1;
-	
-
 	
 	//Releve la liste des points particuliers
 	public static LinkedList<DonneesPoint> listeMinuties(Signature s) {
@@ -99,15 +95,6 @@ public class Analyse {
 		return 1-d;
 	}
 	
-	//Compare le score des positions au seuil defini
-	public static boolean comparePositions (Signature sTest, Signature sRef) {
-		if (scorePositions (sTest,sRef) < ScorePositionsSeuil)
-			return false;
-		else
-			return true;
-	}
-	
-	
 	//Calcule le score de vitesse point a point
 	public static double scoreVitesses (Signature sTest, Signature sRef) {
 		double d = 0;
@@ -131,15 +118,6 @@ public class Analyse {
 		}
 		return 1-d/taille;
 	}
-	
-	//Compare le score des vitesses au seuil defini
-	public static boolean compareVitesses (Signature sTest, Signature sRef) {
-		if (scoreVitesses (sTest,sRef) > ScoreVitessesSeuil) 
-			return false;
-		else
-			return true;
-	}
-	
 
 	//Modifie sRef (coupe des points) et sTest (coupe des points, homothetie, rotation, translation) de sorte que scorePositions soit minimis��
 	public static double[] similitudes(Signature sRef, Signature sTest){
