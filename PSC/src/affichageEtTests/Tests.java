@@ -7,11 +7,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import objets.DonneesPoint;
+import objets.Gabarit;
 import objets.Signature;
-
-import comparaison.Analyse;
-import java.awt.AWTException;
 
 /* Classe Tests
  * ---------------
@@ -24,7 +21,10 @@ public class Tests {
 
 
 	public static void main(String[] args) {
-		Signature sRef = new Signature();
+		Signature sRef = new Gabarit().sRef;
+		Fenetre f1=new Fenetre();
+		f1.ajouter(sRef);
+		/*Signature sRef = new Signature();
 		Signature sTest = new Signature();
 		
 		sRef.calculs();
@@ -62,7 +62,8 @@ public class Tests {
 
 		System.out.println("Decoupages : " + "["+n1avant+"][ sRef ]["+n1apres+"]" + "   -   " + "["+n2avant+"][ sTest ]["+n2apres+"]");
 		System.out.println("Theta = "+infos[0]+"   -   "+"Lambda = "+infos[1]);
-		System.out.println("Scores Positions : " + Analyse.scorePositions(sRefSave,sTestSave) + "   ->   " + Analyse.scorePositions(sRef,sTest));
+		System.out.println("Scores Positions : " + Analyse.scorePositions(sRefSave,sTestSave) + "   ->   " + Analyse.scorePositions(sRef,sTest));*/
+		
 
 	}
 }

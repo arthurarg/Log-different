@@ -29,6 +29,16 @@ public class DonneesPoint {
 		return (this.x==c.x && this.y==c.y && this.t==c.t && this.vx==c.vx && this.vy==c.vy);
 	}
 	
+	//Ajoute deux DonneesPoint, avec un facteur lambda de pondération
+	public DonneesPoint add(DonneesPoint c, double lambda) {
+		return new DonneesPoint (1/lambda * c.x+this.x,
+								1/lambda * c.y+this.y,
+								1/lambda * c.t+this.t,
+								1/lambda * c.vx+this.vx,
+								1/lambda * c.vy+this.vy);
+		
+	}
+	
 	
 	
 	//Calculs basiques
