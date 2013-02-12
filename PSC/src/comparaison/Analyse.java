@@ -137,9 +137,9 @@ public class Analyse {
 	    // initial estimates
 	    double[] start = {0, 1, 0, 0, 0, 0};
 	    // convergence tolerance
-	    double ftol = 1e-10;
+	    double ftol = 1e-7;
 	    // initial step sizes
-        double[] step = {0.2, 0.1, 0.05, 0.05, 0.05, 0.05};
+        double[] step = {0.1, 0.5, 0.4, 0.4, 0.03, 0.03};
         
 	    // Nelder and Mead minimisation procedure
 	    min.addConstraint(0, -1, -angleMax);
