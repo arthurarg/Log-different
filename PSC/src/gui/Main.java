@@ -231,7 +231,9 @@ public class Main extends JFrame {
 		labelPositionsDynamique.setBounds(16, 358, 60, 16);
 		panneauComparer.add(labelPositionsDynamique);
 
-		// ActionOnEvent :
+		// //////////////////
+		// ActionOnEvent
+		// //////////////////
 
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
