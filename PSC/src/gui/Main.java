@@ -208,7 +208,7 @@ public class Main extends JFrame {
 			}
 		});
 
-		comboBox_2.setBounds(77, 2, 336, 27);
+		comboBox_2.setBounds(77, 2, 207, 27);
 		layeredPane_2.add(comboBox_2);
 		
 		panel = new JPanel();
@@ -229,6 +229,35 @@ public class Main extends JFrame {
 		separator_3 = new JSeparator();
 		separator_3.setBounds(6, 34, 407, 12);
 		layeredPane_2.add(separator_3);
+		
+		JButton boutonSupprimer = new JButton("Supprimer");
+		boutonSupprimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+					String myPath = "gabarits/";
+					try{
+						File folder = new File(myPath+(String) comboBox_2.getSelectedItem()+".txt");
+						folder.delete();
+						comboBox.removeAllItems();
+						comboBox_1.removeAllItems();
+						comboBox_2.removeAllItems();
+						folder = new File(myPath);
+					    File[] listOfFiles = folder.listFiles();
+					    
+					    for (int i = 0; i < listOfFiles.length; i++) {
+					    	if (listOfFiles[i].getName().endsWith(".txt")){
+					    		comboBox.addItem(listOfFiles[i].getName().subSequence(0, listOfFiles[i].getName().length()-4));
+					    		comboBox_1.addItem(listOfFiles[i].getName().subSequence(0, listOfFiles[i].getName().length()-4));
+					    		comboBox_2.addItem(listOfFiles[i].getName().subSequence(0, listOfFiles[i].getName().length()-4));
+					    	}
+					    }
+					} catch (Exception ee){}
+				   
+				
+			}
+		});
+		boutonSupprimer.setBounds(296, 1, 117, 29);
+		layeredPane_2.add(boutonSupprimer);
 		
 		layeredPane_1 = new JLayeredPane();
 		tabbedPane.addTab("Comparer", null, layeredPane_1, null);
