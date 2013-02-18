@@ -100,10 +100,14 @@ public class Analyse {
 		double d = 0;
 		int taille = sTest.donnees.length;
 		
-		for (int j=0; j<sTest.donnees.length;j++)
-			d+= sTest.donnees[j].differenceVitesses(sRef.donnees[j])/(sTest.donnees[j].normeVitesse()+sRef.donnees[j].normeVitesse());
-		
-		return 1-d/taille;
+		for (int j=0; j<sTest.donnees.length;j++) {
+			double temp = sTest.donnees[j].differenceVitesses(sRef.donnees[j])/(sTest.donnees[j].normeVitesse()+sRef.donnees[j].normeVitesse());
+			if (!Double.isNaN(temp))
+				d+= temp;
+			else
+				System.out.println("wtf");
+		}
+		return 1.0 - d / taille;
 	}
 	
 	//Calcule le score de temps point par point
