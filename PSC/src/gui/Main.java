@@ -73,6 +73,10 @@ public class Main extends JFrame {
 	private JLabel label_4;
 	private JLabel label_5;
 	
+	private String currentSRef = "";
+	private String currentSTest = "";
+	private boolean currentSimilitudes = false;
+	
 
 	/**
 	 * Launch the application.
@@ -367,6 +371,12 @@ public class Main extends JFrame {
 	}
 	
 	void mettreAJour(){
+		
+		if (currentSRef==(String) comboBox.getSelectedItem() && currentSTest==(String) comboBox_1.getSelectedItem() && currentSimilitudes==tglbtnNewToggleButton.isSelected()){return;}
+		System.out.println(1);
+		currentSRef=(String) comboBox.getSelectedItem();
+		currentSTest=(String) comboBox_1.getSelectedItem();
+		currentSimilitudes=tglbtnNewToggleButton.isSelected();
 		try{
 		Signature sRef = Enregistrement.ouvrir((String) comboBox.getSelectedItem());
 		Signature sTest = Enregistrement.ouvrir((String) comboBox_1.getSelectedItem());
