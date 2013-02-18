@@ -2,8 +2,6 @@ package gui;
 
 import gestionIO.Enregistrement;
 
-import java.io.File;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -13,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,14 +26,16 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.SwingConstants;
 
 import objets.Coordonnees;
+import objets.Gabarit;
 import objets.Signature;
 import affichageEtTests.Image;
+
 import comparaison.Analyse;
 
 /* Classe Main
@@ -44,7 +45,7 @@ import comparaison.Analyse;
  */
 
 public class Main extends JFrame {
-
+ 
 	private JPanel contentPane;
 	private JTextField textFieldLogin;
 	private JComboBox comboBoxSRef;
@@ -277,7 +278,7 @@ public class Main extends JFrame {
 				String login = textFieldLogin.getText();
 
 				if (login != null && login.matches("[a-z0-9_-]{1,}")) {
-					Signature s = new Signature();
+					Signature s = new Gabarit().sRef;
 					Enregistrement.enregistrer(login, s);
 					panneauEnregistrer.remove(imageEnregistrer);
 					imageEnregistrer = new JPanel();

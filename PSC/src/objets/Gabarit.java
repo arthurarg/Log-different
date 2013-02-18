@@ -3,7 +3,7 @@ package objets;
 import comparaison.Analyse;
 
 
-/* Classe Signature
+/* Classe Gabarit
  * ---------------
  * Role : Crée un nouveau gabarit
  *         Un gabarit est un "modèle" utilisé dans les comparaisons futures
@@ -32,6 +32,20 @@ public class Gabarit {
 			sRef.donnees[i] =  new DonneesPoint(0,0,0,0,0);
 		
 		//Remplis le tableau donnees (moyenne des dix signatures)
+		for (int i=0; i<sRef.donnees.length; i++) 
+			for (int j=0; j<nbSign; j++)
+				sRef.donnees[i] = sRef.donnees[i].add(tab[j].donnees[i], nbSign);
+		
+		
+		//Modifie les diffèrentes signatures saisies en les rapprochant par similitudes à la signature moyenne
+		for (int i=0; i<nbSign; i++)  {
+			//On évite de modifier sRef en la coupant; on passe donc par s;
+			Signature s = new Signature(sRef.donnees);
+			Analyse.similitudes(s, tab[i]);
+		}
+		// On redefinit la signature référence à partir des signatures saisies et modifiées
+		for (int i=0; i<sRef.donnees.length; i++)
+			sRef.donnees[i] =  new DonneesPoint(0,0,0,0,0);
 		for (int i=0; i<sRef.donnees.length; i++) 
 			for (int j=0; j<nbSign; j++)
 				sRef.donnees[i] = sRef.donnees[i].add(tab[j].donnees[i], nbSign);
