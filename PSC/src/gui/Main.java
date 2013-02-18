@@ -35,6 +35,8 @@ import objets.Signature;
 import affichageEtTests.Image;
 
 import comparaison.Analyse;
+import javax.swing.JScrollBar;
+import javax.swing.SwingConstants;
 
 
 /* Classe Main
@@ -61,15 +63,15 @@ public class Main extends JFrame {
 	private JPanel panel_3;
 	private JSeparator separator;
 	private JSeparator separator_1;
-	private JSeparator separator_2;
 	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel;
 	private JToggleButton tglbtnNewToggleButton;
-	private JLabel lblScorePositions;
-	private JLabel label;
-	private JLabel lblDecoupages;
 	private JSeparator separator_3;
+	private JLabel label_1;
+	private JLabel label_2;
+	private JLabel label_3;
+	private JLabel label_4;
+	private JLabel label_5;
 	
 
 	/**
@@ -136,6 +138,11 @@ public class Main extends JFrame {
 		layeredPane = new JLayeredPane();
 		tabbedPane.addTab("Enregistrer", null, layeredPane, null);
 		
+		panel_3 = new JPanel();
+		panel_3.setBounds(41, 40, 337, 337);
+		layeredPane.add(panel_3);
+		panel_3.setOpaque(false);
+		
 		JLabel lblLogin = new JLabel("Login");
 		lblLogin.setBounds(6, 6, 41, 16);
 		layeredPane.add(lblLogin);
@@ -155,7 +162,7 @@ public class Main extends JFrame {
 					Enregistrement.enregistrer(login,s);
 					layeredPane.remove(panel_3);
 				 	panel_3 = new JPanel();
-				 	panel_3.setBounds(74, 34, 271, 271);
+				 	panel_3.setBounds(41, 40, 337, 337);
 				 	ImageComponent img = new ImageComponent(conversion_taille_337(s, 0xff000000));
 				 	panel_3.add(img);
 				 	layeredPane.add(panel_3);
@@ -165,11 +172,6 @@ public class Main extends JFrame {
 		});
 		btnNewButton.setBounds(296, 1, 117, 29);
 		layeredPane.add(btnNewButton);
-		
-		panel_3 = new JPanel();
-		panel_3.setBounds(41, 40, 337, 337);
-		layeredPane.add(panel_3);
-		panel_3.setOpaque(false);
 		
 		separator = new JSeparator();
 		separator.setBounds(6, 34, 407, 12);
@@ -196,7 +198,7 @@ public class Main extends JFrame {
 					 
 					 layeredPane_2.remove(panel);
 					 panel = new JPanel();
-					 panel.setBounds(74, 34, 271, 271);
+					 panel.setBounds(41, 40, 337, 337);
 					 panel.add(new ImageComponent(conversion_taille_337(s, 0xff000000)));
 					 panel.setOpaque(false);
 					 layeredPane_2.add(panel);
@@ -287,6 +289,11 @@ public class Main extends JFrame {
 		panel_1.setBounds(109, 103, 200, 200);
 		layeredPane_1.add(panel_1);
 		panel_1.setOpaque(false);
+		panel_1.setLayout(null);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(-88, 43, 282, 16);
+		panel_1.add(lblNewLabel);
 		
 		panel_2 = new JPanel();
 		panel_2.setBounds(109, 103, 200, 200);
@@ -299,33 +306,35 @@ public class Main extends JFrame {
 		separator_1.setBounds(6, 89, 407, 12);
 		layeredPane_1.add(separator_1);
 		
-		separator_2 = new JSeparator();
-		separator_2.setBounds(6, 307, 407, 19);
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(6, 304, 407, 12);
 		layeredPane_1.add(separator_2);
 		
-		lblNewLabel = new JLabel("Score Position :");
-		lblNewLabel.setBounds(131, 315, 282, 16);
-		layeredPane_1.add(lblNewLabel);
-		
-		lblNewLabel_1 = new JLabel("Theta, lambda");
-		lblNewLabel_1.setBounds(131, 338, 282, 16);
-		layeredPane_1.add(lblNewLabel_1);
-		
-		lblNewLabel_2 = new JLabel("Points coup\u00E9s : ");
-		lblNewLabel_2.setBounds(131, 361, 282, 16);
-		layeredPane_1.add(lblNewLabel_2);
-		
-		lblScorePositions = new JLabel("Score Positions");
-		lblScorePositions.setBounds(6, 315, 115, 16);
-		layeredPane_1.add(lblScorePositions);
-		
-		label = new JLabel("��   -   ��");
-		label.setBounds(6, 338, 61, 16);
+		JLabel label = new JLabel("Scores");
+		label.setBounds(6, 315, 115, 16);
 		layeredPane_1.add(label);
 		
-		lblDecoupages = new JLabel("Decoupages");
-		lblDecoupages.setBounds(6, 361, 87, 16);
-		layeredPane_1.add(lblDecoupages);
+		label_1 = new JLabel("Positions");
+		label_1.setBounds(16, 338, 77, 16);
+		layeredPane_1.add(label_1);
+		
+		label_2 = new JLabel("Vitesses");
+		label_2.setBounds(111, 338, 77, 16);
+		layeredPane_1.add(label_2);
+		
+		label_3 = new JLabel("Pression");
+		label_3.setBounds(200, 338, 77, 16);
+		layeredPane_1.add(label_3);
+		
+		label_4 = new JLabel("Minuties");
+		label_4.setBounds(289, 338, 77, 16);
+		layeredPane_1.add(label_4);
+		
+		label_5 = new JLabel("");
+		label_5.setHorizontalAlignment(SwingConstants.CENTER);
+		label_5.setBounds(16, 358, 60, 16);
+		layeredPane_1.add(label_5);
+		String Newligne=System.getProperty("line.separator");
 	}
 	
 	void mettreAJour(){
@@ -385,9 +394,9 @@ public class Main extends JFrame {
 
 		}
 
-		lblNewLabel.setText(""+Analyse.scorePositions(sTest, sRef));
-		lblNewLabel_1.setText(Math.round(theta*180/Math.PI)+"   -   "+((float) Math.round(1000*lambda))/1000);
-		lblNewLabel_2.setText(n1avant+"-sRef-"+n1apres + "   -   " +n2avant+"-sTest-"+n2apres);
+		label_5.setText(""+((double)Math.round(Analyse.scorePositions(sTest, sRef)*1000))/1000);
+		//label.setText("θ="+Math.round(theta*180/Math.PI)+" λ="+((float) Math.round(1000*lambda))/1000);
+
 		} catch(Exception e){}
 		
 	}
@@ -399,7 +408,7 @@ public class Main extends JFrame {
 			Coordonnees a = new Coordonnees(s.donnees[i].x, s.donnees[i].y);
 			Coordonnees b = new Coordonnees(s.donnees[i+1].x, s.donnees[i+1].y);
 			
-			r.tracerSegment(a.fois(200), b.fois(200), rgb);
+			r.tracerSegment(a.fois(194).plus(1, 1), b.fois(194).plus(1, 1), rgb);
 		}
 		
 		return r;
@@ -411,8 +420,8 @@ public class Main extends JFrame {
 		for(int i=0; i<s.donnees.length-1; i++){
 			Coordonnees a = new Coordonnees(s.donnees[i].x, s.donnees[i].y);
 			Coordonnees b = new Coordonnees(s.donnees[i+1].x, s.donnees[i+1].y);
+			r.tracerSegment(a.fois(330).plus(1, 1), b.fois(330).plus(1, 1), rgb);
 			
-			r.tracerSegment(a.fois(337), b.fois(337), rgb);
 		}
 		
 		return r;

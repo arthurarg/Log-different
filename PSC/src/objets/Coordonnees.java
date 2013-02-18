@@ -29,4 +29,8 @@ public class Coordonnees {
 	public Coordonnees fois(double x){
 		return new Coordonnees(x*this.x, x*this.y);
 	}
+	
+	public Coordonnees plus(double n, double m){
+		return new Coordonnees(this.x+n, this.y+m);
+	}
 }

@@ -25,19 +25,24 @@ public class Image extends BufferedImage {
 	}
 	
 	public void tracerSegment(Coordonnees a, Coordonnees b, int rgb){ // en pixel
-		if(a.x<b.x){
+		//System.out.println(a.x+","+a.y+" -> "+b.x+","+b.y);
+		int x0 = (int) a.x; int y0 = (int) a.y; int x1 = (int) b.x; int y1 = (int) b.y;
+		if(x0<x1){
 			int l=(int)a.y;
 			int y;
-			for(int x=(int)a.x; x<(int)b.x; x++){
-				y=(int)((x-a.x)*(b.y-a.y)/(b.x-a.x)+a.y);
+			for(int x=x0; x<=x1; x++){
+				y=(int)((x-x0)*(y1-y0)/(x1-x0)+y0);
 				for(int z=min(l,y);z<=max(l,y);z++)
-					this.setRGB(x, z, rgb);
+					//{System.out.println(x+" - "+z);
+					{this.setRGB(x, z, rgb);}
 				l=y;
 			}
 		}
-		else if(a.x==b.x){
-			for(int y=(int)min(a.y, b.y); y<(int)max(a.y, b.y); y++)
-				this.setRGB((int)a.x, y, rgb);
+		else if(x0==x1){
+			for(int y=min(y0, y1); y<max(y0, y1); y++)
+				//{System.out.println(x0+" "+y);
+				{this.setRGB(x0, y, rgb);
+			}
 		}
 		else
 			tracerSegment(b, a, rgb);
