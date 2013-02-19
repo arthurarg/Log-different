@@ -102,7 +102,6 @@ public class Analyse {
 		
 		for (int j=0; j<sTest.donnees.length;j++)
 			d+= sTest.donnees[j].differenceVitesses(sRef.donnees[j])/(sTest.donnees[j].normeVitesse()+sRef.donnees[j].normeVitesse());
-		
 		return 1-d/taille;
 	}
 	

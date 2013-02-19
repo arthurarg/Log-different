@@ -66,9 +66,10 @@ public class Main extends JFrame {
 	private JLabel labelPression;
 	private JLabel labelMinuties;
 	private JLabel labelPositionsDynamique;
+	private JLabel labelVitessesDynamique;
 	private String currentSRef = "";
 	private String currentSTest = "";
-	private boolean currentSimilitudes = false;
+	private boolean currentSimilitudes = true;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -186,6 +187,7 @@ public class Main extends JFrame {
 		boutonSimilitudes = new JToggleButton("Appliquer similitudes");
 		boutonSimilitudes.setBounds(96, 62, 226, 29);
 		panneauComparer.add(boutonSimilitudes);
+		boutonSimilitudes.setSelected(true);
 
 		imageSRef = new JPanel();
 		imageSRef.setBounds(109, 103, 200, 200);
@@ -230,6 +232,11 @@ public class Main extends JFrame {
 		labelPositionsDynamique.setHorizontalAlignment(SwingConstants.CENTER);
 		labelPositionsDynamique.setBounds(16, 358, 60, 16);
 		panneauComparer.add(labelPositionsDynamique);
+		
+		labelVitessesDynamique = new JLabel("");
+		labelVitessesDynamique.setHorizontalAlignment(SwingConstants.CENTER);
+		labelVitessesDynamique.setBounds(109, 358, 60, 16);
+		panneauComparer.add(labelVitessesDynamique);
 
 		// //////////////////
 		// ActionOnEvent
@@ -454,17 +461,18 @@ public class Main extends JFrame {
 						0xFFFF1111)));
 				panneauComparer.add(imageSTest);
 				imageSTest.setOpaque(false);
-				sTest.calculs();
-				sRef.calculs();
 
 			}
 
 			labelPositionsDynamique
-					.setText(""
-							+ ((double) Math.round(Analyse.scorePositions(
-									sTest, sRef) * 1000)) / 1000);
-			// labelScores.setText("θ="+Math.round(theta*180/Math.PI)+" λ="+((float)
-			// Math.round(1000*lambda))/1000);
+			.setText(""
+					+ ((double) Math.round(Analyse.scorePositions(
+							sTest, sRef) * 1000)) / 1000);
+			labelVitessesDynamique
+			.setText(""
+					+ ((double) Math.round(Analyse.scoreVitesses(
+							sTest, sRef) * 1000)) / 1000);
+
 
 		} catch (Exception e) {
 		}
@@ -500,7 +508,6 @@ public class Main extends JFrame {
 
 		return r;
 	}
-
 }
 
 class ImageComponent extends JComponent {
