@@ -88,7 +88,7 @@ public class Signature {
 			}
 
 			// Translation du barycentre en 0.5,0.5
-			this.recalibrerDonnees();
+			//this.recalibrerDonnees();
 			this.calculs();
 		}
 
@@ -120,7 +120,7 @@ public class Signature {
 
 			this.donnees = demo.getSignature();
 
-			this.recalibrerDonnees();
+			//this.recalibrerDonnees();
 			this.calculs();
 		}
 	}
@@ -151,7 +151,8 @@ public class Signature {
 	}
 
 	// Recentre le barycentre en (0,5;0,5)
-	void recalibrerDonnees() {
+	/*void recalibrerDonnees() {
+		System.out.print("ASQQSD");
 		double xG = 0, yG = 0;
 
 		// Calcul des coordonnees du barycentre
@@ -167,7 +168,7 @@ public class Signature {
 			this.donnees[j].x -= (xG - 0.5);
 			this.donnees[j].y -= (yG - 0.5);
 		}
-	}
+	}*/
 
 	// Reparsing de la signature en N points
 	public void calculs() {

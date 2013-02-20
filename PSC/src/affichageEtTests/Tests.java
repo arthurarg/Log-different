@@ -3,15 +3,16 @@ package affichageEtTests;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import objets.DonneesPoint;
-import objets.Signature;
-
 import comparaison.Analyse;
-import java.awt.AWTException;
+
+import objets.Gabarit;
+import objets.Signature;
 
 /* Classe Tests
  * ---------------
@@ -24,46 +25,60 @@ public class Tests {
 
 
 	public static void main(String[] args) {
-		Signature sRef = new Signature();
-		Signature sTest = new Signature();
+		SerieTests();
+	}
+	
+	// Test sur 100 signatures
+	public static void SerieTests () {
+		Signature sRef = new Gabarit().sRef;
+		Fenetre f1=new Fenetre();
+		f1.ajouter(sRef);
 		
-		sRef.calculs();
-		sTest.calculs();
+		double[] tabPositions = new double[100];
+		double[] tabVitesses = new double[100];
 		
-		 DonneesPoint[] tabRef = new DonneesPoint[sRef.donnees.length];
-			for(int i=0;i<sRef.donnees.length;i++){
-				tabRef[i] = sRef.donnees[i];
+		for (int i = 0; i<100; i++) {
+			Signature sTest = new Signature();
+			Analyse.similitudes(new Signature (sRef.donnees), sTest); // on ne veut pas modifier sRef en la coupant (on passe par un tiers)
+			tabPositions[i] = Analyse.scorePositions(sTest, sRef);
+			tabVitesses[i] = Analyse.scoreVitesses(sTest, sRef);
+		}
+		
+		
+		final String NEW_LINE = System.getProperty("line.separator" );
+		
+		//On écrit dans le fichier scorePositions.txt
+		try {
+			//Ouverture du fichier .txt
+			FileWriter fichier = new FileWriter("scorePositions" + ".txt");
+			
+			//Enregistrement s.donnees (taille puis contenu)
+			fichier.write("GROOOOOOVANI EST UN TOS...");
+			for(int j=0; j<100;j++) {
+				fichier.write("" + NEW_LINE + tabPositions[j]);
 			}
-		Signature sRefSave = new Signature(tabRef);
+			fichier.close();
+		}
+		catch (IOException e) {
+			System.out.println("Le fichier n'a pu etre ouvert, " +
+					" ou un probleme d'ecriture a ete rencontre"); }
 		
-		 DonneesPoint[] tabTest = new DonneesPoint[sTest.donnees.length];
-			for(int i=0;i<sTest.donnees.length;i++){
-				tabTest[i] = sTest.donnees[i];
+		
+		// On écrit dans le fichier scoreVitesses.txt
+		try {
+			//Ouverture du fichier .txt
+			FileWriter fichier = new FileWriter("scoreVitesses" + ".txt");
+			
+			//Enregistrement s.donnees (taille puis contenu)
+			fichier.write("... Et arthur un daron");
+			for(int j=0; j<100;j++) {
+				fichier.write("" + NEW_LINE + tabVitesses[j]);
 			}
-		Signature sTestSave = new Signature(tabTest);
-
-		double[] infos = Analyse.similitudes(sRef,sTest);
-		
-		int n1avant = Math.max((int) Math.floor(infos[2]*sRef.donnees.length), 0);
-		int n1apres = Math.max((int) Math.floor(infos[3]*sRef.donnees.length), 0);
-		int n2avant = Math.max((int) Math.floor(-infos[2]*sTest.donnees.length), 0);
-		int n2apres = Math.max((int) Math.floor(-infos[3]*sTest.donnees.length), 0);
-
-		
-		Fenetre f1=new Fenetre();	
-		Fenetre f2=new Fenetre();
-
-		
-		f1.ajouter(sRefSave);
-		f1.ajouter(sTestSave,0xFFFF1111);
-		f2.ajouter(sRef);
-		f2.ajouter(sTest,0xFFFF1111);
-
-
-		System.out.println("Decoupages : " + "["+n1avant+"][ sRef ]["+n1apres+"]" + "   -   " + "["+n2avant+"][ sTest ]["+n2apres+"]");
-		System.out.println("Theta = "+infos[0]+"   -   "+"Lambda = "+infos[1]);
-		System.out.println("Scores Positions : " + Analyse.scorePositions(sRefSave,sTestSave) + "   ->   " + Analyse.scorePositions(sRef,sTest));
-
+			fichier.close();
+		}
+		catch (IOException e) {
+			System.out.println("Le fichier n'a pu etre ouvert, " +
+					" ou un probleme d'ecriture a ete rencontre"); }
 	}
 }
 
