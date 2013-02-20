@@ -26,7 +26,9 @@ public class Tests {
 		f.setText("test       ");
 		Minuties m;
 		double c;
-		while(true){
+		while(true){s=new Signature();
+		f.afficherV(s);}
+		/*while(true){
 			s=new Signature();
 			f.vider();
 			m=new Minuties(s);
@@ -43,13 +45,13 @@ public class Tests {
 				if(x.t==4)
 					couleur=0xffff0000;
 				else if(x.t==1)
-					couleur=0xff0000ff;
+					couleur=0;//couleur=0xff0000ff;
 				else if(x.t==3)
 					couleur=0;//couleur=0xff0b0b0b;
 				f.setPoint((int)(s.donnees[x.p].x*f.taille_signature), (int)(s.donnees[x.p].y*f.taille_signature), (int)(c*couleur));
 			}
 			f.ajouterVariations(s);
-		}
+		}*/
 			
 	}
 }

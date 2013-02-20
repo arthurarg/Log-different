@@ -18,8 +18,8 @@ public class PaveScreen implements Pave {
 	screen = new JFrame();
 
 	//Dimensions
-	int w = Toolkit.getDefaultToolkit().getScreenSize().width-100;
-	int h = Toolkit.getDefaultToolkit().getScreenSize().height-100;
+	int w = 500;//Toolkit.getDefaultToolkit().getScreenSize().width-100;
+	int h = 500;//Toolkit.getDefaultToolkit().getScreenSize().height-100;
 	screen.setSize(w,h);
 	
 	//Ajout d'un MouseInputListener

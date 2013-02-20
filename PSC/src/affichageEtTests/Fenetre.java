@@ -70,6 +70,71 @@ public class Fenetre extends JFrame {
 		return r;
 	}
 	
+	public void afficherV(Signature s){
+		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
+		
+		int len=s.donnees.length;
+		
+		double duree=s.donnees[0].t-s.donnees[len-1].t;
+		double vmin, vmax;
+		vmin=s.donnees[0].normeVitesse();
+		vmax=vmin;
+		for(int i=0; i<len-1; i++){
+			if(s.donnees[i].normeVitesse()<vmin)
+				vmin=s.donnees[i].normeVitesse();
+			if(s.donnees[i].normeVitesse()>vmax)
+				vmax=s.donnees[i].normeVitesse();
+		}
+		
+		Coordonnees l=new Coordonnees(1, (s.donnees[0].normeVitesse()-vmin)/(vmax-vmin));
+		Coordonnees c;
+		
+		for(int i=1; i<len-1; i++){
+			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(s.donnees[i].normeVitesse()-vmin)/(vmax-vmin));
+			r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);
+			l=c;
+		}
+		
+		// supr
+		double dtot=0, d=0;
+		for(int i=0; i<len-1; i++)
+			dtot=dtot+s.donnees[i].norme();
+		l=new Coordonnees(0, (s.donnees[0].normeVitesse()-vmin)/(vmax-vmin));
+		
+		for(int i=1; i<len-1; i++){
+			d=d+s.donnees[i].norme();
+			c = new Coordonnees(d/dtot,(s.donnees[i].normeVitesse()-vmin)/(vmax-vmin));
+			//r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);
+			l=c;
+		}
+		double a[]=new double[len-2];
+		for(int i=0;i<len-2;i++)
+			a[i]=s.donnees[i].differenceVitesses(s.donnees[i+1])/(s.donnees[i].t-s.donnees[i+1].t);
+		double amin, amax;
+		amin=a[0];
+		amax=amin;
+		for(int i=0; i<len-2; i++){
+			if(a[i]<amin)
+				amin=a[i];
+			if(a[i]>amax)
+				amax=a[i];
+		}
+		
+		l=new Coordonnees(1, (a[0]-amin)/(amax-amin));
+		
+		for(int i=1; i<len-2; i++){
+			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(a[i]-amin)/(amax-amin));
+			System.out.println(c.fois(0.5*taille_signature));
+			//r.tracerSegment(l.fois(0.5*taille_signature), c.fois(0.5*taille_signature), 0xff000000);
+			l=c;
+		}
+		// spur
+		
+		this.getContentPane().add(new ImageComponent(r));
+		this.setVisible(true);
+		
+	}
+	
 	//Role inconnu
 	//TODO ameliorer le commentaire de la ligne au-dessus
 	Image conversionVariations(Signature s){

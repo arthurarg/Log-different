@@ -1,7 +1,9 @@
 package minuties;
 import java.util.LinkedList;
 
+import objets.Coordonnees;
 import objets.Signature;
+import affichageEtTests.Fenetre;
 import affichageEtTests.Image;
 
 public class Minuties {
@@ -11,6 +13,17 @@ public class Minuties {
 	double v[], a[]; // taux
 	int p[], pInv[];
 	int length;
+	
+	public LinkedList<Sommet> trouverSommets(){
+		LinkedList<Sommet> l=new LinkedList<Sommet>();
+		for(int i=1;i<length-1;i++){
+			if(s.donnees[i-1].normeVitesse()<s.donnees[i].normeVitesse() && s.donnees[i+1].normeVitesse()<s.donnees[i].normeVitesse())
+				l.add(new Sommet(i, true));
+			else if(s.donnees[i-1].normeVitesse()>s.donnees[i].normeVitesse() && s.donnees[i+1].normeVitesse()>s.donnees[i].normeVitesse())
+				l.add(new Sommet(i, false));
+		}
+		return l;
+	}
 	
 	Minuties(Signature s){
 		this.s=s;
@@ -41,7 +54,7 @@ public class Minuties {
 		for(Donnee x:al){
 			System.out.println(1+(int)(4*(aMax-x.m)/(aMax-aMin)));
 			m.add(new DonneesMinutie(x.posMoy, 4, x.m, 1+(int)(4*(aMax-x.m)/(aMax-aMin))));
-			if(i>=2)
+			if(i>=limite)
 				break;
 			else i++;
 		}
