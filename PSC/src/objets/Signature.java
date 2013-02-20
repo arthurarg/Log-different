@@ -28,7 +28,7 @@ public class Signature {
 	public Signature() {
 		
 		// IMPORTANT : Initialiser a false si MAC OS X + Tongseng
-		boolean Windows = false;
+		boolean Windows = true;
 		if (Windows == true) {
 			// Variables utilisees lors de l'enregistrement
 			LinkedList<Coordonnees> positions, vitesse;

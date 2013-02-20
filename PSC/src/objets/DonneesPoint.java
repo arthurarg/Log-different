@@ -41,6 +41,9 @@ public class DonneesPoint {
 	public double normeVitesse () {
 		return Math.sqrt(Math.pow(this.vx,2) + Math.pow(this.vy,2));
 	}
+	public double norme () {
+		return Math.sqrt(Math.pow(this.x,2) + Math.pow(this.y,2));
+	}
 	public double angleVecteurVitesse() {
 		if (this.vx==0)
 			if (this.vy!=0)
