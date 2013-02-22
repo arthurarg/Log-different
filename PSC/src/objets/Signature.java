@@ -1,6 +1,7 @@
 package objets;
 
 import gestionIO.Pave;
+import gestionIO.PaveGLULOGIC;
 import gestionIO.PaveScreen;
 import gestionIO.PaveTUIO;
 
@@ -21,15 +22,15 @@ import affichageEtTests.FenetreTempsReel;
 public class Signature {
 	public static boolean AffichageTpsReel = true;
 	public static final int N = 50;
-	
+	// Choisir Acquisition.WINDOWS ou Acquisition.TUIO ou
+	// Acquisition.GLULOGIC selon le mode souhaité
+	Acquisition a = Acquisition.GLULOGIC;
 	public DonneesPoint[] donnees;
-	
-	
+
 	public Signature() {
-		
-		// IMPORTANT : Initialiser a false si MAC OS X + Tongseng
-		boolean Windows = true;
-		if (Windows == true) {
+
+		if (a == Acquisition.WINDOWS) {
+
 			// Variables utilisees lors de l'enregistrement
 			LinkedList<Coordonnees> positions, vitesse;
 			LinkedList<Long> temps;
@@ -40,7 +41,7 @@ public class Signature {
 			// Acquisition de la signature
 			Pave pave = new PaveScreen();
 
-			// On attend que l'utilisateur pose son doigt sur le pav��
+			// On attend que l'utilisateur pose son doigt sur le pav������
 			while (!pave.pose()) {
 				attendre(10);
 			}
@@ -88,39 +89,51 @@ public class Signature {
 			}
 
 			// Translation du barycentre en 0.5,0.5
-			//this.recalibrerDonnees();
+			// this.recalibrerDonnees();
 			this.calculs();
 		}
+		if (a == Acquisition.TUIO) {
 
-		else {
 			TuioClient client = new TuioClient(3333);
 			PaveTUIO demo = new PaveTUIO();
 			client.removeAllTuioListeners();
 			client.addTuioListener(demo);
 			FenetreTempsReel F = null;
-			Robot r=null;
-			
-			//Prepare la fenetre et le robot qui fixe la souris
+			Robot r = null;
+
+			client.connect();
+			// Prepare la fenetre et le robot qui fixe la souris
 			if (AffichageTpsReel) {
 				F = new FenetreTempsReel(demo);
-				try {r = new Robot();}
-				catch (Exception e){}
+				try {
+					r = new Robot();
+				} catch (Exception e) {
+				}
 			}
-			client.connect();
-			
 			while (demo.getY() == 0) {
 				if (AffichageTpsReel)
-					r.mouseMove(F.frame.getX()+F.frame.getWidth()/2,F.frame.getY()+F.frame.getHeight()/2);
-				attendre(1);				
+					r.mouseMove(F.frame.getX() + F.frame.getWidth() / 2,
+							F.frame.getY() + F.frame.getHeight() / 2);
+				attendre(1);
 			}
-			
+
 			client.disconnect();
 			if (AffichageTpsReel)
 				F.destroyWindow();
 
 			this.donnees = demo.getSignature();
+			// this.recalibrerDonnees();
+			this.calculs();
+		}
 
-			//this.recalibrerDonnees();
+		if (a == Acquisition.GLULOGIC) {
+
+			PaveGLULOGIC ct = new PaveGLULOGIC();
+			ct.run();
+			while (ct.getY() == 0) {
+				attendre(1);
+			}
+			this.donnees = ct.getSignature();
 			this.calculs();
 		}
 	}
@@ -129,15 +142,15 @@ public class Signature {
 	public Signature(DonneesPoint[] tab) {
 		this.donnees = tab;
 	}
-	
-	// Remet les donnees dans l'ordre du tracé
-	public void inverserDonnees(){
-		int l=donnees.length;
+
+	// Remet les donnees dans l'ordre du trac��
+	public void inverserDonnees() {
+		int l = donnees.length;
 		DonneesPoint t;
-		for(int i=0;i<(int)(l/2);i++){
-			t=donnees[l-1-i];
-			donnees[l-1-i]=donnees[i];
-			donnees[i]=t;
+		for (int i = 0; i < (int) (l / 2); i++) {
+			t = donnees[l - 1 - i];
+			donnees[l - 1 - i] = donnees[i];
+			donnees[i] = t;
 		}
 	}
 
@@ -151,24 +164,19 @@ public class Signature {
 	}
 
 	// Recentre le barycentre en (0,5;0,5)
-	/*void recalibrerDonnees() {
-		System.out.print("ASQQSD");
-		double xG = 0, yG = 0;
-
-		// Calcul des coordonnees du barycentre
-		for (int j = 0; j < this.donnees.length; j++) {
-			xG += this.donnees[j].x;
-			yG += this.donnees[j].y;
-		}
-		xG /= this.donnees.length;
-		yG /= this.donnees.length;
-
-		// Translation (changement d'origine; barycentre en (0.5,0.5) )
-		for (int j = 0; j < this.donnees.length; j++) {
-			this.donnees[j].x -= (xG - 0.5);
-			this.donnees[j].y -= (yG - 0.5);
-		}
-	}*/
+	/*
+	 * void recalibrerDonnees() { System.out.print("ASQQSD"); double xG = 0, yG
+	 * = 0;
+	 * 
+	 * // Calcul des coordonnees du barycentre for (int j = 0; j <
+	 * this.donnees.length; j++) { xG += this.donnees[j].x; yG +=
+	 * this.donnees[j].y; } xG /= this.donnees.length; yG /=
+	 * this.donnees.length;
+	 * 
+	 * // Translation (changement d'origine; barycentre en (0.5,0.5) ) for (int
+	 * j = 0; j < this.donnees.length; j++) { this.donnees[j].x -= (xG - 0.5);
+	 * this.donnees[j].y -= (yG - 0.5); } }
+	 */
 
 	// Reparsing de la signature en N points
 	public void calculs() {
@@ -222,4 +230,8 @@ public class Signature {
 			this.donnees[j] = new DonneesPoint(temp[j].x, temp[j].y, temp[j].t,
 					temp[j].vx, temp[j].vy);
 	}
+}
+
+enum Acquisition {
+	TUIO, GLULOGIC, WINDOWS
 }
