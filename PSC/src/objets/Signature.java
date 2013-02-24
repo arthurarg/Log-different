@@ -6,6 +6,7 @@ import gestionIO.PaveScreen;
 import gestionIO.PaveTUIO;
 
 import java.awt.Robot;
+import java.awt.Toolkit;
 import java.util.LinkedList;
 
 import TUIO.TuioClient;
@@ -127,10 +128,18 @@ public class Signature {
 		}
 
 		if (a == Acquisition.GLULOGIC) {
-
+			Robot r = null;
+			int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+			int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+			
+			
 			PaveGLULOGIC ct = new PaveGLULOGIC();
 			ct.run();
+			
+			try { r = new Robot();} catch (Exception e) {}
+	
 			while (ct.getY() == 0) {
+				r.mouseMove(width/2, height/2);
 				attendre(1);
 			}
 			this.donnees = ct.getSignature();

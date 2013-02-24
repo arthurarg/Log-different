@@ -52,7 +52,7 @@ import com.alderstone.multitouch.mac.touchpad.TouchpadObservable;
 				System.out.println("Nbre de points "+Nbrepoints+ListeDoi);
 				this.donnees=new DonneesPoint[Nbrepoints];
 					for (int i=0; i<this.donnees.length;i++) {
-						this.donnees[i] = new DonneesPoint(ListeDoi.get(i).x,ListeDoi.get(i).y,
+						this.donnees[i] = new DonneesPoint(ListeDoi.get(i).x,1 - ListeDoi.get(i).y,
 							              ListeDoi.get(i).t, ListeDoi.get(i).vx,ListeDoi.get(i).vy,ListeDoi.get(i).s);
 					}
 					y=1;
