@@ -13,14 +13,7 @@ public class DonneesPoint {
 	
 	
 	//Constructeur, toString et equals
-	public DonneesPoint (double x, double y, double t, double vx, double vy) {
-		this.x=x;
-		this.y=y;
-		this.t=t;
-		this.vx=vx;
-		this.vy=vy;
-		this.s=0;
-	}
+
 	public DonneesPoint (double x, double y, double t, double vx, double vy, double s) {
 		this.x=x;
 		this.y=y;

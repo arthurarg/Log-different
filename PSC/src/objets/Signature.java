@@ -86,7 +86,7 @@ public class Signature {
 				int j = donnees.length - i - 1;
 				this.donnees[i] = new DonneesPoint(positions.get(j).x,
 						positions.get(j).y, temps.get(j), vitesse.get(j).x,
-						vitesse.get(j).y);
+						vitesse.get(j).y,0);
 			}
 
 			// Translation du barycentre en 0.5,0.5
@@ -216,15 +216,12 @@ public class Signature {
 			} else {
 				rapport = (distanceEqui - distanceActuelle)
 						/ pointMarque.distance(this.donnees[i + 1]);
-				pointMarque = new DonneesPoint((1 - rapport) * pointMarque.x
-						+ rapport * (this.donnees[i + 1].x), (1 - rapport)
-						* pointMarque.y + rapport * (this.donnees[i + 1].y),
-						(1 - rapport) * pointMarque.t + rapport
-								* (this.donnees[i + 1].t), (1 - rapport)
-								* pointMarque.vx + rapport
-								* (this.donnees[i + 1].vx), (1 - rapport)
-								* pointMarque.vy + rapport
-								* (this.donnees[i + 1].vy));
+				pointMarque = new DonneesPoint(	(1 - rapport) * pointMarque.x + rapport * (this.donnees[i + 1].x), 
+												(1 - rapport) * pointMarque.y + rapport * (this.donnees[i + 1].y),
+												(1 - rapport) * pointMarque.t + rapport * (this.donnees[i + 1].t),
+												(1 - rapport) * pointMarque.vx + rapport * (this.donnees[i + 1].vx), 
+												(1 - rapport) * pointMarque.vy + rapport * (this.donnees[i + 1].vy),
+												(1 - rapport) * pointMarque.s + rapport * (this.donnees[i + 1].s));
 				temp[marqueur] = pointMarque;
 				marqueur++;
 				distanceActuelle = 0;
@@ -237,7 +234,7 @@ public class Signature {
 		this.donnees = new DonneesPoint[N];
 		for (int j = 0; j < N; j++)
 			this.donnees[j] = new DonneesPoint(temp[j].x, temp[j].y, temp[j].t,
-					temp[j].vx, temp[j].vy);
+					temp[j].vx, temp[j].vy, temp[j].s);
 	}
 }
 

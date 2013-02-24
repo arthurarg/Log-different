@@ -29,13 +29,13 @@ public class MinimFunct implements MinimisationFunction{
     	
     		DonneesPoint[] tab2 = new DonneesPoint[sTest.donnees.length-n2avant-n2apres];
     		for(int i=0;i<sTest.donnees.length-n2avant-n2apres;i++){
-    			tab2[i] = new DonneesPoint(Math.cos(x[0])*x[1]*sTest.donnees[i+n2avant].x - Math.sin(x[0])*x[1]*sTest.donnees[i+n2avant].y + x[2],Math.sin(x[0])*x[1]*sTest.donnees[i+n2avant].x + Math.cos(x[0])*x[1]*sTest.donnees[i+n2avant].y + x[3],0,0,0);
+    			tab2[i] = new DonneesPoint(Math.cos(x[0])*x[1]*sTest.donnees[i+n2avant].x - Math.sin(x[0])*x[1]*sTest.donnees[i+n2avant].y + x[2],Math.sin(x[0])*x[1]*sTest.donnees[i+n2avant].x + Math.cos(x[0])*x[1]*sTest.donnees[i+n2avant].y + x[3],0,0,0,0);
     		}
     		Signature sTestApresSimilitude = new Signature(tab2);
     		
     		DonneesPoint[] tab1 = new DonneesPoint[sRef.donnees.length-n1avant-n1apres];
     		for(int i=0;i<sRef.donnees.length-n1avant-n1apres;i++){
-    			tab1[i] = new DonneesPoint(sRef.donnees[i+n1avant].x, sRef.donnees[i+n1avant].y,0,0,0);
+    			tab1[i] = new DonneesPoint(sRef.donnees[i+n1avant].x, sRef.donnees[i+n1avant].y,0,0,0,0);
     		}
     		Signature sRefCoupee = new Signature(tab1);
     		
