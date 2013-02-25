@@ -27,7 +27,7 @@ public class Tests {
 		Minuties m;
 		double c;
 		while(true){s=new Signature();
-		f.afficherV(s);}
+		f.afficherVMoyenneMobile(s, 5);}
 		/*while(true){
 			s=new Signature();
 			f.vider();

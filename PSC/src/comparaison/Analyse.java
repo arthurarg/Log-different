@@ -92,7 +92,7 @@ public class Analyse {
 		for (int j=0; j<sTest.donnees.length;j++)
 			d+= sTest.donnees[j].distance(sRef.donnees[j])/(taille*Math.sqrt(2));
 		
-		return 1-d;
+		return 1.0 - d;
 	}
 	
 	//Calcule le score de vitesse point a point
@@ -104,9 +104,20 @@ public class Analyse {
 			double temp = sTest.donnees[j].differenceVitesses(sRef.donnees[j])/(sTest.donnees[j].normeVitesse()+sRef.donnees[j].normeVitesse());
 			if (!Double.isNaN(temp))
 				d+= temp;
-			else
-				System.out.println("wtf");
 		}
+		return 1.0 - d / taille;
+	}
+	
+	//Calcule le score de pression point à point
+	public static double scorePressions (Signature sTest, Signature sRef) {
+		double d = 0;
+		int taille = sTest.donnees.length;
+		
+		for (int j=0; j<sTest.donnees.length;j++) {
+			if ((sTest.donnees[j].s + sRef.donnees[j].s) != 0)
+				d+=  Math.abs(sTest.donnees[j].s - sRef.donnees[j].s) / (sTest.donnees[j].s + sRef.donnees[j].s);
+		}
+		
 		return 1.0 - d / taille;
 	}
 	
@@ -164,7 +175,7 @@ public class Analyse {
 	    
 	    // get the minimum value
 	    double minimum = min.getMinimum();	
-	    // valeur des param���tres au minimum
+	    // valeur des parametres au minimum
 	    double[] param = min.getParamValues();
 	    // resultat
 	    double[] params = {minimum, param[0], param[1], param[2], param[3], param[4], param[5]};
@@ -177,12 +188,12 @@ public class Analyse {
 	    
 	    DonneesPoint[] tab2 = new DonneesPoint[sTest.donnees.length-n2avant-n2apres];
 		for(int i=0;i<sTest.donnees.length-n2avant-n2apres;i++){
-			tab2[i] = new DonneesPoint(Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].x - Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].y + params[3],Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].x + Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].y + params[4],sTest.donnees[i+n2avant].t, Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].vx - Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].vy, Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].vx + Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].vy);
+			tab2[i] = new DonneesPoint(Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].x - Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].y + params[3],Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].x + Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].y + params[4],sTest.donnees[i+n2avant].t, Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].vx - Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].vy, Math.sin(params[1])*params[2]*sTest.donnees[i+n2avant].vx + Math.cos(params[1])*params[2]*sTest.donnees[i+n2avant].vy, sTest.donnees[i+n2avant].s);
 		}
 		
 		DonneesPoint[] tab1 = new DonneesPoint[sRef.donnees.length-n1avant-n1apres];
 		for(int i=0;i<sRef.donnees.length-n1avant-n1apres;i++){
-			tab1[i] = new DonneesPoint(sRef.donnees[i+n1avant].x, sRef.donnees[i+n1avant].y,sRef.donnees[i+n1avant].t,sRef.donnees[i+n1avant].vx,sRef.donnees[i+n1avant].vy);
+			tab1[i] = new DonneesPoint(sRef.donnees[i+n1avant].x, sRef.donnees[i+n1avant].y,sRef.donnees[i+n1avant].t,sRef.donnees[i+n1avant].vx,sRef.donnees[i+n1avant].vy,sRef.donnees[i+n1avant].s);
 		}
 		
 		sTest.donnees=tab2;

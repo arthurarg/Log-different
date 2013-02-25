@@ -55,7 +55,7 @@ public class PaveTUIO extends JComponent implements TuioListener {
 		DonneesPoint debut = new DonneesPoint((double) tcur.getX(),
 				(double) tcur.getY(), (double) tcur.getTuioTime()
 						.getTotalMilliseconds() - t0,
-				(double) tcur.getXSpeed(), (double) tcur.getYSpeed());
+				(double) tcur.getXSpeed(), (double) tcur.getYSpeed(),0);
 		ListeDoi.addLast(debut);
 
 	}
@@ -65,7 +65,7 @@ public class PaveTUIO extends JComponent implements TuioListener {
 		DonneesPoint milieu = new DonneesPoint((double) tcur.getX(),
 				tcur.getY(), (double) tcur.getTuioTime().getTotalMilliseconds()
 						- t0, (double) tcur.getXSpeed(),
-				(double) tcur.getYSpeed());
+				(double) tcur.getYSpeed(),0);
 		ListeDoi.addLast(milieu);
 	}
 
@@ -74,7 +74,7 @@ public class PaveTUIO extends JComponent implements TuioListener {
 			DonneesPoint fin = new DonneesPoint((double) tcur.getX(),
 					(double) tcur.getY(), (double) tcur.getTuioTime()
 							.getTotalMilliseconds() - t0,
-					(double) tcur.getXSpeed(), (double) tcur.getYSpeed());
+					(double) tcur.getXSpeed(), (double) tcur.getYSpeed(),0);
 			ListeDoi.addLast(fin);
 			y = 1;
 
@@ -84,7 +84,7 @@ public class PaveTUIO extends JComponent implements TuioListener {
 			for (int i = 0; i < this.donnees.length; i++) {
 				this.donnees[i] = new DonneesPoint(ListeDoi.get(i).x,
 						ListeDoi.get(i).y, ListeDoi.get(i).t,
-						ListeDoi.get(i).vx, ListeDoi.get(i).vy);
+						ListeDoi.get(i).vx, ListeDoi.get(i).vy,0);
 			}
 		
 	}

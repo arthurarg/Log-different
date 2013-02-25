@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 import objets.DonneesPoint;
 import objets.Signature;
@@ -59,7 +58,7 @@ public class Enregistrement {
 			
 			tab = new DonneesPoint[Integer.parseInt(in.readLine())];
 			for (int j=0; j<tab.length;j++) {
-				tab[j] = new DonneesPoint(0,0,0,0,0);
+				tab[j] = new DonneesPoint(0,0,0,0,0,0);
 			}
 			
 			for (int j=0; j<tab.length;j++) {
@@ -70,7 +69,8 @@ public class Enregistrement {
 						                  Double.parseDouble(nombres[1]),
 						                  Double.parseDouble(nombres[2]),
 						                  Double.parseDouble(nombres[3]),
-						                  Double.parseDouble(nombres[4]));
+						                  Double.parseDouble(nombres[4]),
+						                  Double.parseDouble(nombres[5]));
 			}
 			file.close();
 			in.close();

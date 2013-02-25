@@ -17,7 +17,9 @@ public class Comparaison {
 	public static final double angleSeuil = Math.PI/2;
 	public static final double ecartRelatifVitesseMoyenne = 0.50;
 	public static final double ScorePositionsSeuil = 0.9;
-	public static final double ScoreVitessesSeuil = 3E-4; // En cours de test, pas de raison que la valeur soit entre 0 et 1;
+	public static final double ScoreVitessesSeuil = 0.8;
+	public static final double ScorePressionsSeuil = 0.8;
+	
 	
 	
 	
@@ -31,7 +33,15 @@ public class Comparaison {
 	
 	//Méthode 2 : Compare le score des vitesses au seuil defini
 	public static boolean compareVitesses (Signature sTest, Signature sRef) {
-		if (Analyse.scoreVitesses (sTest,sRef) > ScoreVitessesSeuil) 
+		if (Analyse.scoreVitesses (sTest,sRef) < ScoreVitessesSeuil) 
+			return false;
+		else
+			return true;
+	}
+	
+	//Méthode 3 : Compare le score des pressions au seuil defini
+	public static boolean comparePressions (Signature sTest, Signature sRef) {
+		if (Analyse.scoreVitesses (sTest,sRef) < ScorePressionsSeuil) 
 			return false;
 		else
 			return true;
