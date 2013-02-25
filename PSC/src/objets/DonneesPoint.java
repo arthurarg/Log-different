@@ -2,40 +2,43 @@ package objets;
 
 /* Classe DonneesPoint
  * ---------------
- * Role : Objet qui regroupe toutes les informations inhérentes a un point
+ * Role : Objet qui regroupe toutes les informations inh��rentes a un point
  * --------------
  */
 
 
 public class DonneesPoint {
  
-	public double x, y, t, vx, vy;
+	public double x, y, t, vx, vy, s;
 	
 	
 	//Constructeur, toString et equals
-	public DonneesPoint (double x, double y, double t, double vx, double vy) {
+
+	public DonneesPoint (double x, double y, double t, double vx, double vy, double s) {
 		this.x=x;
 		this.y=y;
 		this.t=t;
 		this.vx=vx;
 		this.vy=vy;
+		this.s=s;
 	}
 	public String toString() {
-		return ("("+this.x + "," + this.y + "," + this.t + "," + this.vx + "," + this.vy +")");
+		return ("("+this.x + "," + this.y + "," + this.t + "," + this.vx + "," + this.vy + "," +this.s +")");
 	}
 	
 	//Renvoie true s'il s'agit du meme point
 	public boolean equals(DonneesPoint c) {
-		return (this.x==c.x && this.y==c.y && this.t==c.t && this.vx==c.vx && this.vy==c.vy);
+		return (this.x==c.x && this.y==c.y && this.t==c.t && this.vx==c.vx && this.vy==c.vy && this.s==c.s);
 	}
 	
-	//Ajoute deux DonneesPoint, avec un facteur lambda de pondération
+	//Ajoute deux DonneesPoint, avec un facteur lambda de pond��ration
 	public DonneesPoint add(DonneesPoint c, double lambda) {
 		return new DonneesPoint (1/lambda * c.x+this.x,
 								1/lambda * c.y+this.y,
 								1/lambda * c.t+this.t,
 								1/lambda * c.vx+this.vx,
-								1/lambda * c.vy+this.vy);
+								1/lambda * c.vy+this.vy,
+								1/lambda * c.s+this.s);
 		
 	}
 	
