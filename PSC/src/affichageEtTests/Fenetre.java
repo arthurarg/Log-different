@@ -96,6 +96,25 @@ public class Fenetre extends JFrame {
 		}
 		
 		// supr
+		double smin, smax;
+		smin=s.donnees[0].s;
+		smax=smin;
+		for(int i=0; i<len-1; i++){
+			if(s.donnees[i].s<smin)
+				smin=s.donnees[i].s;
+			if(s.donnees[i].s>smax)
+				smax=s.donnees[i].s;
+		}
+		
+		l=new Coordonnees(1, (s.donnees[0].s-smin)/(smax-smin));
+		
+		for(int i=1; i<len-1; i++){
+			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(s.donnees[i].s-smin)/(smax-smin));
+			r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);
+			System.out.println(s.donnees[i].s);
+			l=c;
+		}
+		
 		double dtot=0, d=0;
 		for(int i=0; i<len-1; i++)
 			dtot=dtot+s.donnees[i].norme();
@@ -124,7 +143,6 @@ public class Fenetre extends JFrame {
 		
 		for(int i=1; i<len-2; i++){
 			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(a[i]-amin)/(amax-amin));
-			System.out.println(c.fois(0.5*taille_signature));
 			//r.tracerSegment(l.fois(0.5*taille_signature), c.fois(0.5*taille_signature), 0xff000000);
 			l=c;
 		}
