@@ -22,9 +22,18 @@ public class Enregistrement {
 	
 	//Enregistre une signature sur le disque dur
 	public static void enregistrer (String login, Signature s) {
+		enregistrer(login, s, "gabarit");
+	}
+	//Recupère une signature sur le disque dur, dans le dossier gabarits
+	public static Signature ouvrir(String login) {
+		return ouvrir(login,"gabarit");
+	}
+	
+	// Méthode plus générale ou l'on choisit le chemin relatif
+	public static void enregistrer (String name, Signature s, String path) {
 		try {
 			//Ouverture du fichier .txt
-			FileWriter fichier = new FileWriter("gabarits/"+login + ".txt");
+			FileWriter fichier = new FileWriter(path + "/" + name + ".txt");
 			
 			//Enregistrement s.donnees (taille puis contenu)
 			fichier.write("" + s.donnees.length);
@@ -33,7 +42,8 @@ public class Enregistrement {
 			                       s.donnees[j].y + " " +
 			                       s.donnees[j].t + " " +
 			                       s.donnees[j].vx + " " +
-			                       s.donnees[j].vy);
+			                       s.donnees[j].vy + " " +
+			                       s.donnees[j].s);
 			}
 			fichier.close();
 		}
@@ -44,15 +54,15 @@ public class Enregistrement {
 		
 	}
 	
-	//Recupere une signature deja enregistree sur le disque dur
-	public static Signature ouvrir (String login) {
+	//Méthode plus générale pour récuperer une signature deja enregistree sur le disque dur
+	public static Signature ouvrir (String name, String path) {
 		//Declaration du tableau et variable temporaire de lecture
 		DonneesPoint[] tab;
 		String[] nombres;
 		
 		//Ouverture du fichier .txt et initialisation tableau donnees
 		try {
-			FileReader file = new FileReader("gabarits/"+login+".txt");
+			FileReader file = new FileReader(path + "/" + name + ".txt");
 			BufferedReader in = new BufferedReader(file);
 			
 			
@@ -63,8 +73,11 @@ public class Enregistrement {
 			
 			for (int j=0; j<tab.length;j++) {
 				nombres = in.readLine().split(" ");
-				if (nombres.length != 5)
-					System.out.println("Erreur de lecture du fichier .txt");
+				if (nombres.length != 6) {
+					System.out.println("Erreur de lecture du fichier .txt :");
+					for (int w=0; w<nombres.length;w++)
+						System.out.println(nombres[w]);
+				}
 				tab[j] = new DonneesPoint(Double.parseDouble(nombres[0]),
 						                  Double.parseDouble(nombres[1]),
 						                  Double.parseDouble(nombres[2]),

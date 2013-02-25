@@ -1,18 +1,22 @@
 package affichageEtTests;
 
+import gestionIO.Enregistrement;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
-import comparaison.Analyse;
-
 import objets.Gabarit;
 import objets.Signature;
+
+import comparaison.Analyse;
 
 /* Classe Tests
  * ---------------
@@ -25,8 +29,9 @@ public class Tests {
 
 
 	public static void main(String[] args) {
-		SerieTests();
 	}
+	
+
 	
 	// Test sur 100 signatures
 	public static void SerieTests () {
