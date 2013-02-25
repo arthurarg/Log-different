@@ -1,4 +1,4 @@
-package minuties;
+package minutiesV1;
 
 public class Sommet {
 	int p;
