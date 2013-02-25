@@ -1,4 +1,4 @@
-package minuties;
+package minutiesV1;
 import gestionIO.Enregistrement;
 
 import java.awt.Dimension;
@@ -24,7 +24,7 @@ public class Tests {
 		Signature s;
 		Fenetre f=new Fenetre();
 		f.setText("test       ");
-		Minuties m;
+		MinutiesV1 m;
 		double c;
 		while(true){s=new Signature();
 		f.afficherVMoyenneMobile(s, 5);}

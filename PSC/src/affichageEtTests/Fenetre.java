@@ -1,6 +1,7 @@
 package affichageEtTests;
 import affichageEtTests.Image;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,6 +69,45 @@ public class Fenetre extends JFrame {
 		}
 		
 		return r;
+	}
+	
+	public void afficherTableau(double[] t){
+		LinkedList<Integer> l=new LinkedList<Integer>();
+		for(int i=0;i<t.length;i++)
+			l.add(i);
+		afficherTableau(t, l, 0xff000000);
+	}
+	
+	public void afficherTableau(double[] t, LinkedList<Integer> list){
+		afficherTableau(t, list, 0xff000000);
+	}
+	
+	public void afficherTableau(double[] t, LinkedList<Integer> list, int rgb){
+		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
+		
+		int len=t.length;
+		
+		double min, max;
+		min=t[0];
+		max=min;
+		for(int i=0; i<len-1; i++){
+			if(t[i]<min)
+				min=t[i];
+			if(t[i]>max)
+				max=t[i];
+		}
+		
+		Coordonnees l=new Coordonnees(0, (t[0]-min)/(max-min));
+		Coordonnees c;
+		
+		for(int i:list){
+			c = new Coordonnees((double)i/len,(t[i]-min)/(max-min));
+			r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), rgb);
+			l=c;
+		}
+		
+		this.getContentPane().add(new ImageComponent(r));
+		this.setVisible(true);
 	}
 	
 	public void afficherV(Signature s){
@@ -195,41 +235,6 @@ public class Fenetre extends JFrame {
 			l=c;
 		}
 		
-		/*// supr
-		double dtot=0, d=0;
-		for(int i=0; i<len-1; i++)
-			dtot=dtot+s.donnees[i].norme();
-		l=new Coordonnees(0, (s.donnees[0].normeVitesse()-vmin)/(vmax-vmin));
-		
-		for(int i=1; i<len-1; i++){
-			d=d+s.donnees[i].norme();
-			c = new Coordonnees(d/dtot,(s.donnees[i].normeVitesse()-vmin)/(vmax-vmin));
-			//r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);
-			l=c;
-		}
-		double a[]=new double[len-2];
-		for(int i=0;i<len-2;i++)
-			a[i]=s.donnees[i].differenceVitesses(s.donnees[i+1])/(s.donnees[i].t-s.donnees[i+1].t);
-		double amin, amax;
-		amin=a[0];
-		amax=amin;
-		for(int i=0; i<len-2; i++){
-			if(a[i]<amin)
-				amin=a[i];
-			if(a[i]>amax)
-				amax=a[i];
-		}
-		
-		l=new Coordonnees(1, (a[0]-amin)/(amax-amin));
-		
-		for(int i=1; i<len-2; i++){
-			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(a[i]-amin)/(amax-amin));
-			System.out.println(c.fois(0.5*taille_signature));
-			//r.tracerSegment(l.fois(0.5*taille_signature), c.fois(0.5*taille_signature), 0xff000000);
-			l=c;
-		}
-		// spur*/
-		
 		this.getContentPane().add(new ImageComponent(r));
 		this.setVisible(true);
 		
@@ -301,6 +306,21 @@ public class Fenetre extends JFrame {
 	
 	public void setPixel2(Coordonnees p, int rgb){
 		points.setRGB((int)p.x, (int)p.y, rgb);
+		this.setVisible(true);
+	}
+	
+	public void tracerSegment(Coordonnees a, Coordonnees b, int rgb){
+		points.tracerSegment(a, b, rgb);
+		this.setVisible(true);
+	}
+	
+	public void tracerSegment(Coordonnees a, Coordonnees b){
+		points.tracerSegment(a, b, 0xff000000);
+		this.setVisible(true);
+	}
+	
+	public void tracerSegment(int ax, int ay, int bx, int by){
+		points.tracerSegment(new Coordonnees(ax, ay), new Coordonnees(bx, by), 0xff000000);
 		this.setVisible(true);
 	}
 	

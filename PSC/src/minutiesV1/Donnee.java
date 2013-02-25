@@ -1,4 +1,4 @@
-package minuties;
+package minutiesV1;
 
 public class Donnee {
 	int l, d, f, posMoy;

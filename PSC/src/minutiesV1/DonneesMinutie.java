@@ -1,7 +1,7 @@
-package minuties;
+package minutiesV1;
 
 public class DonneesMinutie {
-	int p, t, st; // p : position ; t : type ; st : sous-type (varie de 1 à 4)
+	int p, t, st; // p : position ; t : type ; st : sous-type (varie de 1 ï¿½ 4)
 	double c; // c : valeur
 	
 	DonneesMinutie(){		
