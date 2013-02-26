@@ -81,6 +81,11 @@ public class Bdd {
 		sc.next();
 		
 		for (int i = 0; i < 100; i++) {
+			if ((i % 25) == 0 && i!= 0) {
+				System.out.println("Faites une pause ... " + i + " signatures enregistrées");
+				System.out.println("Veuillez taper yes");
+				sc.next();
+			}
 			Enregistrement.enregistrer("" + i, new Signature(), fsignatures.getAbsolutePath());
 			System.out.println(i);
 		}
