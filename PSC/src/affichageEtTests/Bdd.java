@@ -2,15 +2,17 @@ package affichageEtTests;
 
 import gestionIO.Enregistrement;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import comparaison.Analyse;
-
 import objets.Gabarit;
 import objets.Signature;
+
+import comparaison.Analyse;
 
 
 /* Classe Bdd
@@ -28,7 +30,7 @@ public class Bdd {
 		 *  Appeler analyseBDD() pour analyser toutes les donnees stockees sur l'ordi
 		 */
 		//constructBDD();
-		//analyseBDD();
+		analyseBDD();
 	}
 	
 	public static void constructBDD() {
@@ -169,15 +171,19 @@ public class Bdd {
 		if (!image3Folder.exists())
 			image3Folder.mkdir();
 		
-		//Assuming there's a string with da login
+		//Liste les fichiers présents dans bdd/
 		String[] names = new File("bdd/").list();
 
+
+		//________________________________________________
+		//Enregistre les données par personne
+		//________________________________________________
 		for (int k = 0; k < names.length; k++) {
 			
 			String login = names[k];
-			if (new File("bdd/" + login + "/gabarit.txt").exists()) {
-			
-				System.out.println(names[k]);
+			System.out.println(login);
+			System.out.println("Ce login a deja été traité : " + dejaVu(login));
+			if (new File("bdd/" + login + "/gabarit.txt").exists() && !dejaVu(login)) {
 				//Recupere le gabarit
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
 		
@@ -231,10 +237,95 @@ public class Bdd {
 				ecrireTexte(login, scorePre, image3Folder.getAbsolutePath());
 			}
 		}
+		
+		//________________________________________________
+		//Agglomère l'ensemble des données dans 9 fichier .txt
+		//________________________________________________
+		String scorePos = "", scoreVit = "", scorePre = "";
+		
+		for (int k = 0; k < names.length; k++) {
+			String login = names[k];
+			
+			if (dejaVu(login)) {
+				scorePos = renvoiTexte(login, sign1Folder.getAbsolutePath());
+				scoreVit = renvoiTexte(login, sign2Folder.getAbsolutePath());
+				scorePre = renvoiTexte(login, sign3Folder.getAbsolutePath());
+			}
+			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
+				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
+				
+				for (int i = 0; i<100; i++) {
+					Signature s = new Signature(sRef.donnees);
+					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/signatures");
+					Analyse.similitudes(s, sTest);
+					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
+					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
+					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
+				}	
+			}
+		}
+		ecrireTexte("_scorePositionsTotal.txt", scorePos, signFolder.getAbsolutePath());
+		ecrireTexte("_scoreVitessesTotal.txt", scoreVit, signFolder.getAbsolutePath());
+		ecrireTexte("_scorePressionsTotal.txt", scorePre, signFolder.getAbsolutePath());
+		
+		scorePos = scoreVit = scorePre = "";
+		for (int k = 0; k < names.length; k++) {
+			String login = names[k];
+			
+			if (dejaVu(login)) {
+				scorePos = renvoiTexte(login, shoulder1Folder.getAbsolutePath());
+				scoreVit = renvoiTexte(login, shoulder2Folder.getAbsolutePath());
+				scorePre = renvoiTexte(login, shoulder3Folder.getAbsolutePath());
+			}
+			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
+				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
+				
+				for (int i = 0; i<25; i++) {
+					Signature s = new Signature(sRef.donnees);
+					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/far/shoulder");
+					Analyse.similitudes(s, sTest);
+					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
+					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
+					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
+				}	
+			}
+		}
+		ecrireTexte("_scorePositionsTotal.txt", scorePos, shoulderFolder.getAbsolutePath());
+		ecrireTexte("_scoreVitessesTotal.txt", scoreVit, shoulderFolder.getAbsolutePath());
+		ecrireTexte("_scorePressionsTotal.txt", scorePre, shoulderFolder.getAbsolutePath());
+		
+		scorePos = scoreVit = scorePre = "";
+		for (int k = 0; k < names.length; k++) {
+			String login = names[k];
+			if (dejaVu(login)) {
+				scorePos = renvoiTexte(login, image1Folder.getAbsolutePath());
+				scoreVit = renvoiTexte(login, image2Folder.getAbsolutePath());
+				scorePre = renvoiTexte(login, image3Folder.getAbsolutePath());
+			}
+			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
+				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
+				
+				for (int i = 0; i<25; i++) {
+					Signature s = new Signature(sRef.donnees);
+					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/far/image");
+					Analyse.similitudes(s, sTest);
+					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
+					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
+					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
+				}	
+			}
+		}
+		ecrireTexte("_scorePositionsTotal.txt", scorePos, imageFolder.getAbsolutePath());
+		ecrireTexte("_scoreVitessesTotal.txt", scoreVit, imageFolder.getAbsolutePath());
+		ecrireTexte("_scorePressionsTotal.txt", scorePre, imageFolder.getAbsolutePath());
 	}
 	
 	
-	public static void ecrireTexte(String name, String text, String path) {
+	//--------
+	//Fonctions auxiliaires : écrire un fichier .txt, ouvrir un fichier .txt et dire si le login a deja été analyse
+	//--------
+	
+	private static void ecrireTexte(String name, String text, String path) {
 		try {
 			//Ouverture du fichier .txt
 			File fileToWrite = new File(path + "/" + name + ".txt");
@@ -252,5 +343,39 @@ public class Bdd {
 			System.out.println("Le fichier " + path + "/" + name + ".txt" + " n'a pu etre ouvert, " +
 					" ou un probleme d'ecriture a ete rencontre"); 
 		}
+	}
+	
+	private static String renvoiTexte(String name, String path) {
+		String s = "";
+		File fileToOpen = new File(path + "/" + name + ".txt");
+		if (!fileToOpen.exists()) {
+			System.out.println("Ce fichier n'existe pas. Une erreur dans le dossier results existe. Veuillez le suprrimmer et le reconstruire");
+			return "";
+		}
+		
+		try {
+			FileReader file = new FileReader(fileToOpen);
+			BufferedReader in = new BufferedReader(file);
+			String tampon = "";
+			
+			while((tampon = in.readLine()) != null)
+				s+= tampon + NEW_LINE;
+
+			return s;
+		}
+		catch (IOException e) {return null;}
+	}
+	
+	
+	private static boolean dejaVu (String login) {
+		return (new File("results/signatures/scorePositions/" + login + ".txt").exists() &&
+				new File("results/signatures/scoreVitesses/" + login + ".txt").exists() &&
+				new File("results/signatures/scorePressions/" + login + ".txt").exists() &&
+				new File("results/shoulder/scorePositions/" + login + ".txt").exists() &&
+				new File("results/shoulder/scoreVitesses/" + login + ".txt").exists() &&
+				new File("results/shoulder/scorePressions/" + login + ".txt").exists() &&
+				new File("results/image/scorePositions/" + login + ".txt").exists() &&
+				new File("results/image/scoreVitesses/" + login + ".txt").exists() &&
+				new File("results/image/scorePressions/" + login + ".txt").exists());
 	}
 }
