@@ -30,7 +30,7 @@ public class Bdd {
 		 *  Appeler analyseBDD() pour analyser toutes les donnees stockees sur l'ordi
 		 */
 		//constructBDD();
-		analyseBDD();
+		//analyseBDD();
 	}
 	
 	public static void constructBDD() {
@@ -247,9 +247,9 @@ public class Bdd {
 			String login = names[k];
 			
 			if (dejaVu(login)) {
-				scorePos = renvoiTexte(login, sign1Folder.getAbsolutePath());
-				scoreVit = renvoiTexte(login, sign2Folder.getAbsolutePath());
-				scorePre = renvoiTexte(login, sign3Folder.getAbsolutePath());
+				scorePos += renvoiTexte(login, sign1Folder.getAbsolutePath());
+				scoreVit += renvoiTexte(login, sign2Folder.getAbsolutePath());
+				scorePre += renvoiTexte(login, sign3Folder.getAbsolutePath());
 			}
 			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
@@ -273,9 +273,9 @@ public class Bdd {
 			String login = names[k];
 			
 			if (dejaVu(login)) {
-				scorePos = renvoiTexte(login, shoulder1Folder.getAbsolutePath());
-				scoreVit = renvoiTexte(login, shoulder2Folder.getAbsolutePath());
-				scorePre = renvoiTexte(login, shoulder3Folder.getAbsolutePath());
+				scorePos += renvoiTexte(login, shoulder1Folder.getAbsolutePath());
+				scoreVit += renvoiTexte(login, shoulder2Folder.getAbsolutePath());
+				scorePre += renvoiTexte(login, shoulder3Folder.getAbsolutePath());
 			}
 			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
@@ -298,9 +298,9 @@ public class Bdd {
 		for (int k = 0; k < names.length; k++) {
 			String login = names[k];
 			if (dejaVu(login)) {
-				scorePos = renvoiTexte(login, image1Folder.getAbsolutePath());
-				scoreVit = renvoiTexte(login, image2Folder.getAbsolutePath());
-				scorePre = renvoiTexte(login, image3Folder.getAbsolutePath());
+				scorePos += renvoiTexte(login, image1Folder.getAbsolutePath());
+				scoreVit += renvoiTexte(login, image2Folder.getAbsolutePath());
+				scorePre += renvoiTexte(login, image3Folder.getAbsolutePath());
 			}
 			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
