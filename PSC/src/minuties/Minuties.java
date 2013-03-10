@@ -8,6 +8,8 @@ import affichageEtTests.Fenetre;
 
 public class Minuties {
 	
+	static double seuilLissage=0.5;
+	
 	static LinkedList<Integer> extremats(double[] t){ // renvoit une liste des posititons des extremats d'un tableau
 		LinkedList<Integer> l=new LinkedList<Integer>();
 		l.add(0);
@@ -40,7 +42,7 @@ public class Minuties {
 		}
 		m=m/size; // moyenne des hauteurs de pics
 		
-		LinkedList<Integer> l2=new LinkedList<Integer>();
+		LinkedList<Integer> l2=new LinkedList<Integer>(); // 1er lissage fonction de la hauteur entre deux extremats
 		last=0;
 		for(int x:l){
 			if(Math.abs(t[x]-t[last])>niv*m){
@@ -48,7 +50,26 @@ public class Minuties {
 				last=x;
 			}
 		}
-		return l2;
+		
+		LinkedList<Integer> l3=new LinkedList<Integer>(); // 2eme lissage : supprime les points intermediaires
+		last=0;
+		int x=0, next=0, temp;
+		for(ListIterator<Integer> i = l2.listIterator(); i.hasNext();){
+			if(t[last]<t[x] && t[x]<t[next]){
+			}
+			else if(t[last]>t[x] && t[x]>t[next]){	
+			}
+			else{
+				l3.add(x);
+				last=x;
+			}
+			temp=next;
+			next=i.next();
+			x=temp;
+		}
+		l3.add(x);
+		l3.add(next);
+		return l3;
 	}
 	
 	static LinkedList<Integer> minuties(double[] t, double niv){ // procède au repérage des extremats puis au lissage
@@ -89,17 +110,53 @@ public class Minuties {
 		return t;
 	}
 	
+	public static double comparaison(Signature s1, Signature s2){ // vitesses uniquement pour l'instant
+		double[] t1=donnees(s1,0), t2=donnees(s2,0);
+		LinkedList<Integer> l1=minuties(t1, seuilLissage), l2=minuties(t2, seuilLissage);
+		
+		double step=0.1, s=0, ss1=0, ss2=0;
+		
+		for(int i=0;i<Math.min(t1.length, t2.length)/step;i++){
+			s=s+Math.abs(prolongementContinue(t1, i*step)-prolongementContinue(t2, i*step))*step;
+			ss1=ss1+Math.abs(prolongementContinue(t1, i*step))*step;
+			ss2=ss2+Math.abs(prolongementContinue(t2, i*step))*step;
+		}
+		
+		return 1-s/(ss1+ss2);
+	}
+	
+	public static double prolongementContinue(double[] t, double x){
+		if(x>t.length-1)
+			return 0;
+		if(x==t.length-1)
+			return t[t.length-1];
+		double y=x-(double)((int)x);
+		return t[(int)x]+y*t[1+(int)x];
+	}
+	
 	public static void main(String[] args) {
-		Signature s;
+		Signature s, sref;
 		Fenetre f=new Fenetre();
-		double t[];LinkedList<Integer> l;
+		double[] t, t0;LinkedList<Integer> l0, l;
+		sref=new Signature();
+		t0=donnees(sref,0);
+		l0=minuties(t0, seuilLissage);
+		
 		while(true){
 			s=new Signature();
-			t=donnees(s,2);
-			l=minuties(t, 0.5);
+			f.vider();
+			t=donnees(s,0);
+			l=minuties(t, seuilLissage);
 
 			f.afficherTableau(t);
-			f.afficherTableau(t, l, 0xffff0000);
+			//f.afficherTableau(t, l, 0xff0000ff);
+			f.afficherTableau(t0, 0xffff0000);
+			//f.afficherTableau(t0, l0, 0xffff0000);
+			
+			//f.ajouter(sref, 0xFFFF0000);
+			//f.ajouter(s);
+			
+			System.out.println(comparaison(s, sref));
 		}
 	}
 		

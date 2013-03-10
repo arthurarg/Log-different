@@ -71,14 +71,18 @@ public class Fenetre extends JFrame {
 		return r;
 	}
 	
-	/* Les fonctions afficherTableau permettent d'afficher un tableau de touble en fonction des indices.
+	/* Les fonctions afficherTableau permettent d'afficher un tableau de double en fonction des indices.
 	 * Les valeurs peuvent être quelconques. Tout est normalisé et adapté à l'affichage
 	 * */
-	public void afficherTableau(double[] t){
+	public void afficherTableau(double[] t, int rgb){
 		LinkedList<Integer> l=new LinkedList<Integer>();
 		for(int i=0;i<t.length;i++)
 			l.add(i);
-		afficherTableau(t, l, 0xff000000);
+		afficherTableau(t, l, rgb);
+	}
+	
+	public void afficherTableau(double[] t){
+		afficherTableau(t, 0xff000000);
 	}
 	
 	public void afficherTableau(double[] t, LinkedList<Integer> list){
