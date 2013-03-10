@@ -1,4 +1,12 @@
 bin
 .metadata
 .DS_Store
+DS_Store
 gabarits
+bdd
+results
+scorePositions.txt
+scoreVitesses.txt
+scorePressions.txt
+.classpath
+classpath
