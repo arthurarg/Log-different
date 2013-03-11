@@ -22,11 +22,11 @@ public class Enregistrement {
 	
 	//Enregistre une signature sur le disque dur
 	public static void enregistrer (String login, Signature s) {
-		enregistrer(login, s, "gabarit");
+		enregistrer(login, s, "gabarits");
 	}
 	//Recupère une signature sur le disque dur, dans le dossier gabarits
 	public static Signature ouvrir(String login) {
-		return ouvrir(login,"gabarit");
+		return ouvrir(login,"gabarits");
 	}
 	
 	// Méthode plus générale ou l'on choisit le chemin relatif
