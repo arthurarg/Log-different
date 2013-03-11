@@ -49,6 +49,7 @@ public class Bdd {
 		
 		//Cree le dossier bdd/login/
 		File f = new File("bdd/" + login);
+	
 		if (!f.exists())
 			f.mkdir();
 		else {

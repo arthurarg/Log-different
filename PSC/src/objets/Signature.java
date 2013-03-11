@@ -25,7 +25,7 @@ public class Signature {
 	public static final int N = 50;
 	// Choisir Acquisition.WINDOWS ou Acquisition.TUIO ou
 	// Acquisition.GLULOGIC selon le mode souhaité
-	Acquisition a = Acquisition.WINDOWS;
+	Acquisition a = Acquisition.GLULOGIC;
 	public DonneesPoint[] donnees;
 
 	public Signature() {
