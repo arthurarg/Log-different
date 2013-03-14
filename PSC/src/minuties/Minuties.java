@@ -87,6 +87,16 @@ public class Minuties {
 		double[] t;
 		int l=s.donnees.length;
 		
+		
+		if(i==3){ // COURBURE
+			t=new double[l-1];
+			double ax, ay;
+			for(int k=0;k<l-1;k++){
+				ax=Math.pow(s.donnees[k+1].vx-s.donnees[k].vx, 2);
+				ay=Math.pow(s.donnees[k+1].vy-s.donnees[k].vy, 2);
+				t[k]=angle(ax, ay)-angle(s.donnees[k].vx, s.donnees[k].vy);
+			}
+		}
 		if(i==2){ // ANGLE
 			t=new double[l-1];
 			for(int k=0;k<l-1;k++)
@@ -134,18 +144,22 @@ public class Minuties {
 		return t[(int)x]+y*t[1+(int)x];
 	}
 	
+	static double angle(double x, double y){
+		return Math.atan(y/x);
+	}
+	
 	public static void main(String[] args) {
 		Signature s, sref;
 		Fenetre f=new Fenetre();
 		double[] t, t0;LinkedList<Integer> l0, l;
 		sref=new Signature();
-		t0=donnees(sref,0);
+		t0=donnees(sref,3);
 		l0=minuties(t0, seuilLissage);
 		
 		while(true){
 			s=new Signature();
 			f.vider();
-			t=donnees(s,0);
+			t=donnees(s,3);
 			l=minuties(t, seuilLissage);
 
 			f.afficherTableau(t);
