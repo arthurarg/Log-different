@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import minuties.Minuties;
+
 import objets.Gabarit;
 import objets.Signature;
 
@@ -30,7 +32,7 @@ public class Bdd {
 		 *  Appeler analyseBDD() pour analyser toutes les donnees stockees sur l'ordi
 		 */
 		//constructBDD();
-		//analyseBDD();
+		analyseBDD();
 	}
 	
 	public static void constructBDD() {
@@ -49,6 +51,7 @@ public class Bdd {
 		
 		//Cree le dossier bdd/login/
 		File f = new File("bdd/" + login);
+	
 		if (!f.exists())
 			f.mkdir();
 		else {
@@ -144,6 +147,15 @@ public class Bdd {
 		File sign3Folder = new File("results/signatures/scorePressions");
 		if (!sign3Folder.exists())
 			sign3Folder.mkdir();
+		File sign4Folder = new File("results/signatures/scoreMinuties0");
+		if (!sign4Folder.exists())
+			sign4Folder.mkdir();
+		File sign5Folder = new File("results/signatures/scoreMinuties1");
+		if (!sign5Folder.exists())
+			sign5Folder.mkdir();
+		File sign6Folder = new File("results/signatures/scoreMinuties2");
+		if (!sign6Folder.exists())
+			sign6Folder.mkdir();
 		
 		File shoulderFolder = new File("results/shoulder");
 		if (!shoulderFolder.exists())
@@ -157,6 +169,15 @@ public class Bdd {
 		File shoulder3Folder = new File("results/shoulder/scorePressions");
 		if (!shoulder3Folder.exists())
 			shoulder3Folder.mkdir();
+		File shoulder4Folder = new File("results/shoulder/scoreMinuties0");
+		if (!shoulder4Folder.exists())
+			shoulder4Folder.mkdir();
+		File shoulder5Folder = new File("results/shoulder/scoreMinuties1");
+		if (!shoulder5Folder.exists())
+			shoulder5Folder.mkdir();
+		File shoulder6Folder = new File("results/shoulder/scoreMinuties2");
+		if (!shoulder6Folder.exists())
+			shoulder6Folder.mkdir();
 		
 		File imageFolder = new File("results/image");
 		if (!imageFolder.exists())
@@ -170,6 +191,17 @@ public class Bdd {
 		File image3Folder = new File("results/image/scorePressions");
 		if (!image3Folder.exists())
 			image3Folder.mkdir();
+		File image4Folder = new File("results/image/scoreMinuties0");
+		if (!image4Folder.exists())
+			image4Folder.mkdir();
+		File image5Folder = new File("results/image/scoreMinuties1");
+		if (!image5Folder.exists())
+			image5Folder.mkdir();
+		File image6Folder = new File("results/image/scoreMinuties2");
+		if (!image6Folder.exists())
+			image6Folder.mkdir();
+		
+		
 		
 		//Liste les fichiers présents dans bdd/
 		String[] names = new File("bdd/").list();
@@ -183,142 +215,100 @@ public class Bdd {
 			String login = names[k];
 			System.out.println(login);
 			System.out.println("Ce login a deja été traité : " + dejaVu(login));
+			
 			if (new File("bdd/" + login + "/gabarit.txt").exists() && !dejaVu(login)) {
 				//Recupere le gabarit
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
 		
-		
 				//Enregistrement des scores obtenus pour les vrais signatures
-				String scorePos = "", scoreVit = "", scorePre = "";
-				for (int i = 0; i<100; i++) {
-					Signature s = new Signature(sRef.donnees);
-					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/signatures");
-					Analyse.similitudes(s, sTest);
-					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
-					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
-					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
-				}
-				ecrireTexte(login, scorePos, sign1Folder.getAbsolutePath());
-				ecrireTexte(login, scoreVit, sign2Folder.getAbsolutePath());
-				ecrireTexte(login, scorePre, sign3Folder.getAbsolutePath());
-		
-		
+				analyseParPersonne(sRef,login,"signatures",100,sign1Folder,sign2Folder,sign3Folder,sign4Folder,sign5Folder,sign6Folder);
 				//Enregistrement des scores obtenus pour les tentatives shoulder
-				scorePos = "";
-				scoreVit = "";
-				scorePre = "";
-				for (int i = 0; i<25; i++) {
-					Signature s = new Signature(sRef.donnees);
-					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/far/shoulder");
-					Analyse.similitudes(s, sTest);
-					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
-					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
-					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
-				}	
-				ecrireTexte(login, scorePos, shoulder1Folder.getAbsolutePath());
-				ecrireTexte(login, scoreVit, shoulder2Folder.getAbsolutePath());
-				ecrireTexte(login, scorePre, shoulder3Folder.getAbsolutePath());
-		
-		
+				analyseParPersonne(sRef,login,"far/shoulder",25,shoulder1Folder,shoulder2Folder,shoulder3Folder,shoulder4Folder,shoulder5Folder,shoulder6Folder);
 				//Enregistrement des scores obtenus pour les tentatives image
-				scorePos = "";
-				scoreVit = "";
-				scorePre = "";
-				for (int i = 0; i<25; i++) {
-					Signature s = new Signature(sRef.donnees);
-					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/far/image");
-					Analyse.similitudes(s, sTest);
-					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
-					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
-					scorePre+= "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
-				}
-				ecrireTexte(login, scorePos, image1Folder.getAbsolutePath());
-				ecrireTexte(login, scoreVit, image2Folder.getAbsolutePath());
-				ecrireTexte(login, scorePre, image3Folder.getAbsolutePath());
+				analyseParPersonne(sRef,login,"far/image",25,image1Folder,image2Folder,image3Folder,image4Folder,image5Folder,image6Folder);
 			}
 		}
 		
 		//________________________________________________
 		//Agglomère l'ensemble des données dans 9 fichier .txt
 		//________________________________________________
-		String scorePos = "", scoreVit = "", scorePre = "";
+		System.out.println("Agrégation des données en cours");
+		analyseGlobale(names,"signature",signFolder,sign1Folder,sign2Folder,sign3Folder,sign4Folder,sign5Folder,sign6Folder);
+		analyseGlobale(names,"far/shoulder",shoulderFolder,shoulder1Folder,shoulder2Folder,shoulder3Folder,shoulder4Folder,shoulder5Folder,shoulder6Folder);
+		analyseGlobale(names,"far/image",imageFolder,image1Folder,image2Folder,image3Folder,image4Folder,image5Folder,image6Folder);
+		System.out.println("Agrégation des données réussie !");
+
+	}
+	
+	//--------
+	//Fonctions utilisées pour analyser les données
+	//--------
+	
+	private static void analyseParPersonne(Signature sRef, String login, String where, int n, 
+											File folder1, File folder2, File folder3, File folder4, File folder5, File folder6) {
+		
+		String scorePos = "", scoreVit = "", scorePre = "",scoreMin0 = "",scoreMin1 = "",scoreMin2 = "";
+		for (int i = 0; i<n; i++) {
+			Signature s = new Signature(sRef.donnees);
+			Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/" + where);
+			Analyse.similitudes(s, sTest);
+			scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
+			scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
+			scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
+			scoreMin0 += "" + Minuties.comparaison(sTest, s, 0) + NEW_LINE;
+			scoreMin1 += "" + Minuties.comparaison(sTest, s, 1) + NEW_LINE;
+			scoreMin2 += "" + Minuties.comparaison(sTest, s, 2) + NEW_LINE;
+		}
+		ecrireTexte(login, scorePos, folder1.getAbsolutePath());
+		ecrireTexte(login, scoreVit, folder2.getAbsolutePath());
+		ecrireTexte(login, scorePre, folder3.getAbsolutePath());
+		ecrireTexte(login, scoreMin0, folder4.getAbsolutePath());
+		ecrireTexte(login, scoreMin1, folder5.getAbsolutePath());
+		ecrireTexte(login, scoreMin2, folder6.getAbsolutePath());
+	}
+	
+	private static void analyseGlobale(String[] names, String where, 
+							File folder0, File folder1, File folder2, File folder3, File folder4, File folder5, File folder6){
+		String scorePos = "", scoreVit = "", scorePre = "",scoreMin0 = "",scoreMin1 = "",scoreMin2 = "";
 		
 		for (int k = 0; k < names.length; k++) {
 			String login = names[k];
 			
 			if (dejaVu(login)) {
-				scorePos += renvoiTexte(login, sign1Folder.getAbsolutePath());
-				scoreVit += renvoiTexte(login, sign2Folder.getAbsolutePath());
-				scorePre += renvoiTexte(login, sign3Folder.getAbsolutePath());
+				scorePos += renvoiTexte(login, folder1.getAbsolutePath());
+				scoreVit += renvoiTexte(login, folder2.getAbsolutePath());
+				scorePre += renvoiTexte(login, folder3.getAbsolutePath());
+				scoreMin0 += renvoiTexte(login, folder4.getAbsolutePath());
+				scoreMin1 += renvoiTexte(login, folder5.getAbsolutePath());
+				scoreMin2 += renvoiTexte(login, folder6.getAbsolutePath());
 			}
 			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
 				
 				for (int i = 0; i<100; i++) {
 					Signature s = new Signature(sRef.donnees);
-					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/signatures");
+					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/" + where);
 					Analyse.similitudes(s, sTest);
 					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
 					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
 					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
+					scoreMin0 += "" + Minuties.comparaison(sTest, s, 0) + NEW_LINE;
+					scoreMin1 += "" + Minuties.comparaison(sTest, s, 1) + NEW_LINE;
+					scoreMin2 += "" + Minuties.comparaison(sTest, s, 2) + NEW_LINE;
 				}	
 			}
 		}
-		ecrireTexte("_scorePositionsTotal.txt", scorePos, signFolder.getAbsolutePath());
-		ecrireTexte("_scoreVitessesTotal.txt", scoreVit, signFolder.getAbsolutePath());
-		ecrireTexte("_scorePressionsTotal.txt", scorePre, signFolder.getAbsolutePath());
+		ecrireTexte("_scorePositionsTotal.txt", scorePos, folder0.getAbsolutePath());
+		ecrireTexte("_scoreVitessesTotal.txt", scoreVit, folder0.getAbsolutePath());
+		ecrireTexte("_scorePressionsTotal.txt", scorePre, folder0.getAbsolutePath());
+		ecrireTexte("_scoreMinuties0Total.txt", scoreMin0, folder0.getAbsolutePath());
+		ecrireTexte("_scoreMinuties1Total.txt", scoreMin1, folder0.getAbsolutePath());
+		ecrireTexte("_scoreMinuties2Total.txt", scoreMin2, folder0.getAbsolutePath());
 		
-		scorePos = scoreVit = scorePre = "";
-		for (int k = 0; k < names.length; k++) {
-			String login = names[k];
-			
-			if (dejaVu(login)) {
-				scorePos += renvoiTexte(login, shoulder1Folder.getAbsolutePath());
-				scoreVit += renvoiTexte(login, shoulder2Folder.getAbsolutePath());
-				scorePre += renvoiTexte(login, shoulder3Folder.getAbsolutePath());
-			}
-			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
-				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
-				
-				for (int i = 0; i<25; i++) {
-					Signature s = new Signature(sRef.donnees);
-					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/far/shoulder");
-					Analyse.similitudes(s, sTest);
-					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
-					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
-					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
-				}	
-			}
-		}
-		ecrireTexte("_scorePositionsTotal.txt", scorePos, shoulderFolder.getAbsolutePath());
-		ecrireTexte("_scoreVitessesTotal.txt", scoreVit, shoulderFolder.getAbsolutePath());
-		ecrireTexte("_scorePressionsTotal.txt", scorePre, shoulderFolder.getAbsolutePath());
-		
-		scorePos = scoreVit = scorePre = "";
-		for (int k = 0; k < names.length; k++) {
-			String login = names[k];
-			if (dejaVu(login)) {
-				scorePos += renvoiTexte(login, image1Folder.getAbsolutePath());
-				scoreVit += renvoiTexte(login, image2Folder.getAbsolutePath());
-				scorePre += renvoiTexte(login, image3Folder.getAbsolutePath());
-			}
-			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
-				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
-				
-				for (int i = 0; i<25; i++) {
-					Signature s = new Signature(sRef.donnees);
-					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/far/image");
-					Analyse.similitudes(s, sTest);
-					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
-					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
-					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
-				}	
-			}
-		}
-		ecrireTexte("_scorePositionsTotal.txt", scorePos, imageFolder.getAbsolutePath());
-		ecrireTexte("_scoreVitessesTotal.txt", scoreVit, imageFolder.getAbsolutePath());
-		ecrireTexte("_scorePressionsTotal.txt", scorePre, imageFolder.getAbsolutePath());
 	}
+	
+	
+	
 	
 	
 	//--------
@@ -331,13 +321,17 @@ public class Bdd {
 			File fileToWrite = new File(path + "/" + name + ".txt");
 			if (fileToWrite.exists())
 				fileToWrite.delete();
-			System.out.println(fileToWrite.createNewFile());
+			fileToWrite.createNewFile();
+			
 			
 			FileWriter fichier = new FileWriter(fileToWrite);
 			
 			//Enregistrement
+			System.out.print("Ecriture du fichier...");
 			fichier.write(text);
 			fichier.close();
+
+			System.out.println(" Ok");
 		}
 		catch (IOException e) {
 			System.out.println("Le fichier " + path + "/" + name + ".txt" + " n'a pu etre ouvert, " +
@@ -361,6 +355,7 @@ public class Bdd {
 			while((tampon = in.readLine()) != null)
 				s+= tampon + NEW_LINE;
 
+			in.close();
 			return s;
 		}
 		catch (IOException e) {return null;}

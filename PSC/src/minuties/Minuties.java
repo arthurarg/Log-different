@@ -120,8 +120,8 @@ public class Minuties {
 		return t;
 	}
 	
-	public static double comparaison(Signature s1, Signature s2){ // vitesses uniquement pour l'instant
-		double[] t1=donnees(s1,0), t2=donnees(s2,0);
+	public static double comparaison(Signature s1, Signature s2, int n){ // vitesses uniquement pour l'instant, n=type de minutie
+		double[] t1=donnees(s1,n), t2=donnees(s2,n);
 		LinkedList<Integer> l1=minuties(t1, seuilLissage), l2=minuties(t2, seuilLissage);
 		
 		double step=0.1, s=0, ss1=0, ss2=0;
@@ -169,8 +169,9 @@ public class Minuties {
 			
 			//f.ajouter(sref, 0xFFFF0000);
 			//f.ajouter(s);
-			
-			System.out.println(comparaison(s, sref));
+			System.out.println(comparaison(s, sref,0));
+			System.out.println(comparaison(s, sref,1));
+			System.out.println(comparaison(s, sref,2));
 		}
 	}
 		
