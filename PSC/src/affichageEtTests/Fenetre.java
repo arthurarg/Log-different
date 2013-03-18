@@ -3,11 +3,13 @@ import affichageEtTests.Image;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import objets.Coordonnees;
 import objets.Signature;
+import minutiesVectorielles.DonneesAnglesSortedLinkedList;;
 
 
 /* Classe Fenetre
@@ -300,6 +302,21 @@ public class Fenetre extends JFrame {
 		this.getContentPane().add(new ImageComponent(conversion(s, rgb)));
 		this.setVisible(true);
 	}
+	
+	public void ajouterSignatureEtMinuties(Signature s, DonneesAnglesSortedLinkedList l, int n){
+		Image tmp =conversion(s, 0xff000000);
+		for(int i=0; i<n; i++){
+			Coordonnees a = new Coordonnees(s.donnees[l.get(i).j].x,s.donnees[l.get(i).j].y);
+			Coordonnees b = new Coordonnees(s.donnees[l.get(i).i].x,s.donnees[l.get(i).i].y);
+			Coordonnees c = new Coordonnees(s.donnees[l.get(i).k].x,s.donnees[l.get(i).k].y);
+			tmp.tracerSegment(a.fois(taille_signature), b.fois(taille_signature), 0xFFFF1111);
+			tmp.tracerSegment(c.fois(taille_signature), b.fois(taille_signature), 0xFFFF1111);
+		}
+		this.getContentPane().add(new ImageComponent(tmp));
+		this.setVisible(true);
+	}
+	
+	
 	
 	//Ajoute la signature a la fenetre, couleur noire
 	public void ajouter(Signature s){

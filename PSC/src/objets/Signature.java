@@ -22,7 +22,7 @@ import affichageEtTests.FenetreTempsReel;
 
 public class Signature {
 	public static boolean AffichageTpsReel = true;
-	public static final int N = 50;
+	public static final int N = 100;
 	// Choisir Acquisition.WINDOWS ou Acquisition.TUIO ou
 	// Acquisition.GLULOGIC selon le mode souhaité
 	Acquisition a = Acquisition.GLULOGIC;
