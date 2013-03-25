@@ -144,8 +144,6 @@ public class Analyse {
 
 	//Modifie sRef (coupe des points) et sTest (coupe des points, homothetie, rotation, translation) de sorte que scorePositions soit minimisee
 	public static DonneesPoint[][] similitudes(Signature sRef, Signature sTest){
-		sRef.calculs();
-		sTest.calculs();
 		DonneesPoint[] tabRef = sRef.getDonnees();
 		DonneesPoint[] tabTest = sTest.getDonnees();
 		
@@ -212,14 +210,8 @@ public class Analyse {
 		for(int i=0;i<sRef.size()-n1avant-n1apres;i++)
 			tab1[i] = new DonneesPoint(tabRef[i+n1avant].x, tabRef[i+n1avant].y,tabRef[i+n1avant].t,tabRef[i+n1avant].vx,tabRef[i+n1avant].vy,tabRef[i+n1avant].s);
 		
-		
-		//TODO renvoyer les deux tableaux plutôt que modifier les signatures !!
-		//sTest = new Signature(tab2);
-		//sRef = new Signature(tab1);
-		//TODO supprimer lignes ci dessus
+	
 		double[] res = {params[1],params[2], param[4], param[5]};
-		//ici tout est bon
-		//mauvaise adresse !
 		
 		DonneesPoint[][] aRetourner;
 		aRetourner = new DonneesPoint[2][];
