@@ -96,9 +96,9 @@ public class Minuties {
 			t=new double[l-1];
 			double ax, ay;
 			for(int k=0;k<l-1;k++){
-				ax=Math.pow(s.donnees[k+1].vx-s.donnees[k].vx, 2);
-				ay=Math.pow(s.donnees[k+1].vy-s.donnees[k].vy, 2);
-				t[k]=angle(ax, ay)-angle(s.donnees[k].vx, s.donnees[k].vy);
+				ax=Math.pow(tab[k+1].vx-tab[k].vx, 2);
+				ay=Math.pow(tab[k+1].vy-tab[k].vy, 2);
+				t[k]=angle(ax, ay)-angle(tab[k].vx, tab[k].vy);
 			}
 		}
 		if(i==2){ // ANGLE

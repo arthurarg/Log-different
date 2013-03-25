@@ -309,10 +309,12 @@ public class Fenetre extends JFrame {
 	
 	public void ajouterSignatureEtMinuties(Signature s, DonneesAnglesSortedLinkedList l, int n){
 		Image tmp =conversion(s, 0xff000000);
+		DonneesPoint[] tab = s.getDonnees();
+		
 		for(int i=0; i<n; i++){
-			Coordonnees a = new Coordonnees(s.donnees[l.get(i).j].x,s.donnees[l.get(i).j].y);
-			Coordonnees b = new Coordonnees(s.donnees[l.get(i).i].x,s.donnees[l.get(i).i].y);
-			Coordonnees c = new Coordonnees(s.donnees[l.get(i).k].x,s.donnees[l.get(i).k].y);
+			Coordonnees a = new Coordonnees(tab[l.get(i).j].x,tab[l.get(i).j].y);
+			Coordonnees b = new Coordonnees(tab[l.get(i).i].x,tab[l.get(i).i].y);
+			Coordonnees c = new Coordonnees(tab[l.get(i).k].x,tab[l.get(i).k].y);
 			tmp.tracerSegment(a.fois(taille_signature), b.fois(taille_signature), 0xFFFF1111);
 			tmp.tracerSegment(c.fois(taille_signature), b.fois(taille_signature), 0xFFFF1111);
 		}
