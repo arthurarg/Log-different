@@ -2,6 +2,7 @@ package minuties;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import objets.DonneesPoint;
 import objets.Signature;
 
 import affichageEtTests.Fenetre;
@@ -85,26 +86,28 @@ public class Minuties {
 	
 	static double[] donnees(Signature s, int i){
 		double[] t;
-		int l=s.donnees.length;
+		DonneesPoint[] tab = s.getDonnees();
+		
+		int l=tab.length;
 		
 		if(i==2){ // ANGLE
 			t=new double[l-1];
 			for(int k=0;k<l-1;k++)
-				t[k]=s.donnees[k+1].angleVecteurVitesse()-s.donnees[k].angleVecteurVitesse();
+				t[k]=tab[k+1].angleVecteurVitesse()-tab[k].angleVecteurVitesse();
 		}
 		if(i==1){ // ACCELERATION
 			t=new double[l-1];
 			double ax, ay;
 			for(int k=0;k<l-1;k++){
-				ax=Math.pow(s.donnees[k+1].vx-s.donnees[k].vx, 2);
-				ay=Math.pow(s.donnees[k+1].vy-s.donnees[k].vy, 2);
-				t[k]=Math.pow(ax+ay, 1/2)/(s.donnees[k].t-s.donnees[k+1].t);
+				ax=Math.pow(tab[k+1].vx-tab[k].vx, 2);
+				ay=Math.pow(tab[k+1].vy-tab[k].vy, 2);
+				t[k]=Math.pow(ax+ay, 1/2)/(tab[k].t-tab[k+1].t);
 			}
 		}
 		else{ // VITESSE
 			t=new double[l];
 			for(int k=0;k<l;k++)
-				t[k]=s.donnees[k].normeVitesse();
+				t[k]=tab[k].normeVitesse();
 		}
 		
 		return t;

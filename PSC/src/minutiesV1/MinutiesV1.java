@@ -1,14 +1,14 @@
 package minutiesV1;
 import java.util.LinkedList;
 
-import objets.Coordonnees;
+import objets.DonneesPoint;
 import objets.Signature;
-import affichageEtTests.Fenetre;
 import affichageEtTests.Image;
 
 public class MinutiesV1 {
 	double vmax, vmin;
 	Signature s;
+	DonneesPoint[] tab;
 	LinkedList<DonneesMinutie> m;
 	double v[], a[]; // taux
 	int p[], pInv[];
@@ -17,9 +17,9 @@ public class MinutiesV1 {
 	public LinkedList<Sommet> trouverSommets(){
 		LinkedList<Sommet> l=new LinkedList<Sommet>();
 		for(int i=1;i<length-1;i++){
-			if(s.donnees[i-1].normeVitesse()<s.donnees[i].normeVitesse() && s.donnees[i+1].normeVitesse()<s.donnees[i].normeVitesse())
+			if(tab[i-1].normeVitesse()<tab[i].normeVitesse() && tab[i+1].normeVitesse()<tab[i].normeVitesse())
 				l.add(new Sommet(i, true));
-			else if(s.donnees[i-1].normeVitesse()>s.donnees[i].normeVitesse() && s.donnees[i+1].normeVitesse()>s.donnees[i].normeVitesse())
+			else if(tab[i-1].normeVitesse()>tab[i].normeVitesse() && tab[i+1].normeVitesse()>tab[i].normeVitesse())
 				l.add(new Sommet(i, false));
 		}
 		return l;
@@ -30,7 +30,9 @@ public class MinutiesV1 {
 		
 		s.inverserDonnees();
 		
-		length=s.donnees.length;
+		length=s.getDonnees().length;
+		tab = s.getDonnees();
+		
 		m=new LinkedList<DonneesMinutie>();
 		v=new double[length];
 		a=new double[length];
@@ -45,7 +47,7 @@ public class MinutiesV1 {
 	void detection4(int n){
 		double a[]=new double[length-1];
 		for(int i=0;i<length-1;i++)
-			a[i]=s.donnees[i].differenceVitesses(s.donnees[i+1])/(s.donnees[i].t-s.donnees[i+1].t);
+			a[i]=tab[i].differenceVitesses(tab[i+1])/(tab[i].t-tab[i+1].t);
 		int[] p=trie(a);
 		LinkedList<Donnee> al=lissage(a, p);
 		
@@ -101,18 +103,18 @@ public class MinutiesV1 {
 	}
 	
 	void vitessesLimites(){
-		vmin=s.donnees[0].normeVitesse();
+		vmin=tab[0].normeVitesse();
 		vmax=vmin;
-		for(int i=0; i<s.donnees.length-1; i++){
-			if(s.donnees[i].normeVitesse()<vmin)
-				vmin=s.donnees[i].normeVitesse();
-			if(s.donnees[i].normeVitesse()>vmax)
-				vmax=s.donnees[i].normeVitesse();
+		for(int i=0; i<tab.length-1; i++){
+			if(tab[i].normeVitesse()<vmin)
+				vmin=tab[i].normeVitesse();
+			if(tab[i].normeVitesse()>vmax)
+				vmax=tab[i].normeVitesse();
 		}
 	}
 	
 	double t(int i){
-		return (s.donnees[i].normeVitesse()-vmin)/(vmax-vmin);
+		return (tab[i].normeVitesse()-vmin)/(vmax-vmin);
 	}
 	
 	void swap(double[] t, int i, int j){
@@ -128,7 +130,7 @@ public class MinutiesV1 {
 	}
 	
 	void trieVitesses(){ // decroissant
-		int l=s.donnees.length;
+		int l=tab.length;
 		for(int i=0;i<l;i++){
 			v[i]=t(i);
 			p[i]=i;
@@ -148,7 +150,7 @@ public class MinutiesV1 {
 	}
 	
 	void trieAngles(){ // decroissant
-		int l=s.donnees.length;
+		int l=tab.length;
 		for(int i=0;i<l-2;i++){
 			a[i]=angle(i+1, i+2);
 			p[i]=i;
@@ -168,7 +170,7 @@ public class MinutiesV1 {
 	}
 	
 	void inverser(){
-		int l=s.donnees.length;
+		int l=tab.length;
 		for(int i=0;i<(int)(l/2);i++){
 			swap(v, i, l-1-i);
 			swap(p, i, l-1-i);
@@ -178,7 +180,7 @@ public class MinutiesV1 {
 	}
 	
 	void aff(){
-		int l=s.donnees.length;
+		int l=tab.length;
 		for(int i=0;i<l;i++){
 			System.out.print(p[i]+" - ");
 		}
@@ -190,7 +192,7 @@ public class MinutiesV1 {
 	}
 	
 	void aff2(){
-		int l=s.donnees.length;
+		int l=tab.length;
 		for(int i=0;i<l;i++){
 			System.out.print(p[i]+" - ");
 		}
@@ -219,7 +221,7 @@ public class MinutiesV1 {
 		
 		int i=0, j=1;
 		int d=0, f=0;
-		while(i<n && j<s.donnees.length){
+		while(i<n && j<tab.length){
 			if(p[j]==p[d]-1)
 				d=j;
 			else if(p[j]==p[f]+1)
@@ -248,7 +250,7 @@ public class MinutiesV1 {
 		
 		int i=0, j=1;
 		int d=0, f=0;
-		while(i<n && j<s.donnees.length){
+		while(i<n && j<tab.length){
 			if(p[j]==p[d]-1)
 				d=j;
 			else if(p[j]==p[f]+1)
@@ -277,7 +279,7 @@ public class MinutiesV1 {
 		
 		int i=0, j=1;
 		int d=0, f=0;
-		while(i<n && j<s.donnees.length){
+		while(i<n && j<tab.length){
 			if(p[j]==p[d]-1)
 				d=j;
 			else if(p[j]==p[f]+1)
@@ -319,7 +321,7 @@ public class MinutiesV1 {
 		double t;
 		boolean b1=false, b2=false;
 		
-		for(int i=0; i<s.donnees.length-1; i++){
+		for(int i=0; i<tab.length-1; i++){
 			t=t(i);
 			
 			if(t>0.99 && b1==false){
@@ -343,7 +345,7 @@ public class MinutiesV1 {
 	}
 	
 	public void detectionT2(){
-		for(int i=1; i<s.donnees.length-1; i++){
+		for(int i=1; i<tab.length-1; i++){
 			if(angle(i, i+1)>Math.PI/2){
 				m.add(new DonneesMinutie(i, 3));
 			}
@@ -351,6 +353,6 @@ public class MinutiesV1 {
 	}
 	
 	double angle(int i, int j){
-		return Math.abs(s.donnees[i].angleVecteurVitesse()-s.donnees[j].angleVecteurVitesse());
+		return Math.abs(tab[i].angleVecteurVitesse()-tab[j].angleVecteurVitesse());
 	}
 }

@@ -21,13 +21,28 @@ import affichageEtTests.FenetreTempsReel;
  */
 
 public class Signature {
+	
 	public static boolean AffichageTpsReel = true;
 	public static final int N = 50;
 	// Choisir Acquisition.WINDOWS ou Acquisition.TUIO ou
 	// Acquisition.GLULOGIC selon le mode souhaité
 	Acquisition a = Acquisition.GLULOGIC;
-	public DonneesPoint[] donnees;
+	private DonneesPoint[] donnees;
 
+	//renvoie une copie du tableau .donnees afin de le protéger
+	public DonneesPoint[] getDonnees(){
+		DonneesPoint[] temp = new DonneesPoint[this.donnees.length];
+		for (int i=0; i< temp.length; i++)
+			temp[i] = new DonneesPoint(this.donnees[i].x,this.donnees[i].y,this.donnees[i].t,
+										this.donnees[i].vx,this.donnees[i].vy,this.donnees[i].s);
+		
+		return temp;
+	}
+	public int size() {
+		return N;
+	}
+	
+	//Constructeur générique : s'occupe de la saisie
 	public Signature() {
 
 		if (a == Acquisition.WINDOWS) {
@@ -149,10 +164,13 @@ public class Signature {
 
 	// Construit la signature a partir d'un tableau de DonneesPoints
 	public Signature(DonneesPoint[] tab) {
-		this.donnees = tab;
+		this.donnees= new DonneesPoint[tab.length];
+		for (int i=0;i<tab.length;i++)
+			this.donnees[i]= new DonneesPoint(tab[i].x,tab[i].y,tab[i].t,tab[i].vx,tab[i].vy,tab[i].s);
+		this.calculs();
 	}
 
-	// Remet les donnees dans l'ordre du trac��
+	// Remet les donnees dans l'ordre du tracé
 	public void inverserDonnees() {
 		int l = donnees.length;
 		DonneesPoint t;
@@ -164,7 +182,7 @@ public class Signature {
 	}
 
 	// Fonction d'attente pour eviter boucle infinie
-	void attendre(long t) {
+	public void attendre(long t) {
 
 		try {
 			Thread.sleep(t);

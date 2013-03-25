@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import minuties.Minuties;
-
+import objets.DonneesPoint;
 import objets.Gabarit;
 import objets.Signature;
 
@@ -32,7 +32,7 @@ public class Bdd {
 		 *  Appeler analyseBDD() pour analyser toutes les donnees stockees sur l'ordi
 		 */
 		//constructBDD();
-		analyseBDD();
+		//analyseBDD();
 	}
 	
 	public static void constructBDD() {
@@ -63,6 +63,8 @@ public class Bdd {
 		//Creation de l'arborescence entiere
 		File fsignatures = new File("bdd/" + login + "/signatures");
 		fsignatures.mkdir();
+		File fgabarit = new File("bdd/" + login + "/gabarit");
+		fgabarit.mkdir();
 		File ffar = new File("bdd/" + login + "/far");
 		ffar.mkdir();
 		File fshoulder = new File("bdd/" + login + "/far/shoulder");
@@ -76,6 +78,7 @@ public class Bdd {
 		System.out.println("Veuillez rentrer yes");
 		sc.next();
 		
+		//TODO enregistrer les 10 signatures ds le disque dur
 		Enregistrement.enregistrer("gabarit", new Gabarit().sRef, f.getAbsolutePath());
 		
 		
@@ -249,15 +252,19 @@ public class Bdd {
 		
 		String scorePos = "", scoreVit = "", scorePre = "",scoreMin0 = "",scoreMin1 = "",scoreMin2 = "";
 		for (int i = 0; i<n; i++) {
-			Signature s = new Signature(sRef.donnees);
+			Signature s = new Signature(sRef.getDonnees());
 			Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/" + where);
-			Analyse.similitudes(s, sTest);
-			scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
-			scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
-			scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
-			scoreMin0 += "" + Minuties.comparaison(sTest, s, 0) + NEW_LINE;
-			scoreMin1 += "" + Minuties.comparaison(sTest, s, 1) + NEW_LINE;
-			scoreMin2 += "" + Minuties.comparaison(sTest, s, 2) + NEW_LINE;
+			
+			DonneesPoint[][] analyse = Analyse.similitudes(s, sTest);
+			Signature s1 = new Signature(analyse[0]);
+			Signature s2 = new Signature(analyse[1]);
+			
+			scorePos += "" + Analyse.scorePositions(s1, s2) + NEW_LINE;
+			scoreVit += "" + Analyse.scoreVitesses(s1, s2) + NEW_LINE;
+			scorePre += "" + Analyse.scorePressions(s1, s2) + NEW_LINE;
+			scoreMin0 += "" + Minuties.comparaison(s1, s2, 0) + NEW_LINE;
+			scoreMin1 += "" + Minuties.comparaison(s1, s2, 1) + NEW_LINE;
+			scoreMin2 += "" + Minuties.comparaison(s1, s2, 2) + NEW_LINE;
 		}
 		ecrireTexte(login, scorePos, folder1.getAbsolutePath());
 		ecrireTexte(login, scoreVit, folder2.getAbsolutePath());
@@ -286,15 +293,19 @@ public class Bdd {
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
 				
 				for (int i = 0; i<100; i++) {
-					Signature s = new Signature(sRef.donnees);
+					Signature s = new Signature(sRef.getDonnees());
 					Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/" + where);
-					Analyse.similitudes(s, sTest);
-					scorePos += "" + Analyse.scorePositions(sTest, s) + NEW_LINE;
-					scoreVit += "" + Analyse.scoreVitesses(sTest, s) + NEW_LINE;
-					scorePre += "" + Analyse.scorePressions(sTest, s) + NEW_LINE;
-					scoreMin0 += "" + Minuties.comparaison(sTest, s, 0) + NEW_LINE;
-					scoreMin1 += "" + Minuties.comparaison(sTest, s, 1) + NEW_LINE;
-					scoreMin2 += "" + Minuties.comparaison(sTest, s, 2) + NEW_LINE;
+					
+					DonneesPoint[][] analyse = Analyse.similitudes(s, sTest);
+					Signature s1 = new Signature(analyse[0]);
+					Signature s2 = new Signature(analyse[1]);
+					
+					scorePos += "" + Analyse.scorePositions(s1, s2) + NEW_LINE;
+					scoreVit += "" + Analyse.scoreVitesses(s1, s2) + NEW_LINE;
+					scorePre += "" + Analyse.scorePressions(s1, s2) + NEW_LINE;
+					scoreMin0 += "" + Minuties.comparaison(s1, s2, 0) + NEW_LINE;
+					scoreMin1 += "" + Minuties.comparaison(s1, s2, 1) + NEW_LINE;
+					scoreMin2 += "" + Minuties.comparaison(s1, s2, 2) + NEW_LINE;
 				}	
 			}
 		}

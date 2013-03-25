@@ -2,6 +2,7 @@ package comparaison;
 
 import java.util.LinkedList;
 
+import objets.DonneesPoint;
 import objets.Signature;
 
 
@@ -21,16 +22,18 @@ public class Minuties {
 	//Constructeur
 	//TODO Placer cette classe minuties dans le package objets ? Ou pas ?
 	Minuties(Signature s){
-		this.s=s;
+		this.s=new Signature(s.getDonnees());
 		m=new LinkedList<Integer>();
 		
-		vmin=s.donnees[0].normeVitesse();
+		DonneesPoint[] tab = this.s.getDonnees();
+		
+		vmin=tab[0].normeVitesse();
 		vmax=vmin;
-		for(int i=0; i<s.donnees.length-1; i++){
-			if(s.donnees[i].normeVitesse()<vmin)
-				vmin=s.donnees[i].normeVitesse();
-			if(s.donnees[i].normeVitesse()>vmax)
-				vmax=s.donnees[i].normeVitesse();
+		for(int i=0; i<tab.length-1; i++){
+			if(tab[i].normeVitesse()<vmin)
+				vmin=tab[i].normeVitesse();
+			if(tab[i].normeVitesse()>vmax)
+				vmax=tab[i].normeVitesse();
 		}
 		detection();
 	}
@@ -41,9 +44,10 @@ public class Minuties {
 	public void detection(){
 		double t;
 		boolean b=false;
+		DonneesPoint[] tab = s.getDonnees();
 		
-		for(int i=0; i<s.donnees.length-1; i++){
-			t=(s.donnees[i].normeVitesse()-vmin)/(vmax-vmin);
+		for(int i=0; i<s.size()-1; i++){
+			t=(tab[i].normeVitesse()-vmin)/(vmax-vmin);
 			
 			if(t>0.85 && b==false){
 				b=true;
