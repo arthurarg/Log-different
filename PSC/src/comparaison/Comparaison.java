@@ -1,6 +1,7 @@
 package comparaison;
 
 import minuties.Minuties;
+import objets.DonneesPoint;
 import objets.Signature;
 
 
@@ -27,7 +28,12 @@ public class Comparaison {
 	
 	
 	//Dis oui ou non l'authentification est ok
-	public boolean comparer (Signature s1, Signature s2) {
+	public static boolean comparer (Signature sRef, Signature sTest) {
+		// On procede systematiquement a un recalage, dans le doute
+		DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
+		Signature s1 = new Signature(analyse[0]);
+		Signature s2 = new Signature(analyse[1]);
+		
 		return (Analyse.scorePositions(s1, s2)>=seuilPos
 				&& Analyse.scoreVitesses(s1, s2)>=seuilVit
 				&& Analyse.scorePressions(s1, s2)>=seuilPre
@@ -37,7 +43,12 @@ public class Comparaison {
 	}
 	
 	//Renvoie une chaine de caractères pour relever les problèmes
-	public String enumProblemes (Signature s1, Signature s2) {
+	public static String enumProblemes (Signature sRef, Signature sTest) {
+		// On procede systematiquement a un recalage, dans le doute
+		DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
+		Signature s1 = new Signature(analyse[0]);
+		Signature s2 = new Signature(analyse[1]);
+		
 		String s = "";
 		if (Analyse.scorePositions(s1, s2)<=seuilPos)
 			s+= " Les POSITONS sont trop differentes" + NEW_LINE;
@@ -53,6 +64,21 @@ public class Comparaison {
 			s+= " Les minuties de TYPE 2 ne sont pas les mêmes" + NEW_LINE;
 		
 		return s;
+	}
+	
+	public static double mesureEcart (Signature sRef, Signature sTest) {
+		// On procede systematiquement a un recalage, dans le doute
+		DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
+		Signature s1 = new Signature(analyse[0]);
+		Signature s2 = new Signature(analyse[1]);
+		
+		return (Analyse.scorePositions(s1, s2)
+				* Analyse.scoreVitesses(s1, s2)
+				* Analyse.scorePressions(s1, s2)
+				*  Minuties.comparaison(s1, s2, 0)
+				*  Minuties.comparaison(s1, s2, 1)
+				*  Minuties.comparaison(s1, s2, 2));
+				
 	}
 	
 }

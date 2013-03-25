@@ -24,9 +24,8 @@ public class Signature {
 	
 	public static boolean AffichageTpsReel = true;
 	public static final int N = 100;
-	// Choisir Acquisition.WINDOWS ou Acquisition.TUIO ou
-	// Acquisition.GLULOGIC selon le mode souhaité
-	Acquisition a = Acquisition.GLULOGIC;
+	Acquisition a;
+	
 	private DonneesPoint[] donnees;
 
 	//renvoie une copie du tableau .donnees afin de le protéger
@@ -44,6 +43,14 @@ public class Signature {
 	
 	//Constructeur générique : s'occupe de la saisie
 	public Signature() {
+		
+		// Choisi Acquisition.WINDOWS ou Acquisition.TUIO ou
+		// Acquisition.GLULOGIC selon le syseme d'exploitation
+		if (getOsName().equals("mac"))
+			a = Acquisition.GLULOGIC;
+		else
+			a = Acquisition.WINDOWS;
+		
 
 		if (a == Acquisition.WINDOWS) {
 
@@ -254,8 +261,24 @@ public class Signature {
 			this.donnees[j] = new DonneesPoint(temp[j].x, temp[j].y, temp[j].t,
 					temp[j].vx, temp[j].vy, temp[j].s);
 	}
+	
+	public static String getOsName() {
+		  String os = "";
+		  if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
+		    os = "windows";
+		  } else if (System.getProperty("os.name").toLowerCase().indexOf("linux") > -1) {
+		    os = "linux";
+		  } else if (System.getProperty("os.name").toLowerCase().indexOf("mac") > -1) {
+		    os = "mac";
+		  }
+		 
+		  return os;
+	}
 }
+
 
 enum Acquisition {
 	TUIO, GLULOGIC, WINDOWS
 }
+
+

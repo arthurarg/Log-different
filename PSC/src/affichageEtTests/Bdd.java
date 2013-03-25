@@ -32,6 +32,7 @@ public class Bdd {
 		 *  Appeler analyseBDD() pour analyser toutes les donnees stockees sur l'ordi
 		 */
 		//constructBDD();
+		//recalculerGabarits();
 		//analyseBDD();
 	}
 	
@@ -78,8 +79,11 @@ public class Bdd {
 		System.out.println("Veuillez rentrer yes");
 		sc.next();
 		
-		//TODO enregistrer les 10 signatures ds le disque dur
-		Enregistrement.enregistrer("gabarit", new Gabarit().sRef, f.getAbsolutePath());
+		//Enregistrement des 10 signatures utilisée pour le gabarit ds le disque dur
+		Gabarit g = new Gabarit();
+		for (int k=0; k<g.tab.length; k++)
+			Enregistrement.enregistrer("" + k, g.tab[k], fgabarit.getAbsolutePath());
+		Enregistrement.enregistrer("gabarit", g.sRef, f.getAbsolutePath());
 		
 		
 		//Enregistrement des 100 signatures
@@ -132,6 +136,24 @@ public class Bdd {
 		System.exit(0);
 	}
 
+	
+	public static void recalculerGabarits() {
+		//Liste les fichiers présents dans bdd/
+		String[] names = new File("bdd/").list();
+		String login;
+		
+		for (int k = 0; k < names.length; k++) {
+			login = names[k];	
+			if (new File("bdd/" + login + "/gabarit").exists()) {
+				Signature[] tab = new Signature[Gabarit.nbSign];
+				for (int j=0; j<tab.length; j++)
+					tab[j] = Enregistrement.ouvrir(""+j,"bdd/" + login + "/gabarit");
+				Enregistrement.enregistrer("gabarit",new Gabarit(tab).sRef, "bdd/" + login);
+				
+			}
+		}
+	}
+	
 	public static void analyseBDD() {
 		// Cree le dossiers results et les sous-dossiers
 		File resultsFolder = new File("results");
