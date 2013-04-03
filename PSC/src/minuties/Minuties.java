@@ -121,7 +121,7 @@ public class Minuties {
 		return t;
 	}
 	
-	public static double comparaison(Signature s1, Signature s2, int n){ // vitesses uniquement pour l'instant, n=type de minutie
+	public static double comparaison(Signature s1, Signature s2, int n){ // n=type de minutie
 		double[] t1=donnees(s1,n), t2=donnees(s2,n);
 		LinkedList<Integer> l1=minuties(t1, seuilLissage), l2=minuties(t2, seuilLissage);
 		
@@ -134,6 +134,12 @@ public class Minuties {
 		}
 		
 		return 1-s/(ss1+ss2);
+	}
+	
+	public static int nombreMinuties(Signature s, int n){
+		if(s==null)
+			return 0;
+		else return minuties(donnees(s, n), seuilLissage).size();
 	}
 	
 	public static double prolongementContinue(double[] t, double x){
