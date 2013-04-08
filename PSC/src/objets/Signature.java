@@ -22,6 +22,10 @@ import affichageEtTests.FenetreTempsReel;
 
 public class Signature {
 	
+	public enum Complexite{
+		FAIBLE, MOYENNE, FORTE
+	}
+	
 	public static boolean AffichageTpsReel = true;
 	public static final int N = 100;
 	Acquisition a;
@@ -39,6 +43,47 @@ public class Signature {
 	}
 	public int size() {
 		return N;
+	}
+	
+	public Complexite complexite(){
+		
+		int len=donnees.length;
+		int n=len-2;
+		
+		double mx=0, amx=0, vx=0;
+		double my=0, amy=0, vy=0;
+		double m=0, v=0;
+		
+		for(int i=1;i<len-1;i++){
+			mx=mx+Math.abs(donnees[i].vx);
+			amx=amx+donnees[i].vx;
+			my=my+Math.abs(donnees[i].vy);
+			amy=amy+donnees[i].vy;
+			m=m+donnees[i].normeVitesse();
+		}
+		mx=mx/n;
+		my=my/n;
+		amx=amx/n;
+		amy=amy/n;
+		m=m/n;
+		
+		
+		for(int i=1;i<len-1;i++){
+			vx=vx+Math.pow(donnees[i].vx-mx, 2);
+			vy=vy+Math.pow(donnees[i].vy-my, 2);
+			
+			v=v+Math.pow(v-m, 2);
+		}
+		vx=Math.sqrt(vx/n);
+		vy=Math.sqrt(vy/n);
+		v=Math.sqrt(v/n);
+		
+		
+		if(vx+vy<0.0011)
+			return Complexite.FAIBLE;
+		else if(vx+vy>0.0015)
+			return Complexite.FORTE;
+		else return Complexite.MOYENNE;
 	}
 	
 	//Constructeur générique : s'occupe de la saisie

@@ -5,6 +5,7 @@ import java.util.ListIterator;
 
 import objets.DonneesPoint;
 import objets.Signature;
+import objets.Signature.Complexite;
 
 import affichageEtTests.Fenetre;
 
@@ -162,26 +163,32 @@ public class Minuties {
 		Signature s, sref;
 		Fenetre f=new Fenetre();
 		double[] t, t0;LinkedList<Integer> l0, l;
-		sref=new Signature();
-		t0=donnees(sref,3);
-		l0=minuties(t0, seuilLissage);
+		int n=0;double moy=0;
 		
 		while(true){
 			s=new Signature();
+			n++;
 			f.vider();
 			t=donnees(s,3);
 			l=minuties(t, seuilLissage);
 
 			f.afficherTableau(t);
 			//f.afficherTableau(t, l, 0xff0000ff);
-			f.afficherTableau(t0, 0xffff0000);
+			//f.afficherTableau(t0, 0xffff0000);
 			//f.afficherTableau(t0, l0, 0xffff0000);
 			
 			//f.ajouter(sref, 0xFFFF0000);
 			//f.ajouter(s);
-			System.out.println(comparaison(s, sref,0));
-			System.out.println(comparaison(s, sref,1));
-			System.out.println(comparaison(s, sref,2));
+			double m=0;
+			for(int i=0;i<4;i++){
+				m=m+nombreMinuties(s, i);
+			}
+			System.out.println("-->"+m/4+" - "+s.complexite());
+			if(s.complexite()==Complexite.FAIBLE)
+				System.out.println("FUCK");
+			else if(s.complexite()==Complexite.FORTE)
+				System.out.println("FAT");
+			else System.out.println("OK BEBE");
 		}
 	}
 		
