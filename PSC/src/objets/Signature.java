@@ -8,12 +8,9 @@ import gestionIO.PaveTUIO;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import TUIO.TuioClient;
 import affichageEtTests.FenetreTempsReel;
-//import java.awt.Robot;
-//import java.awt.AWTException;
 
 /* Classe Signature
  * ---------------
