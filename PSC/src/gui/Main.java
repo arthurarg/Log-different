@@ -32,6 +32,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import objets.Coordonnees;
+import objets.DonneesPoint;
 import objets.Gabarit;
 import objets.Signature;
 import affichageEtTests.Image;
@@ -412,17 +413,19 @@ public class Main extends JFrame {
 			int n1avant, n2avant, n1apres, n2apres;
 			double lambda, theta;
 			if (boutonSimilitudes.isSelected()) {
-				double[] infos = Analyse.similitudes(sRef, sTest);
-				n1avant = Math.max(
-						(int) Math.floor(infos[2] * sRef.donnees.length), 0);
+				DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
+				sRef = new Signature(analyse[0]);
+				sTest = new Signature(analyse[1]);
+				/*n1avant = Math.max(
+						(int) Math.floor(infos[2] * sRef.size()), 0);
 				n1apres = Math.max(
-						(int) Math.floor(infos[3] * sRef.donnees.length), 0);
+						(int) Math.floor(infos[3] * sRef.size()), 0);
 				n2avant = Math.max(
-						(int) Math.floor(-infos[2] * sTest.donnees.length), 0);
+						(int) Math.floor(-infos[2] * sRef.size()), 0);
 				n2apres = Math.max(
-						(int) Math.floor(-infos[3] * sTest.donnees.length), 0);
+						(int) Math.floor(-infos[3] * sRef.size()), 0);
 				theta = infos[0];
-				lambda = infos[1];
+				lambda = infos[1];*/
 				panneauComparer.remove(imageSRef);
 				imageSRef = new JPanel();
 				imageSRef.setBounds(109, 103, 200, 200);
@@ -483,11 +486,12 @@ public class Main extends JFrame {
 	Image conversion_taille_200(Signature s, int rgb) {
 
 		Image r = new Image(200, 200, BufferedImage.TYPE_INT_ARGB);
-
-		for (int i = 0; i < s.donnees.length - 1; i++) {
-			Coordonnees a = new Coordonnees(s.donnees[i].x, s.donnees[i].y);
-			Coordonnees b = new Coordonnees(s.donnees[i + 1].x,
-					s.donnees[i + 1].y);
+		DonneesPoint[] tab = s.getDonnees();
+		
+		for (int i = 0; i < tab.length - 1; i++) {
+			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
+			Coordonnees b = new Coordonnees(tab[i + 1].x,
+					tab[i + 1].y);
 
 			r.tracerSegment(a.fois(194).plus(1, 1), b.fois(194).plus(1, 1), rgb);
 		}
@@ -498,13 +502,13 @@ public class Main extends JFrame {
 	Image conversion_taille_337(Signature s, int rgb) {
 
 		Image r = new Image(337, 337, BufferedImage.TYPE_INT_ARGB);
-
-		for (int i = 0; i < s.donnees.length - 1; i++) {
-			Coordonnees a = new Coordonnees(s.donnees[i].x, s.donnees[i].y);
-			Coordonnees b = new Coordonnees(s.donnees[i + 1].x,
-					s.donnees[i + 1].y);
+		DonneesPoint[] tab = s.getDonnees();
+		
+		for (int i = 0; i < tab.length - 1; i++) {
+			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
+			Coordonnees b = new Coordonnees(tab[i + 1].x,
+					tab[i + 1].y);
 			r.tracerSegment(a.fois(330).plus(1, 1), b.fois(330).plus(1, 1), rgb);
-
 		}
 
 		return r;

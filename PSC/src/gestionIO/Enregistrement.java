@@ -36,14 +36,15 @@ public class Enregistrement {
 			FileWriter fichier = new FileWriter(path + "/" + name + ".txt");
 			
 			//Enregistrement s.donnees (taille puis contenu)
-			fichier.write("" + s.donnees.length);
-			for(int j=0; j<s.donnees.length;j++) {
-				fichier.write("" + NEW_LINE + s.donnees[j].x + " " + 
-			                       s.donnees[j].y + " " +
-			                       s.donnees[j].t + " " +
-			                       s.donnees[j].vx + " " +
-			                       s.donnees[j].vy + " " +
-			                       s.donnees[j].s);
+			DonneesPoint[] temp = s.getDonnees();
+			fichier.write("" + temp.length);
+			for(int j=0; j<temp.length;j++) {
+				fichier.write("" + NEW_LINE + temp[j].x + " " + 
+												temp[j].y + " " +
+												temp[j].t + " " +
+												temp[j].vx + " " +
+												temp[j].vy + " " +
+			                       				temp[j].s);
 			}
 			fichier.close();
 		}

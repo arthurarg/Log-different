@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import objets.Coordonnees;
+import objets.DonneesPoint;
 import objets.Signature;
 import minutiesVectorielles.DonneesAnglesSortedLinkedList;;
 
@@ -60,12 +61,13 @@ public class Fenetre extends JFrame {
 	Image conversion(Signature s, int rgb){
 		
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
+		DonneesPoint[] tab = s.getDonnees();
 		
-		Coordonnees l=new Coordonnees(s.donnees[0].x, s.donnees[0].y);
+		Coordonnees l=new Coordonnees(tab[0].x, tab[0].y);
 		
-		for(int i=0; i<s.donnees.length-1; i++){
-			Coordonnees a = new Coordonnees(s.donnees[i].x, s.donnees[i].y);
-			Coordonnees b = new Coordonnees(s.donnees[i+1].x, s.donnees[i+1].y);
+		for(int i=0; i<tab.length-1; i++){
+			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
+			Coordonnees b = new Coordonnees(tab[i+1].x, tab[i+1].y);
 			
 			r.tracerSegment(a.fois(taille_signature), b.fois(taille_signature), rgb);
 		}
@@ -121,63 +123,63 @@ public class Fenetre extends JFrame {
 	
 	public void afficherV(Signature s){
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
+		DonneesPoint[] tab = s.getDonnees();
+		int len=tab.length;
 		
-		int len=s.donnees.length;
-		
-		double duree=s.donnees[0].t-s.donnees[len-1].t;
+		double duree=tab[0].t-tab[len-1].t;
 		double vmin, vmax;
-		vmin=s.donnees[0].normeVitesse();
+		vmin=tab[0].normeVitesse();
 		vmax=vmin;
 		for(int i=0; i<len-1; i++){
-			if(s.donnees[i].normeVitesse()<vmin)
-				vmin=s.donnees[i].normeVitesse();
-			if(s.donnees[i].normeVitesse()>vmax)
-				vmax=s.donnees[i].normeVitesse();
+			if(tab[i].normeVitesse()<vmin)
+				vmin=tab[i].normeVitesse();
+			if(tab[i].normeVitesse()>vmax)
+				vmax=tab[i].normeVitesse();
 		}
 		
-		Coordonnees l=new Coordonnees(1, (s.donnees[0].normeVitesse()-vmin)/(vmax-vmin));
+		Coordonnees l=new Coordonnees(1, (tab[0].normeVitesse()-vmin)/(vmax-vmin));
 		Coordonnees c;
 		
 		for(int i=1; i<len-1; i++){
-			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(s.donnees[i].normeVitesse()-vmin)/(vmax-vmin));
+			c = new Coordonnees((tab[i].t-tab[len-1].t)/duree,(tab[i].normeVitesse()-vmin)/(vmax-vmin));
 			r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);
 			l=c;
 		}
 		
 		// supr
 		double smin, smax;
-		smin=s.donnees[0].s;
+		smin=tab[0].s;
 		smax=smin;
 		for(int i=0; i<len-1; i++){
-			if(s.donnees[i].s<smin)
-				smin=s.donnees[i].s;
-			if(s.donnees[i].s>smax)
-				smax=s.donnees[i].s;
+			if(tab[i].s<smin)
+				smin=tab[i].s;
+			if(tab[i].s>smax)
+				smax=tab[i].s;
 		}
 		
-		l=new Coordonnees(1, (s.donnees[0].s-smin)/(smax-smin));
+		l=new Coordonnees(1, (tab[0].s-smin)/(smax-smin));
 		
 		for(int i=1; i<len-1; i++){
-			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(s.donnees[i].s-smin)/(smax-smin));
+			c = new Coordonnees((tab[i].t-tab[len-1].t)/duree,(tab[i].s-smin)/(smax-smin));
 			r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);
-			System.out.println(s.donnees[i].s);
+			System.out.println(tab[i].s);
 			l=c;
 		}
 		
 		double dtot=0, d=0;
 		for(int i=0; i<len-1; i++)
-			dtot=dtot+s.donnees[i].norme();
-		l=new Coordonnees(0, (s.donnees[0].normeVitesse()-vmin)/(vmax-vmin));
+			dtot=dtot+tab[i].norme();
+		l=new Coordonnees(0, (tab[0].normeVitesse()-vmin)/(vmax-vmin));
 		
 		for(int i=1; i<len-1; i++){
-			d=d+s.donnees[i].norme();
-			c = new Coordonnees(d/dtot,(s.donnees[i].normeVitesse()-vmin)/(vmax-vmin));
+			d=d+tab[i].norme();
+			c = new Coordonnees(d/dtot,(tab[i].normeVitesse()-vmin)/(vmax-vmin));
 			//r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);
 			l=c;
 		}
 		double a[]=new double[len-2];
 		for(int i=0;i<len-2;i++)
-			a[i]=s.donnees[i].differenceVitesses(s.donnees[i+1])/(s.donnees[i].t-s.donnees[i+1].t);
+			a[i]=tab[i].differenceVitesses(tab[i+1])/(tab[i].t-tab[i+1].t);
 		double amin, amax;
 		amin=a[0];
 		amax=amin;
@@ -191,7 +193,7 @@ public class Fenetre extends JFrame {
 		l=new Coordonnees(1, (a[0]-amin)/(amax-amin));
 		
 		for(int i=1; i<len-2; i++){
-			c = new Coordonnees((s.donnees[i].t-s.donnees[len-1].t)/duree,(a[i]-amin)/(amax-amin));
+			c = new Coordonnees((tab[i].t-tab[len-1].t)/duree,(a[i]-amin)/(amax-amin));
 			//r.tracerSegment(l.fois(0.5*taille_signature), c.fois(0.5*taille_signature), 0xff000000);
 			l=c;
 		}
@@ -205,20 +207,21 @@ public class Fenetre extends JFrame {
 	public void afficherVMoyenneMobile(Signature s, int n){
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
 		
-		int len=s.donnees.length;
+		DonneesPoint[] tab = s.getDonnees();
+		int len=tab.length;
 		
-		double duree=s.donnees[0].t-s.donnees[len-n].t;
+		double duree=tab[0].t-tab[len-n].t;
 		double vmin, vmax, v;
 		vmin=0;
 		for(int i=0; i<n; i++){
 			
-			vmin=vmin+s.donnees[i].normeVitesse();
+			vmin=vmin+tab[i].normeVitesse();
 		}
 		vmax=vmin;
 		for(int i=1; i<len-n; i++){
 			v=0;
 			for(int j=0; j<n; j++){
-				v=v+s.donnees[i+j].normeVitesse();
+				v=v+tab[i+j].normeVitesse();
 			}
 			if(v<vmin)
 				vmin=v;
@@ -229,7 +232,7 @@ public class Fenetre extends JFrame {
 		
 		v=0;
 		for(int i=0; i<n; i++){
-			v=v+s.donnees[i].normeVitesse();
+			v=v+tab[i].normeVitesse();
 		}
 		Coordonnees l=new Coordonnees(1, (v-vmin)/(vmax-vmin));
 		Coordonnees c;
@@ -237,9 +240,9 @@ public class Fenetre extends JFrame {
 		for(int i=1; i<len-n; i++){
 			v=0;
 			for(int j=0; j<n; j++){
-				v=v+s.donnees[i+j].normeVitesse();
+				v=v+tab[i+j].normeVitesse();
 			}
-			c = new Coordonnees((s.donnees[i].t-s.donnees[len-n].t)/duree,(v-vmin)/(vmax-vmin));
+			c = new Coordonnees((tab[i].t-tab[len-n].t)/duree,(v-vmin)/(vmax-vmin));
 			r.tracerSegment(l.fois(0.9*taille_signature), c.fois(0.9*taille_signature), 0xff000000);			//System.out.println(l.fois(0.9*taille_signature).x+","+l.fois(0.9*taille_signature).y+"   ->   "+c.fois(0.9*taille_signature).x+","+c.fois(0.9*taille_signature).y);
 			l=c;
 		}
@@ -254,24 +257,25 @@ public class Fenetre extends JFrame {
 	Image conversionVariations(Signature s){
 		
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
+		DonneesPoint[] tab = s.getDonnees();
 		
-		Coordonnees l=new Coordonnees(s.donnees[0].x, s.donnees[0].y);
+		Coordonnees l=new Coordonnees(tab[0].x, tab[0].y);
 		
 		int rgb, c=0xff000000;
-		double vmin=s.donnees[0].normeVitesse(), vmax=vmin;
+		double vmin=tab[0].normeVitesse(), vmax=vmin;
 		
-		for(int i=0; i<s.donnees.length-1; i++){
-			if(s.donnees[i].normeVitesse()<vmin)
-				vmin=s.donnees[i].normeVitesse();
-			if(s.donnees[i].normeVitesse()>vmax)
-				vmax=s.donnees[i].normeVitesse();
+		for(int i=0; i<tab.length-1; i++){
+			if(tab[i].normeVitesse()<vmin)
+				vmin=tab[i].normeVitesse();
+			if(tab[i].normeVitesse()>vmax)
+				vmax=tab[i].normeVitesse();
 		}
 		
 		double t;
-		for(int i=0; i<s.donnees.length-1; i++){
-			Coordonnees a = new Coordonnees(s.donnees[i].x, s.donnees[i].y);
-			Coordonnees b = new Coordonnees(s.donnees[i+1].x, s.donnees[i+1].y);
-			t=(s.donnees[i].normeVitesse()-vmin)/(vmax-vmin);
+		for(int i=0; i<tab.length-1; i++){
+			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
+			Coordonnees b = new Coordonnees(tab[i+1].x, tab[i+1].y);
+			t=(tab[i].normeVitesse()-vmin)/(vmax-vmin);
 			rgb=c+couleur(t);
 			r.tracerSegment(a.fois(taille_signature), b.fois(taille_signature), rgb);
 		}
@@ -305,10 +309,12 @@ public class Fenetre extends JFrame {
 	
 	public void ajouterSignatureEtMinuties(Signature s, DonneesAnglesSortedLinkedList l, int n){
 		Image tmp =conversion(s, 0xff000000);
+		DonneesPoint[] tab = s.getDonnees();
+		
 		for(int i=0; i<n; i++){
-			Coordonnees a = new Coordonnees(s.donnees[l.get(i).j].x,s.donnees[l.get(i).j].y);
-			Coordonnees b = new Coordonnees(s.donnees[l.get(i).i].x,s.donnees[l.get(i).i].y);
-			Coordonnees c = new Coordonnees(s.donnees[l.get(i).k].x,s.donnees[l.get(i).k].y);
+			Coordonnees a = new Coordonnees(tab[l.get(i).j].x,tab[l.get(i).j].y);
+			Coordonnees b = new Coordonnees(tab[l.get(i).i].x,tab[l.get(i).i].y);
+			Coordonnees c = new Coordonnees(tab[l.get(i).k].x,tab[l.get(i).k].y);
 			tmp.tracerSegment(a.fois(taille_signature), b.fois(taille_signature), 0xFFFF1111);
 			tmp.tracerSegment(c.fois(taille_signature), b.fois(taille_signature), 0xFFFF1111);
 		}

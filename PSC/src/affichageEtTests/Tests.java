@@ -1,18 +1,15 @@
 package affichageEtTests;
 
-import gestionIO.Enregistrement;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import objets.DonneesPoint;
 import objets.Gabarit;
 import objets.Signature;
 
@@ -29,6 +26,7 @@ public class Tests {
 
 
 	public static void main(String[] args) {
+		new Gabarit();
 	}
 	
 
@@ -45,16 +43,18 @@ public class Tests {
 		
 		for (int i = 0; i<100; i++) {
 			Signature sTest = new Signature();
-			Analyse.similitudes(new Signature (sRef.donnees), sTest); // on ne veut pas modifier sRef en la coupant (on passe par un tiers)
-			tabPositions[i] = Analyse.scorePositions(sTest, sRef);
-			tabVitesses[i] = Analyse.scoreVitesses(sTest, sRef);
-			tabPressions[i] = Analyse.scorePressions(sTest, sRef);
+			DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
+			Signature s1 = new Signature(analyse[0]);
+			Signature s2 = new Signature(analyse[1]);
+			tabPositions[i] = Analyse.scorePositions(s1, s2);
+			tabVitesses[i] = Analyse.scoreVitesses(s1, s2);
+			tabPressions[i] = Analyse.scorePressions(s1, s2);
 		}
 		
 		
 		final String NEW_LINE = System.getProperty("line.separator" );
 		
-		//On ��crit dans le fichier scorePositions.txt
+		//On écrit dans le fichier scorePositions.txt
 		try {
 			//Ouverture du fichier .txt
 			FileWriter fichier = new FileWriter("scorePositions" + ".txt");
