@@ -29,17 +29,26 @@ public class Comparaison {
 	
 	//Dis oui ou non l'authentification est ok
 	public static boolean comparer (Signature sRef, Signature sTest) {
+		int testPasses = 0;
 		// On procede systematiquement a un recalage, dans le doute
 		DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
 		Signature s1 = new Signature(analyse[0]);
 		Signature s2 = new Signature(analyse[1]);
 		
-		return (Analyse.scorePositions(s1, s2)>=seuilPos
-				&& Analyse.scoreVitesses(s1, s2)>=seuilVit
-				&& Analyse.scorePressions(s1, s2)>=seuilPre
-				&&  Minuties.comparaison(s1, s2, 0)>=seuilMin0
-				&&  Minuties.comparaison(s1, s2, 1)>=seuilMin1
-				&&  Minuties.comparaison(s1, s2, 2)>=seuilMin2);
+		if (Analyse.scorePositions(s1, s2)>=seuilPos)
+			testPasses++;
+		if (Analyse.scoreVitesses(s1, s2)>=seuilVit)
+			testPasses++;
+		if (Analyse.scorePressions(s1, s2)>=seuilPre)
+			testPasses++;
+		if (Minuties.comparaison(s1, s2, 0)>=seuilMin0)
+			testPasses++;
+		if (Minuties.comparaison(s1, s2, 1)>=seuilMin1)
+			testPasses++;
+		if(Minuties.comparaison(s1, s2, 2)>=seuilMin2)
+			testPasses++;
+			
+		return (testPasses >= 4);
 	}
 	
 	//Renvoie une chaine de caractères pour relever les problèmes

@@ -25,8 +25,13 @@ public class Gabarit {
 	public Gabarit() {
 		// Enregistrement de nbSign signatures
 		// Grace au reparsing, chacune des signatures a le mm nombre de points
-		for (int i=0; i<nbSign; i++) 
+		for (int i=0; i<nbSign; i++) {
 			tab[i]=new Signature();
+			if (i==1 && tab[i].complexite()==FAIBLE) {
+				System.out.println("Votre signature est trop simple");
+				i--;
+			}
+		}
 		
 		initGabarit();
 	}
@@ -37,7 +42,7 @@ public class Gabarit {
 			initGabarit();
 		}
 		else
-			System.out.println("Tableau envoyé au constructeur non correct");
+			System.err.println("Tableau envoyé au constructeur non correct");
 			
 	}
 	

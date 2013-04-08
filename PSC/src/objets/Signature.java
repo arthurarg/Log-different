@@ -8,6 +8,7 @@ import gestionIO.PaveTUIO;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import TUIO.TuioClient;
 import affichageEtTests.FenetreTempsReel;
@@ -27,16 +28,15 @@ public class Signature {
 	Acquisition a;
 	
 	private DonneesPoint[] donnees;
-
+	
 	//renvoie une copie du tableau .donnees afin de le protéger
-	public DonneesPoint[] getDonnees(){
+	public DonneesPoint[] getDonnees() {
 		DonneesPoint[] temp = new DonneesPoint[this.donnees.length];
 		for (int i=0; i< temp.length; i++)
-			temp[i] = new DonneesPoint(this.donnees[i].x,this.donnees[i].y,this.donnees[i].t,
-										this.donnees[i].vx,this.donnees[i].vy,this.donnees[i].s);
-		
+			temp[i] = new DonneesPoint(this.donnees[i].x,this.donnees[i].y,this.donnees[i].t, this.donnees[i].vx,this.donnees[i].vy,this.donnees[i].s);
 		return temp;
 	}
+	
 	public int size() {
 		return N;
 	}
@@ -49,9 +49,8 @@ public class Signature {
 		if (getOsName().equals("mac"))
 			a = Acquisition.GLULOGIC;
 		else
-			a = Acquisition.WINDOWS;
+			a = Acquisition.WINDOWS;			
 		
-
 		if (a == Acquisition.WINDOWS) {
 
 			// Variables utilisees lors de l'enregistrement
@@ -64,7 +63,7 @@ public class Signature {
 			// Acquisition de la signature
 			Pave pave = new PaveScreen();
 
-			// On attend que l'utilisateur pose son doigt sur le pav������
+			// On attend que l'utilisateur pose son doigt sur le pavé
 			while (!pave.pose()) {
 				attendre(10);
 			}
@@ -157,13 +156,14 @@ public class Signature {
 			
 			PaveGLULOGIC ct = new PaveGLULOGIC();
 			ct.run();
-			
+						
 			try { r = new Robot();} catch (Exception e) {}
 	
 			while (ct.getY() == 0) {
 				r.mouseMove(width/2, height/2);
 				attendre(1);
 			}
+			
 			this.donnees = ct.getSignature();
 			this.calculs();
 		}
@@ -274,6 +274,8 @@ public class Signature {
 		 
 		  return os;
 	}
+
+	
 }
 
 
