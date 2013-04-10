@@ -6,16 +6,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -29,6 +28,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -75,6 +75,46 @@ public class Main extends JFrame {
 	private String currentSRef = "";
 	private String currentSTest = "";
 	private boolean currentSimilitudes = true;
+	Signature s = new Signature (false);
+	Gabarit g;
+	
+	final Thread saisieSignature = new Thread() {
+		public void run() {
+			s = new Signature(false);
+			s.init();
+			if (s.terminate)
+				return;
+			
+			Enregistrement.enregistrer(textFieldLogin.getText(), s);
+			panneauEnregistrer.remove(imageEnregistrer);
+			imageEnregistrer = new JPanel();
+			imageEnregistrer.setBounds(41, 40, 337, 337);
+			ImageComponent img = new ImageComponent(
+					conversion_taille_337(s, 0xff000000));
+			imageEnregistrer.add(img);
+			panneauEnregistrer.add(imageEnregistrer);
+			imageEnregistrer.setOpaque(false);
+		}
+	};
+	
+	final Thread saisieGabarit = new Thread() {
+		public void run() {
+			g = new Gabarit(false);
+			g.init();
+			if (g.s.terminate)
+				return;
+			
+			Enregistrement.enregistrer(textFieldLogin.getText(), g.sRef);
+			panneauEnregistrer.remove(imageEnregistrer);
+			imageEnregistrer = new JPanel();
+			imageEnregistrer.setBounds(41, 40, 337, 337);
+			ImageComponent img = new ImageComponent(
+					conversion_taille_337(g.sRef, 0xff000000));
+			imageEnregistrer.add(img);
+			panneauEnregistrer.add(imageEnregistrer);
+			imageEnregistrer.setOpaque(false);
+		}
+	};
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -113,6 +153,13 @@ public class Main extends JFrame {
 		// Panneau Enregistrer
 		// ////////////////////
 		panneauEnregistrer = new JLayeredPane();
+		panneauEnregistrer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "escape");
+		panneauEnregistrer.getActionMap().put("escape", new AbstractAction() {
+			public void actionPerformed (ActionEvent e) {
+				if (g!=null)
+					g.s.terminate = true;
+			}
+		});
 		tabbedPane.addTab("Enregistrer", null, panneauEnregistrer, null);
 
 		imageEnregistrer = new JPanel();
@@ -284,21 +331,14 @@ public class Main extends JFrame {
 			}
 		});
 
+
+		
 		boutonEnregistrer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String login = textFieldLogin.getText();
 
 				if (login != null && login.matches("[a-z0-9_-]{1,}")) {
-					Signature s = new Gabarit().sRef;
-					Enregistrement.enregistrer(login, s);
-					panneauEnregistrer.remove(imageEnregistrer);
-					imageEnregistrer = new JPanel();
-					imageEnregistrer.setBounds(41, 40, 337, 337);
-					ImageComponent img = new ImageComponent(
-							conversion_taille_337(s, 0xff000000));
-					imageEnregistrer.add(img);
-					panneauEnregistrer.add(imageEnregistrer);
-					imageEnregistrer.setOpaque(false);
+					saisieGabarit.start();
 				}
 			}
 		});

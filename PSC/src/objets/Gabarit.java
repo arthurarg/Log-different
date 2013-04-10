@@ -22,43 +22,52 @@ public class Gabarit {
 	public Signature sRef;
 	public Signature[] tab = new Signature[nbSign];
 	
+	static public Signature s;
 
 	
+	
 	public Gabarit() {
-		// Enregistrement de nbSign signatures
-		// Grace au reparsing, chacune des signatures a le mm nombre de points
-		for (int i=0; i<nbSign; i++) {
-			tab[i]=new Signature();
-			if (i==1 && tab[i].complexite()==Complexite.FAIBLE) {
-				System.out.println("Votre signature est trop simple");
-				i--;
-			}
-		}
-		
-		int j = initGabarit();
-		if (j!= -1) {
-			this.sRef = null;
-			System.out.println("Echec de l'enregistrement du gabarit : signatures trop diffèrentes");
-		}
-		if (sRef.complexite()==Complexite.FAIBLE) {
-			this.sRef = null;
-			System.out.println("Echec de l'enregistrement du gabarit : signature trop simple");
-		}		
-			
+		s = new Signature (false);
+		init();
+	}
+	
+	
+	public Gabarit(boolean b) {
+		s = new Signature (false);
+		if (b)
+			init();			
 	}
 	
 	public Gabarit(Signature[] tab) {
 		if (tab.length==nbSign) {
 			this.tab = tab;
-			initGabarit();
+			constructGabarit();
 		}
 		else
 			System.err.println("Tableau envoyé au constructeur non correct");
 			
 	}
 	
+	public void init() {
+		for (int i=0; i<nbSign; i++) {
+			
+			s = new Signature(false);
+			s.init();
+			
+			if (s.terminate)
+				return;
+			
+			tab[i] = new Signature(s.getDonnees());
+			
+			if (i==1 && tab[i].complexite()==Complexite.FAIBLE) {
+				System.out.println("Votre signature est trop simple");
+				i--;
+			}
+		}
+		constructGabarit();
+	}
 	
-	public int initGabarit() {
+	private void constructGabarit() {
 		//Tableau temp du futur gabarit
 		DonneesPoint[] temp;
 		temp = new DonneesPoint[this.tab[0].getDonnees().length];
@@ -67,8 +76,16 @@ public class Gabarit {
 		int essai = 0;
 		do {
 			//Le cas échéant, on modifie une signature qui ne vas pas avec le gabarit
-			if (marq>=0 && marq<this.tab.length) 
-				this.tab[marq] = new Signature();
+			if (marq>=0 && marq<this.tab.length) {
+				s = new Signature(false);
+				s.init();
+				if (s.terminate)
+					return;
+				
+				this.tab[marq] = new Signature(s.getDonnees());
+				
+			}
+
 			
 			//Initialisation
 			for (int i=0; i<temp.length; i++)
@@ -99,7 +116,15 @@ public class Gabarit {
 			sRef = new Signature (temp);
 			essai++;
 		} while ((marq = validationGabarit()) != -1 || essai > 5);
-		return marq;
+		
+		if (marq!= -1) {
+			this.sRef = null;
+			System.out.println("Echec de l'enregistrement du gabarit : signatures trop diffèrentes");
+		}
+		if (sRef.complexite()==Complexite.FAIBLE) {
+			this.sRef = null;
+			System.out.println("Echec de l'enregistrement du gabarit : signature trop simple");
+		}	 		
 	}
 	
 	public int validationGabarit() {

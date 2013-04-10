@@ -29,9 +29,13 @@ public class Signature {
 	Acquisition a;
 	
 	private DonneesPoint[] donnees;
+	public boolean terminate;
 	
 	//renvoie une copie du tableau .donnees afin de le protéger
 	public DonneesPoint[] getDonnees() {
+		if (this.donnees == null)
+			return null;
+		
 		DonneesPoint[] temp = new DonneesPoint[this.donnees.length];
 		for (int i=0; i< temp.length; i++)
 			temp[i] = new DonneesPoint(this.donnees[i].x,this.donnees[i].y,this.donnees[i].t, this.donnees[i].vx,this.donnees[i].vy,this.donnees[i].s);
@@ -42,57 +46,46 @@ public class Signature {
 		return N;
 	}
 	
-	public Complexite complexite(){
-		
-		int len=donnees.length;
-		int n=len-2;
-		
-		double mx=0, amx=0, vx=0;
-		double my=0, amy=0, vy=0;
-		double m=0, v=0;
-		
-		for(int i=1;i<len-1;i++){
-			mx=mx+Math.abs(donnees[i].vx);
-			amx=amx+donnees[i].vx;
-			my=my+Math.abs(donnees[i].vy);
-			amy=amy+donnees[i].vy;
-			m=m+donnees[i].normeVitesse();
-		}
-		mx=mx/n;
-		my=my/n;
-		amx=amx/n;
-		amy=amy/n;
-		m=m/n;
-		
-		
-		for(int i=1;i<len-1;i++){
-			vx=vx+Math.pow(donnees[i].vx-mx, 2);
-			vy=vy+Math.pow(donnees[i].vy-my, 2);
-			
-			v=v+Math.pow(v-m, 2);
-		}
-		vx=Math.sqrt(vx/n);
-		vy=Math.sqrt(vy/n);
-		v=Math.sqrt(v/n);
-		
-		
-		if(vx+vy<0.0011)
-			return Complexite.FAIBLE;
-		else if(vx+vy>0.0015)
-			return Complexite.FORTE;
-		else return Complexite.MOYENNE;
-	}
+
 	
 	//Constructeur générique : s'occupe de la saisie
 	public Signature() {
-		
-		// Choisi Acquisition.WINDOWS ou Acquisition.TUIO ou
-		// Acquisition.GLULOGIC selon le syseme d'exploitation
+		// Trouve le nom de l'OS
 		if (getOsName().equals("mac"))
 			a = Acquisition.GLULOGIC;
 		else
-			a = Acquisition.WINDOWS;			
+			a = Acquisition.WINDOWS;	
 		
+		//Initialise terminate
+		this.terminate = false;
+		
+		//Initialise le champs signature
+		init();
+	}
+	
+	public Signature (boolean b) {
+		// Trouve le nom de l'OS
+		if (getOsName().equals("mac"))
+			a = Acquisition.GLULOGIC;
+		else
+			a = Acquisition.WINDOWS;
+		
+		this.donnees = null;
+		this.terminate = false;
+		if (b)
+			init();
+	}
+	
+	// Construit la signature a partir d'un tableau de DonneesPoints
+	public Signature(DonneesPoint[] tab) {
+		this.donnees= new DonneesPoint[tab.length];
+		for (int i=0;i<tab.length;i++)
+			this.donnees[i]= new DonneesPoint(tab[i].x,tab[i].y,tab[i].t,tab[i].vx,tab[i].vy,tab[i].s);
+		this.calculs();
+	}
+	
+	// Recupère la signature
+	public void init() {	
 		if (a == Acquisition.WINDOWS) {
 
 			// Variables utilisees lors de l'enregistrement
@@ -195,30 +188,69 @@ public class Signature {
 			int width = Toolkit.getDefaultToolkit().getScreenSize().width;
 			int height = Toolkit.getDefaultToolkit().getScreenSize().height;
 			
-			
+
 			PaveGLULOGIC ct = new PaveGLULOGIC();
 			ct.run();
-						
+					
 			try { r = new Robot();} catch (Exception e) {}
-	
-			while (ct.getY() == 0) {
+			while (ct.getY() == 0 && !terminate) {
 				r.mouseMove(width/2, height/2);
 				attendre(1);
 			}
+			if (!terminate) {
+				this.donnees = ct.getSignature();
+				this.calculs();
+			}
+			else
+				this.donnees = null;
 			
-			this.donnees = ct.getSignature();
-			this.calculs();
 		}
 	}
 
-	// Construit la signature a partir d'un tableau de DonneesPoints
-	public Signature(DonneesPoint[] tab) {
-		this.donnees= new DonneesPoint[tab.length];
-		for (int i=0;i<tab.length;i++)
-			this.donnees[i]= new DonneesPoint(tab[i].x,tab[i].y,tab[i].t,tab[i].vx,tab[i].vy,tab[i].s);
-		this.calculs();
-	}
 
+	
+	//Détermine la complexité de la signature
+	public Complexite complexite(){
+		
+		int len=donnees.length;
+		int n=len-2;
+		
+		double mx=0, amx=0, vx=0;
+		double my=0, amy=0, vy=0;
+		double m=0, v=0;
+		
+		for(int i=1;i<len-1;i++){
+			mx=mx+Math.abs(donnees[i].vx);
+			amx=amx+donnees[i].vx;
+			my=my+Math.abs(donnees[i].vy);
+			amy=amy+donnees[i].vy;
+			m=m+donnees[i].normeVitesse();
+		}
+		mx=mx/n;
+		my=my/n;
+		amx=amx/n;
+		amy=amy/n;
+		m=m/n;
+		
+		
+		for(int i=1;i<len-1;i++){
+			vx=vx+Math.pow(donnees[i].vx-mx, 2);
+			vy=vy+Math.pow(donnees[i].vy-my, 2);
+			
+			v=v+Math.pow(v-m, 2);
+		}
+		vx=Math.sqrt(vx/n);
+		vy=Math.sqrt(vy/n);
+		v=Math.sqrt(v/n);
+		
+		
+		if(vx+vy<0.0011)
+			return Complexite.FAIBLE;
+		else if(vx+vy>0.0015)
+			return Complexite.FORTE;
+		else return Complexite.MOYENNE;
+	}
+	
 	// Remet les donnees dans l'ordre du tracé
 	public void inverserDonnees() {
 		int l = donnees.length;
@@ -239,20 +271,6 @@ public class Signature {
 		}
 	}
 
-	// Recentre le barycentre en (0,5;0,5)
-	/*
-	 * void recalibrerDonnees() { System.out.print("ASQQSD"); double xG = 0, yG
-	 * = 0;
-	 * 
-	 * // Calcul des coordonnees du barycentre for (int j = 0; j <
-	 * this.donnees.length; j++) { xG += this.donnees[j].x; yG +=
-	 * this.donnees[j].y; } xG /= this.donnees.length; yG /=
-	 * this.donnees.length;
-	 * 
-	 * // Translation (changement d'origine; barycentre en (0.5,0.5) ) for (int
-	 * j = 0; j < this.donnees.length; j++) { this.donnees[j].x -= (xG - 0.5);
-	 * this.donnees[j].y -= (yG - 0.5); } }
-	 */
 
 	// Reparsing de la signature en N points
 	public void calculs() {
