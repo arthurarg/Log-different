@@ -2,14 +2,34 @@ package affichageEtTests;
 
 import gestionIO.Enregistrement;
 
+import java.awt.Color;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import minuties.Minuties;
+import objets.Coordonnees;
 import objets.DonneesPoint;
 import objets.Gabarit;
 import objets.Signature;
@@ -26,28 +46,90 @@ import comparaison.Analyse;
 
 public class Bdd {
 	public static final String NEW_LINE = System.getProperty("line.separator" );
-
+	static boolean continuer = false;
+	
 	public static void main(String[] args) {
+		
 		/* Appeler constructBDD() pour faire passer les tests de saisie à une personne et l'ajouter à la base de donnees
 		 *  Appeler analyseBDD() pour analyser toutes les donnees stockees sur l'ordi
 		 */
-		//constructBDD();
+		constructBDD();
 		//recalculerGabarits();
 		//analyseBDD();
 	}
 	
+	
+	
 	public static void constructBDD() {
-		
+	
 		// Cree le dossier bdd
 		File bddFolder = new File("bdd");
 		if (!bddFolder.exists())
 			bddFolder.mkdir();
 		
 		
-		//Demande des renseignements pour le login
-		System.out.println("Veuillez rentrer votre identifiant (prenom.nom) : ");
-		Scanner sc = new Scanner(System.in);
-		String login = sc.next().toLowerCase();
+		
+		//Elements graphiques
+		JFrame frame = new JFrame();
+		frame.setBounds(50, 50, 500, 500);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		
+		JLayeredPane display = new JLayeredPane();
+		display.setBounds(0, 0, 500, 500);
+		display.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true), "entrer");
+		display.getActionMap().put("entrer", new AbstractAction() {
+			public void actionPerformed (ActionEvent e) {
+				continuer = true;
+			}
+		});
+
+		
+		JTextField textFieldLogin = new JTextField();
+		textFieldLogin.setBounds(0, 25, 225, 28);
+		textFieldLogin.setColumns(10);
+		
+		JLabel labelLogin = new JLabel("Login : ");
+		labelLogin.setBounds(6, 6, 59, 16);
+		JTextArea labelSignal = new JTextArea("Appuyer sur entrer pour continuer");
+		labelSignal.setBounds(0, 400, 500, 100);
+		labelSignal.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
+		labelSignal.setBackground(Color.lightGray);
+		
+		
+		JButton boutonDepart = new JButton("Let's start");
+		boutonDepart.setBounds(6, 60, 117, 29);
+		boutonDepart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				continuer = true;
+			}
+		});
+		
+		
+		
+		display.add(textFieldLogin);
+		display.add(labelLogin);
+		display.add(labelSignal);
+		labelSignal.setVisible(false);
+		display.add(boutonDepart);
+		
+		frame.add(display);
+		frame.setVisible(true);
+		
+		
+		// On attend qu'un login soit entre
+		continuer = false;
+		while (!continuer) {
+			try {Thread.currentThread().sleep(1000);}
+			catch(Exception e) {};
+		}
+		boutonDepart.setVisible(false);
+		textFieldLogin.setVisible(false);
+		labelLogin.setVisible(false);
+		labelSignal.setVisible(true);
+		
+		//Récupération du login
+		String login = textFieldLogin.getText().toLowerCase();
 		
 		
 		//Cree le dossier bdd/login/
@@ -56,7 +138,7 @@ public class Bdd {
 		if (!f.exists())
 			f.mkdir();
 		else {
-			System.out.print("Le dossier bdd/" + login + 
+			labelSignal.setText("Le dossier bdd/" + login + 
 					 " existe deja. Veuillez le supprimer avant de refaire passer le test à cette personne");
 			return;
 		}
@@ -75,9 +157,12 @@ public class Bdd {
 		
 		
 		//Enregistrement du gabarit
-		System.out.println("(1/4) Enregistrement du gabarit...");
-		System.out.println("Veuillez rentrer yes");
-		sc.next();
+		continuer = false;
+		labelSignal.setText("(1/4) Enregistrement du gabarit..." + NEW_LINE + "Appuyer sur Entree");
+		while (!continuer) {
+			try {Thread.currentThread().sleep(1000);}
+			catch(Exception e) {};
+		}
 		
 		//Enregistrement des 10 signatures utilisée pour le gabarit ds le disque dur
 		Gabarit g = new Gabarit();
@@ -87,52 +172,68 @@ public class Bdd {
 		
 		
 		//Enregistrement des 100 signatures
-		System.out.println("(2/4) Enregistrement de 100 signatures...");
-		System.out.println("N'hésitez pas à faire des pauses");
-		System.out.println("Veuillez taper yes");
-		sc.next();
+		continuer = false;
+		labelSignal.setText("(2/4) Enregistrement de 100 signatures..." + NEW_LINE + "N'hésitez pas à faire des pauses" + NEW_LINE + "Appuyer sur Entree");
+		while (!continuer) {
+			try {Thread.currentThread().sleep(1000);}
+			catch(Exception e) {};
+		}
 		
 		for (int i = 0; i < 100; i++) {
 			if ((i % 25) == 0 && i!= 0) {
-				System.out.println("Faites une pause ... " + i + " signatures enregistrées");
-				System.out.println("Veuillez taper yes");
-				sc.next();
+				continuer = false;
+				labelSignal.setText("Faites une pause ... " + i + " signatures enregistrées" + NEW_LINE +"Appuyer sur Entree" );
+				while (!continuer) {
+					try {Thread.currentThread().sleep(1000);}
+					catch(Exception e) {};
+				}
 			}
+			labelSignal.setText("" + i + "/100 signatures enregistrées");
 			Enregistrement.enregistrer("" + i, new Signature(), fsignatures.getAbsolutePath());
-			System.out.println(i);
 		}
 		
 		//Enregistrement des 25 tentatives "shoulder"
-		System.out.println("(3/4) Tentative d'instrusion shoulder...");
-		System.out.println("Opération realisee par l'operateur");
-		System.out.println("Veuillez taper yes");
-		sc.next();
+		continuer = false;
+		labelSignal.setText("(3/4) Tentative d'instrusion shoulder..." + NEW_LINE + "Opération realisee par l'operateur" + NEW_LINE + "Appuyer sur Entree");
+		while (!continuer) {
+			try {Thread.currentThread().sleep(1000);}
+			catch(Exception e) {};
+		}
 		
 		for (int i = 0; i < 25; i++) {
-			Enregistrement.enregistrer("" + i, new Signature(), fshoulder.getAbsolutePath());
-			System.out.println(i);
+			labelSignal.setText("" + i + "/25 signatures enregistrées");
+			Enregistrement.enregistrer("" + i, new Signature(), fshoulder.getAbsolutePath());			
 		}
 		
 		//Enregistrement des 25 tentatives "image"
-		System.out.println("(4/4) Tentative d'instrusion image...");
-		System.out.println("Opération realisee par l'operateur");
-		System.out.println("Veuillez taper yes");
-		sc.next();
-		
-		Signature s = Enregistrement.ouvrir("gabarit",f.getAbsolutePath());
-		Fenetre showmeyourface = new Fenetre();
-		showmeyourface.ajouter(s);
-		showmeyourface.setAlwaysOnTop(true);
-		
-		for (int i = 0; i < 25; i++) {
-			Enregistrement.enregistrer("" + i, new Signature(), fimage.getAbsolutePath());		
-			System.out.println(i);
+		continuer = false;
+		labelSignal.setText("(4/4) Tentative d'instrusion image..." + NEW_LINE + "Opération realisee par l'operateur" + NEW_LINE + "Appuyer sur Entree");
+		while (!continuer) {
+			try {Thread.currentThread().sleep(1000);}
+			catch(Exception e) {};
 		}
 		
+		Signature s = Enregistrement.ouvrir("gabarit",f.getAbsolutePath());
+		JPanel imageEnregistrer = new JPanel();
+		imageEnregistrer.setBounds(41, 40, 337, 337);
+		ImageComponent img = new ImageComponent(conversion_taille_200(s, 0xff000000));
+		imageEnregistrer.add(img);
+		display.add(imageEnregistrer);
+		imageEnregistrer.setOpaque(false);
 		
-		System.out.println("Test termine ! Merci pour votre participation ! ");
-		System.out.println("Veuillez taper yes");
-		sc.next();
+		
+		for (int i = 0; i < 25; i++) {
+			Enregistrement.enregistrer("" + i, new Signature(), fimage.getAbsolutePath());	
+			labelSignal.setText("" + i + "/25 signatures enregistrées");
+		}
+		
+		continuer = false;
+		labelSignal.setText("Test termine ! Merci pour votre participation !" + NEW_LINE + "Appuyer sur Entree");
+		while (!continuer) {
+			try {Thread.currentThread().sleep(1000);}
+			catch(Exception e) {};
+		}
+		frame.dispose();
 		System.exit(0);
 	}
 
@@ -405,5 +506,22 @@ public class Bdd {
 				new File("results/image/scorePositions/" + login + ".txt").exists() &&
 				new File("results/image/scoreVitesses/" + login + ".txt").exists() &&
 				new File("results/image/scorePressions/" + login + ".txt").exists());
+	}
+	
+	
+	static Image conversion_taille_200(Signature s, int rgb) {
+
+		Image r = new Image(200, 200, BufferedImage.TYPE_INT_ARGB);
+		DonneesPoint[] tab = s.getDonnees();
+		
+		for (int i = 0; i < tab.length - 1; i++) {
+			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
+			Coordonnees b = new Coordonnees(tab[i + 1].x,
+					tab[i + 1].y);
+
+			r.tracerSegment(a.fois(194).plus(1, 1), b.fois(194).plus(1, 1), rgb);
+		}
+
+		return r;
 	}
 }
