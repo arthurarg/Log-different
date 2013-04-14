@@ -27,6 +27,7 @@ import com.alderstone.multitouch.mac.touchpad.TouchpadObservable;
 		public void run() {
               tpo = TouchpadObservable.getInstance();
               tpo.addObserver(this);
+              y = 1;
         }
 		
 		//Renvoie le tableau de DonneesPoint releve lors de la saisie
@@ -46,6 +47,9 @@ import com.alderstone.multitouch.mac.touchpad.TouchpadObservable;
 			DonneesPoint milieu = new DonneesPoint((double)f.getX(),f.getY(),
 					(double)f.getTimestamp()*1000-t0,(double)f.getXVelocity(),(double)f.getYVelocity(), (double)f.getSize());
 			ListeDoi.addLast(milieu);
+			
+			if (y == 1 && f.getState()==FingerState.PRESSED)
+				y = 0;
 			if (f.getState()==FingerState.RELEASED){
 				tpo.deleteObservers();
 				int Nbrepoints = ListeDoi.size();

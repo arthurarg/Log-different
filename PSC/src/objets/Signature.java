@@ -5,8 +5,12 @@ import gestionIO.PaveGLULOGIC;
 import gestionIO.PaveScreen;
 import gestionIO.PaveTUIO;
 
+import java.awt.Cursor;
+import java.awt.KeyboardFocusManager;
+import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 import TUIO.TuioClient;
@@ -30,6 +34,7 @@ public class Signature {
 	
 	private DonneesPoint[] donnees;
 	public boolean terminate;
+	public boolean doigtPose;
 	
 	//renvoie une copie du tableau .donnees afin de le protéger
 	public DonneesPoint[] getDonnees() {
@@ -58,6 +63,7 @@ public class Signature {
 		
 		//Initialise terminate
 		this.terminate = false;
+		this.doigtPose = false;
 		
 		//Initialise le champs signature
 		init();
@@ -72,6 +78,7 @@ public class Signature {
 		
 		this.donnees = null;
 		this.terminate = false;
+		this.doigtPose = false;
 		if (b)
 			init();
 	}
@@ -99,12 +106,14 @@ public class Signature {
 			Pave pave = new PaveScreen();
 
 			// On attend que l'utilisateur pose son doigt sur le pavé
+			doigtPose = false;
 			while (!pave.pose()) {
 				attendre(10);
 			}
 			Coordonnees p, l = new Coordonnees(0, 0);
 			long t0 = System.currentTimeMillis();
 			// On enregistre le trace tant que le doigt est sur le pave
+			doigtPose = true;
 			while (pave.pose()) {
 
 				p = pave.position();
@@ -116,6 +125,7 @@ public class Signature {
 				l = new Coordonnees(p.x, p.y);
 				attendre(1);
 			}
+			doigtPose = false;
 
 			// On enregistre les vecteurs vitesse a partir de calculs effectues
 			// sur positions et temps
@@ -193,10 +203,19 @@ public class Signature {
 			ct.run();
 					
 			try { r = new Robot();} catch (Exception e) {}
-			while (ct.getY() == 0 && !terminate) {
-				r.mouseMove(width/2, height/2);
+
+			doigtPose = false;
+			while (ct.getY() == 1 && !terminate) {
+				r.mouseMove(150, 150);
 				attendre(1);
 			}
+			doigtPose = true;
+			while (ct.getY() == 0 && !terminate) {
+				r.mouseMove(150, 150);
+				attendre(1);
+			}
+			doigtPose = false;
+						
 			if (!terminate) {
 				this.donnees = ct.getSignature();
 				this.calculs();

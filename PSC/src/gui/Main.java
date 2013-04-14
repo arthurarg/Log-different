@@ -3,9 +3,12 @@ package gui;
 import gestionIO.Enregistrement;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -14,9 +17,11 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -72,6 +77,8 @@ public class Main extends JFrame {
 	private JLabel labelMinuties;
 	private JLabel labelPositionsDynamique;
 	private JLabel labelVitessesDynamique;
+	private JLabel imageDoigt;
+	private JLabel imageDoigtOK;
 	private String currentSRef = "";
 	private String currentSTest = "";
 	private boolean currentSimilitudes = true;
@@ -97,8 +104,33 @@ public class Main extends JFrame {
 		}
 	};
 	
+	final Thread affichageDynamiqueSignature = new Thread() {
+		public void run() {
+			imageDoigt.setVisible(true);
+			
+			while (saisieSignature.isAlive()) {
+				if (!imageDoigtOK.isVisible() && s!= null && s.doigtPose) {
+					imageDoigt.setVisible(false);
+					imageDoigtOK.setVisible(true);
+				}
+				if (!imageDoigt.isVisible() && s!= null && !s.doigtPose) {
+					imageDoigt.setVisible(true);
+					imageDoigtOK.setVisible(false);
+				}
+			}
+			imageDoigt.setVisible(false);
+			imageDoigtOK.setVisible(false);
+		}
+	};
+	
 	final Thread saisieGabarit = new Thread() {
 		public void run() {
+			//Cree un curseur tranparent
+			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+			    cursorImg, new Point(0, 0), "blank cursor");
+			getContentPane().setCursor(blankCursor);
+			
 			g = new Gabarit(false);
 			g.init();
 			if (g.s.terminate)
@@ -113,6 +145,28 @@ public class Main extends JFrame {
 			imageEnregistrer.add(img);
 			panneauEnregistrer.add(imageEnregistrer);
 			imageEnregistrer.setOpaque(false);
+			
+			//Retablis le curseur
+			getContentPane().setCursor(Cursor.getDefaultCursor());
+		}
+	};
+	
+	final Thread affichageDynamiqueGabarit = new Thread() {
+		public void run() {
+			imageDoigt.setVisible(true);
+			
+			while (saisieGabarit.isAlive()) {
+				if (!imageDoigtOK.isVisible() && g!= null && g.s.doigtPose) {
+					imageDoigt.setVisible(false);
+					imageDoigtOK.setVisible(true);
+				}
+				if (!imageDoigt.isVisible() && g!= null && !g.s.doigtPose) {
+					imageDoigt.setVisible(true);
+					imageDoigtOK.setVisible(false);
+				}
+			}
+			imageDoigt.setVisible(false);
+			imageDoigtOK.setVisible(false);
 		}
 	};
 
@@ -128,7 +182,6 @@ public class Main extends JFrame {
 				}
 			}
 		});
-
 	}
 
 	public Main() {
@@ -175,6 +228,18 @@ public class Main extends JFrame {
 		textFieldLogin.setBounds(59, 0, 225, 28);
 		panneauEnregistrer.add(textFieldLogin);
 		textFieldLogin.setColumns(10);
+		
+		try {imageDoigt = new JLabel(new ImageIcon(ImageIO.read(new File("images/doigt.png")))); }
+		catch (Exception ex) {System.err.println("Image non chargée"); return;}
+		imageDoigt.setBounds(0,50,400,350);
+		panneauEnregistrer.add(imageDoigt);
+		imageDoigt.setVisible(false);
+		
+		try {imageDoigtOK = new JLabel(new ImageIcon(ImageIO.read(new File("images/doigtOK.png")))); }
+		catch (Exception ex) {System.err.println("Image non chargée"); return;}
+		imageDoigtOK.setBounds(0,50,400,350);
+		panneauEnregistrer.add(imageDoigtOK);
+		imageDoigtOK.setVisible(false);
 
 		JButton boutonEnregistrer = new JButton("Enregistrer");
 		boutonEnregistrer.setBounds(296, 1, 117, 29);
@@ -337,8 +402,9 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String login = textFieldLogin.getText();
 
-				if (login != null && login.matches("[a-z0-9_-]{1,}")) {
-					saisieGabarit.start();
+				if (login != null && login.matches("[a-z0-9_-]{1,}")) {	
+						saisieGabarit.start();
+						affichageDynamiqueGabarit.start();
 				}
 			}
 		});

@@ -3,12 +3,9 @@ package affichageEtTests;
 import gestionIO.Enregistrement;
 
 import java.awt.Color;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,8 +13,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -48,6 +47,14 @@ public class Bdd {
 	public static final String NEW_LINE = System.getProperty("line.separator" );
 	static boolean continuer = false;
 	
+	static Gabarit g;
+	final static Thread saisieGabarit = new Thread() {
+		public void run() {
+			g = new Gabarit(false);
+			g.init();
+		}
+	};
+	
 	public static void main(String[] args) {
 		
 		/* Appeler constructBDD() pour faire passer les tests de saisie à une personne et l'ajouter à la base de donnees
@@ -61,7 +68,8 @@ public class Bdd {
 	
 	
 	public static void constructBDD() {
-	
+		
+		
 		// Cree le dossier bdd
 		File bddFolder = new File("bdd");
 		if (!bddFolder.exists())
@@ -105,8 +113,23 @@ public class Bdd {
 			}
 		});
 		
+		JLabel imageDoigt;
+		try {imageDoigt = new JLabel(new ImageIcon(ImageIO.read(new File("images/doigt.png")))); }
+		catch (Exception ex) {System.err.println("Image non chargée"); return;}
+		imageDoigt.setBounds(0,0,500,400);
+
 		
+
+		JLabel imageDoigtOK;
+		try {imageDoigtOK = new JLabel(new ImageIcon(ImageIO.read(new File("images/doigtOK.png")))); }
+		catch (Exception ex) {System.err.println("Image non chargée"); return;}
+		imageDoigtOK.setBounds(0,0,500,400);
+
 		
+		display.add(imageDoigt);
+		imageDoigt.setVisible(false);
+		display.add(imageDoigtOK);
+		imageDoigtOK.setVisible(false);
 		display.add(textFieldLogin);
 		display.add(labelLogin);
 		display.add(labelSignal);
@@ -154,6 +177,7 @@ public class Bdd {
 		fshoulder.mkdir();
 		File fimage = new File("bdd/" + login + "/far/image");
 		fimage.mkdir();
+	
 		
 		
 		//Enregistrement du gabarit
@@ -165,7 +189,21 @@ public class Bdd {
 		}
 		
 		//Enregistrement des 10 signatures utilisée pour le gabarit ds le disque dur
-		Gabarit g = new Gabarit();
+		saisieGabarit.start();
+		imageDoigt.setVisible(true);
+		while (saisieGabarit.isAlive()) {
+			if (!imageDoigtOK.isVisible() && g!= null && g.s.doigtPose) {
+				imageDoigt.setVisible(false);
+				imageDoigtOK.setVisible(true);
+			}
+			if (!imageDoigt.isVisible() && g!= null && !g.s.doigtPose) {
+				imageDoigtOK.setVisible(false);
+				imageDoigt.setVisible(true);
+			}
+		}
+		imageDoigtOK.setVisible(false);
+		imageDoigt.setVisible(false);
+		
 		for (int k=0; k<g.tab.length; k++)
 			Enregistrement.enregistrer("" + k, g.tab[k], fgabarit.getAbsolutePath());
 		Enregistrement.enregistrer("gabarit", g.sRef, f.getAbsolutePath());
