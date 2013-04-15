@@ -84,8 +84,9 @@ public class Main extends JFrame {
 	private boolean currentSimilitudes = true;
 	Signature s = new Signature (false);
 	Gabarit g;
+	Thread saisieSignature, affichageDynamiqueSignature, saisieGabarit, affichageDynamiqueGabarit;
 	
-	final Thread saisieSignature = new Thread() {
+	/*saisieSignature = new Thread() {
 		public void run() {
 			s = new Signature(false);
 			s.init();
@@ -102,9 +103,9 @@ public class Main extends JFrame {
 			panneauEnregistrer.add(imageEnregistrer);
 			imageEnregistrer.setOpaque(false);
 		}
-	};
+	};*/
 	
-	final Thread affichageDynamiqueSignature = new Thread() {
+	/*affichageDynamiqueSignature = new Thread() {
 		public void run() {
 			imageDoigt.setVisible(true);
 			
@@ -121,54 +122,7 @@ public class Main extends JFrame {
 			imageDoigt.setVisible(false);
 			imageDoigtOK.setVisible(false);
 		}
-	};
-	
-	final Thread saisieGabarit = new Thread() {
-		public void run() {
-			//Cree un curseur tranparent
-			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-			    cursorImg, new Point(0, 0), "blank cursor");
-			getContentPane().setCursor(blankCursor);
-			
-			g = new Gabarit(false);
-			g.init();
-			if (g.s.terminate)
-				return;
-			
-			Enregistrement.enregistrer(textFieldLogin.getText(), g.sRef);
-			panneauEnregistrer.remove(imageEnregistrer);
-			imageEnregistrer = new JPanel();
-			imageEnregistrer.setBounds(41, 40, 337, 337);
-			ImageComponent img = new ImageComponent(
-					conversion_taille_337(g.sRef, 0xff000000));
-			imageEnregistrer.add(img);
-			panneauEnregistrer.add(imageEnregistrer);
-			imageEnregistrer.setOpaque(false);
-			
-			//Retablis le curseur
-			getContentPane().setCursor(Cursor.getDefaultCursor());
-		}
-	};
-	
-	final Thread affichageDynamiqueGabarit = new Thread() {
-		public void run() {
-			imageDoigt.setVisible(true);
-			
-			while (saisieGabarit.isAlive()) {
-				if (!imageDoigtOK.isVisible() && g!= null && g.s.doigtPose) {
-					imageDoigt.setVisible(false);
-					imageDoigtOK.setVisible(true);
-				}
-				if (!imageDoigt.isVisible() && g!= null && !g.s.doigtPose) {
-					imageDoigt.setVisible(true);
-					imageDoigtOK.setVisible(false);
-				}
-			}
-			imageDoigt.setVisible(false);
-			imageDoigtOK.setVisible(false);
-		}
-	};
+	};*/
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -403,8 +357,54 @@ public class Main extends JFrame {
 				String login = textFieldLogin.getText();
 
 				if (login != null && login.matches("[a-z0-9_-]{1,}")) {	
-						saisieGabarit.start();
-						affichageDynamiqueGabarit.start();
+					saisieGabarit = new Thread() {
+						public void run() {
+							//Cree un curseur tranparent
+							BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+							Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+							    cursorImg, new Point(0, 0), "blank cursor");
+							getContentPane().setCursor(blankCursor);
+							
+							g = new Gabarit(false);
+							g.init();
+							if (g.s.terminate)
+								return;
+							
+							Enregistrement.enregistrer(textFieldLogin.getText(), g.sRef);
+							panneauEnregistrer.remove(imageEnregistrer);
+							imageEnregistrer = new JPanel();
+							imageEnregistrer.setBounds(41, 40, 337, 337);
+							ImageComponent img = new ImageComponent(
+									conversion_taille_337(g.sRef, 0xff000000));
+							imageEnregistrer.add(img);
+							panneauEnregistrer.add(imageEnregistrer);
+							imageEnregistrer.setOpaque(false);
+							
+							//Retablis le curseur
+							getContentPane().setCursor(Cursor.getDefaultCursor());
+						}
+					};
+					affichageDynamiqueGabarit = new Thread() {
+						public void run() {
+							imageDoigt.setVisible(true);
+							
+							while (saisieGabarit.isAlive()) {
+								if (!imageDoigtOK.isVisible() && g!= null && g.s.doigtPose) {
+									imageDoigt.setVisible(false);
+									imageDoigtOK.setVisible(true);
+								}
+								if (!imageDoigt.isVisible() && g!= null && !g.s.doigtPose) {
+									imageDoigt.setVisible(true);
+									imageDoigtOK.setVisible(false);
+								}
+							}
+							imageDoigt.setVisible(false);
+							imageDoigtOK.setVisible(false);
+						}
+					};
+					
+					saisieGabarit.start();
+					affichageDynamiqueGabarit.start();			
 				}
 			}
 		});
