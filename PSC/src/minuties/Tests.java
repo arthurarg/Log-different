@@ -1,4 +1,4 @@
-package minutiesVectorielles;
+package minuties;
 import java.awt.image.BufferedImage;
 
 import affichageEtTests.Fenetre;
@@ -21,13 +21,17 @@ public class Tests {
 	public static void main(String[] args) {
 
 		Signature s = new Signature();
-		DonneesAnglesSortedLinkedList l = Minuties.construireListeAngles(s, 0.001);
-		for(int i=0; i<l.size(); i++){
+		Signature s2 = new Signature();
+		DonneesAnglesSortedLinkedList l = MinutiesVectorielles.construireListeAngles(s, 0.05);
+		DonneesAnglesSortedLinkedList l2 = MinutiesVectorielles.construireListeAngles(s2, 0.05);
+		/*for(int i=0; i<l.size(); i++){
 			System.out.println(l.get(i).angle+"   "+l.get(i).j+","+l.get(i).i+","+l.get(i).k);
-		}
+		}*/
 		Fenetre f=new Fenetre();
-		f.ajouterSignatureEtMinuties(s, l, 4);
-
+		f.ajouterSignatureEtMinuties(s, l, 5);
+		Fenetre f2=new Fenetre();
+		f2.ajouterSignatureEtMinuties(s2, l2, 5);
+		System.out.print("score = "+MinutiesVectorielles.scoreMinutiesCourbure(s,s2));
 		}
 	}
 

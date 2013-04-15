@@ -1,4 +1,4 @@
-package minutiesVectorielles;
+package minuties;
 import java.util.LinkedList;
 
 public class DonneesAnglesSortedLinkedList extends LinkedList<DonneesAngles>{

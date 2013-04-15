@@ -1,4 +1,4 @@
-package minutiesVectorielles;
+package minuties;
 
 public class DonneesAngles {
 double angle;

@@ -1,6 +1,7 @@
 package comparaison;
 
 import minuties.Minuties;
+import minuties.MinutiesVectorielles;
 import objets.DonneesPoint;
 import objets.Signature;
 

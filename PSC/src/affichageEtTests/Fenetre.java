@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import objets.Coordonnees;
 import objets.DonneesPoint;
 import objets.Signature;
-import minutiesVectorielles.DonneesAnglesSortedLinkedList;;
+import minuties.DonneesAnglesSortedLinkedList;
 
 
 /* Classe Fenetre
