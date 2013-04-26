@@ -320,6 +320,9 @@ public class Bdd {
 		File sign6Folder = new File("results/signatures/scoreMinuties2");
 		if (!sign6Folder.exists())
 			sign6Folder.mkdir();
+		File sign7Folder = new File("results/signatures/scoreMinuties3");
+		if (!sign7Folder.exists())
+			sign7Folder.mkdir();
 		
 		File shoulderFolder = new File("results/shoulder");
 		if (!shoulderFolder.exists())
@@ -342,6 +345,9 @@ public class Bdd {
 		File shoulder6Folder = new File("results/shoulder/scoreMinuties2");
 		if (!shoulder6Folder.exists())
 			shoulder6Folder.mkdir();
+		File shoulder7Folder = new File("results/shoulder/scoreMinuties3");
+		if (!shoulder7Folder.exists())
+			shoulder7Folder.mkdir();
 		
 		File imageFolder = new File("results/image");
 		if (!imageFolder.exists())
@@ -364,6 +370,9 @@ public class Bdd {
 		File image6Folder = new File("results/image/scoreMinuties2");
 		if (!image6Folder.exists())
 			image6Folder.mkdir();
+		File image7Folder = new File("results/image/scoreMinuties3");
+		if (!image7Folder.exists())
+			image7Folder.mkdir();
 		
 		
 		
@@ -385,11 +394,11 @@ public class Bdd {
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
 		
 				//Enregistrement des scores obtenus pour les vrais signatures
-				analyseParPersonne(sRef,login,"signatures",100,sign1Folder,sign2Folder,sign3Folder,sign4Folder,sign5Folder,sign6Folder);
+				analyseParPersonne(sRef,login,"signatures",100,sign1Folder,sign2Folder,sign3Folder,sign4Folder,sign5Folder,sign6Folder, sign7Folder);
 				//Enregistrement des scores obtenus pour les tentatives shoulder
-				analyseParPersonne(sRef,login,"far/shoulder",25,shoulder1Folder,shoulder2Folder,shoulder3Folder,shoulder4Folder,shoulder5Folder,shoulder6Folder);
+				analyseParPersonne(sRef,login,"far/shoulder",25,shoulder1Folder,shoulder2Folder,shoulder3Folder,shoulder4Folder,shoulder5Folder,shoulder6Folder, shoulder7Folder);
 				//Enregistrement des scores obtenus pour les tentatives image
-				analyseParPersonne(sRef,login,"far/image",25,image1Folder,image2Folder,image3Folder,image4Folder,image5Folder,image6Folder);
+				analyseParPersonne(sRef,login,"far/image",25,image1Folder,image2Folder,image3Folder,image4Folder,image5Folder,image6Folder, image7Folder);
 			}
 		}
 		
@@ -397,9 +406,9 @@ public class Bdd {
 		//Agglomère l'ensemble des données dans 9 fichier .txt
 		//________________________________________________
 		System.out.println("Agrégation des données en cours");
-		analyseGlobale(names,"signature",signFolder,sign1Folder,sign2Folder,sign3Folder,sign4Folder,sign5Folder,sign6Folder);
-		analyseGlobale(names,"far/shoulder",shoulderFolder,shoulder1Folder,shoulder2Folder,shoulder3Folder,shoulder4Folder,shoulder5Folder,shoulder6Folder);
-		analyseGlobale(names,"far/image",imageFolder,image1Folder,image2Folder,image3Folder,image4Folder,image5Folder,image6Folder);
+		analyseGlobale(names,"signature",signFolder,sign1Folder,sign2Folder,sign3Folder,sign4Folder,sign5Folder,sign6Folder, sign7Folder);
+		analyseGlobale(names,"far/shoulder",shoulderFolder,shoulder1Folder,shoulder2Folder,shoulder3Folder,shoulder4Folder,shoulder5Folder,shoulder6Folder, shoulder7Folder);
+		analyseGlobale(names,"far/image",imageFolder,image1Folder,image2Folder,image3Folder,image4Folder,image5Folder,image6Folder, image7Folder);
 		System.out.println("Agrégation des données réussie !");
 
 	}
@@ -409,9 +418,9 @@ public class Bdd {
 	//--------
 	
 	private static void analyseParPersonne(Signature sRef, String login, String where, int n, 
-											File folder1, File folder2, File folder3, File folder4, File folder5, File folder6) {
+											File folder1, File folder2, File folder3, File folder4, File folder5, File folder6, File folder7) {
 		
-		String scorePos = "", scoreVit = "", scorePre = "",scoreMin0 = "",scoreMin1 = "",scoreMin2 = "";
+		String scorePos = "", scoreVit = "", scorePre = "",scoreMin0 = "",scoreMin1 = "",scoreMin2 = "", scoreMin3 = "";
 		for (int i = 0; i<n; i++) {
 			Signature s = new Signature(sRef.getDonnees());
 			Signature sTest = Enregistrement.ouvrir("" + i, "bdd/" + login + "/" + where);
@@ -426,6 +435,7 @@ public class Bdd {
 			scoreMin0 += "" + Minuties.comparaison(s1, s2, 0) + NEW_LINE;
 			scoreMin1 += "" + Minuties.comparaison(s1, s2, 1) + NEW_LINE;
 			scoreMin2 += "" + Minuties.comparaison(s1, s2, 2) + NEW_LINE;
+			scoreMin3 += "" + Minuties.comparaison(s1, s2, 3) + NEW_LINE;
 		}
 		ecrireTexte(login, scorePos, folder1.getAbsolutePath());
 		ecrireTexte(login, scoreVit, folder2.getAbsolutePath());
@@ -433,11 +443,12 @@ public class Bdd {
 		ecrireTexte(login, scoreMin0, folder4.getAbsolutePath());
 		ecrireTexte(login, scoreMin1, folder5.getAbsolutePath());
 		ecrireTexte(login, scoreMin2, folder6.getAbsolutePath());
+		ecrireTexte(login, scoreMin3, folder7.getAbsolutePath());
 	}
 	
 	private static void analyseGlobale(String[] names, String where, 
-							File folder0, File folder1, File folder2, File folder3, File folder4, File folder5, File folder6){
-		String scorePos = "", scoreVit = "", scorePre = "",scoreMin0 = "",scoreMin1 = "",scoreMin2 = "";
+							File folder0, File folder1, File folder2, File folder3, File folder4, File folder5, File folder6, File folder7){
+		String scorePos = "", scoreVit = "", scorePre = "",scoreMin0 = "",scoreMin1 = "",scoreMin2 = "", scoreMin3 = "";
 		
 		for (int k = 0; k < names.length; k++) {
 			String login = names[k];
@@ -449,6 +460,7 @@ public class Bdd {
 				scoreMin0 += renvoiTexte(login, folder4.getAbsolutePath());
 				scoreMin1 += renvoiTexte(login, folder5.getAbsolutePath());
 				scoreMin2 += renvoiTexte(login, folder6.getAbsolutePath());
+				scoreMin3 += renvoiTexte(login, folder7.getAbsolutePath());
 			}
 			else if (new File("bdd/" + login + "/gabarit.txt").exists()) {
 				Signature sRef = Enregistrement.ouvrir("gabarit", "bdd/" + login);
@@ -467,6 +479,7 @@ public class Bdd {
 					scoreMin0 += "" + Minuties.comparaison(s1, s2, 0) + NEW_LINE;
 					scoreMin1 += "" + Minuties.comparaison(s1, s2, 1) + NEW_LINE;
 					scoreMin2 += "" + Minuties.comparaison(s1, s2, 2) + NEW_LINE;
+					scoreMin3 += "" + Minuties.comparaison(s1, s2, 3) + NEW_LINE;
 				}	
 			}
 		}
@@ -476,6 +489,7 @@ public class Bdd {
 		ecrireTexte("_scoreMinuties0Total.txt", scoreMin0, folder0.getAbsolutePath());
 		ecrireTexte("_scoreMinuties1Total.txt", scoreMin1, folder0.getAbsolutePath());
 		ecrireTexte("_scoreMinuties2Total.txt", scoreMin2, folder0.getAbsolutePath());
+		ecrireTexte("_scoreMinuties3Total.txt", scoreMin3, folder0.getAbsolutePath());
 		
 	}
 	
