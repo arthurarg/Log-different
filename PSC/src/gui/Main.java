@@ -367,6 +367,10 @@ public class Main extends JFrame {
 							
 							g = new Gabarit(false);
 							g.init();
+							
+							//Retablis le curseur
+							getContentPane().setCursor(Cursor.getDefaultCursor());
+							
 							if (g.s.terminate)
 								return;
 							
@@ -380,8 +384,7 @@ public class Main extends JFrame {
 							panneauEnregistrer.add(imageEnregistrer);
 							imageEnregistrer.setOpaque(false);
 							
-							//Retablis le curseur
-							getContentPane().setCursor(Cursor.getDefaultCursor());
+							
 						}
 					};
 					affichageDynamiqueGabarit = new Thread() {
