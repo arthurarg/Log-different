@@ -22,7 +22,7 @@ public class Gabarit {
 	public Signature sRef;
 	public Signature[] tab = new Signature[nbSign];
 	
-	static public Signature s;
+	public Signature s;
 
 	
 	

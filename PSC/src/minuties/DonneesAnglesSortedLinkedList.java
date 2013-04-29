@@ -8,7 +8,8 @@ import java.util.LinkedList;
  */
 
 public class DonneesAnglesSortedLinkedList extends LinkedList<DonneesAngles>{
-   
+   	private static final long serialVersionUID = 1L;
+
 	public boolean add(DonneesAngles d) {
         int index = 0;
         for( ; index<size() ; index++){

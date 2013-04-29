@@ -18,6 +18,7 @@ import objets.Signature;
  */
 
 public class Fenetre extends JFrame {
+	private static final long serialVersionUID = 1L;
 	
 	public int taille_signature, taille;
 	JLabel texte;
@@ -60,8 +61,6 @@ public class Fenetre extends JFrame {
 		
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
 		DonneesPoint[] tab = s.getDonnees();
-		
-		Coordonnees l=new Coordonnees(tab[0].x, tab[0].y);
 		
 		for(int i=0; i<tab.length-1; i++){
 			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
@@ -249,15 +248,11 @@ public class Fenetre extends JFrame {
 		this.setVisible(true);
 		
 	}
-	
-	//Role inconnu
-	//TODO ameliorer le commentaire de la ligne au-dessus
+
 	Image conversionVariations(Signature s){
 		
 		Image r = new Image(taille_signature, taille_signature, BufferedImage.TYPE_INT_ARGB);
 		DonneesPoint[] tab = s.getDonnees();
-		
-		Coordonnees l=new Coordonnees(tab[0].x, tab[0].y);
 		
 		int rgb, c=0xff000000;
 		double vmin=tab[0].normeVitesse(), vmax=vmin;
@@ -282,8 +277,6 @@ public class Fenetre extends JFrame {
 	}
 	
 	
-	//Role inconnu
-	//TODO ameliorer le commentaire de la ligne au-dessus
 	static int couleur(double t){
 		int r, b;
 		

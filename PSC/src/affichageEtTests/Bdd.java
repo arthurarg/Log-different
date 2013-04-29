@@ -87,6 +87,7 @@ public class Bdd {
 		display.setBounds(0, 0, 500, 500);
 		display.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true), "entrer");
 		display.getActionMap().put("entrer", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
 			public void actionPerformed (ActionEvent e) {
 				continuer = true;
 			}
@@ -143,7 +144,7 @@ public class Bdd {
 		// On attend qu'un login soit entre
 		continuer = false;
 		while (!continuer) {
-			try {Thread.currentThread().sleep(1000);}
+			try {Thread.sleep(1000);}
 			catch(Exception e) {};
 		}
 		boutonDepart.setVisible(false);
@@ -184,7 +185,7 @@ public class Bdd {
 		continuer = false;
 		labelSignal.setText("(1/4) Enregistrement du gabarit..." + NEW_LINE + "Appuyer sur Entree");
 		while (!continuer) {
-			try {Thread.currentThread().sleep(1000);}
+			try {Thread.sleep(1000);}
 			catch(Exception e) {};
 		}
 		
@@ -213,7 +214,7 @@ public class Bdd {
 		continuer = false;
 		labelSignal.setText("(2/4) Enregistrement de 100 signatures..." + NEW_LINE + "N'hésitez pas à faire des pauses" + NEW_LINE + "Appuyer sur Entree");
 		while (!continuer) {
-			try {Thread.currentThread().sleep(1000);}
+			try {Thread.sleep(1000);}
 			catch(Exception e) {};
 		}
 		
@@ -222,7 +223,7 @@ public class Bdd {
 				continuer = false;
 				labelSignal.setText("Faites une pause ... " + i + " signatures enregistrées" + NEW_LINE +"Appuyer sur Entree" );
 				while (!continuer) {
-					try {Thread.currentThread().sleep(1000);}
+					try {Thread.sleep(1000);}
 					catch(Exception e) {};
 				}
 			}
@@ -234,7 +235,7 @@ public class Bdd {
 		continuer = false;
 		labelSignal.setText("(3/4) Tentative d'instrusion shoulder..." + NEW_LINE + "Opération realisee par l'operateur" + NEW_LINE + "Appuyer sur Entree");
 		while (!continuer) {
-			try {Thread.currentThread().sleep(1000);}
+			try {Thread.sleep(1000);}
 			catch(Exception e) {};
 		}
 		
@@ -247,7 +248,7 @@ public class Bdd {
 		continuer = false;
 		labelSignal.setText("(4/4) Tentative d'instrusion image..." + NEW_LINE + "Opération realisee par l'operateur" + NEW_LINE + "Appuyer sur Entree");
 		while (!continuer) {
-			try {Thread.currentThread().sleep(1000);}
+			try {Thread.sleep(1000);}
 			catch(Exception e) {};
 		}
 		
@@ -268,7 +269,7 @@ public class Bdd {
 		continuer = false;
 		labelSignal.setText("Test termine ! Merci pour votre participation !" + NEW_LINE + "Appuyer sur Entree");
 		while (!continuer) {
-			try {Thread.currentThread().sleep(1000);}
+			try {Thread.sleep(1000);}
 			catch(Exception e) {};
 		}
 		frame.dispose();

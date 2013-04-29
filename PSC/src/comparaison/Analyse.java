@@ -211,7 +211,7 @@ public class Analyse {
 			tab1[i] = new DonneesPoint(tabRef[i+n1avant].x, tabRef[i+n1avant].y,tabRef[i+n1avant].t,tabRef[i+n1avant].vx,tabRef[i+n1avant].vy,tabRef[i+n1avant].s);
 		
 	
-		double[] res = {params[1],params[2], param[4], param[5]};
+		//double[] res = {params[1],params[2], param[4], param[5]};
 		
 		DonneesPoint[][] aRetourner;
 		aRetourner = new DonneesPoint[2][];

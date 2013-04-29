@@ -2,7 +2,6 @@ package gui;
 
 import gestionIO.Enregistrement;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -11,8 +10,6 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,7 +31,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -54,28 +50,20 @@ import comparaison.Analyse;
  */
 
 public class Main extends JFrame {
-
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel contentPane;
 	private JTextField textFieldLogin;
-	private JComboBox comboBoxSRef;
-	private JComboBox comboBoxSTest;
-	private JComboBox comboBoxAfficher;
-	private JComboBox comboBoxAuthentification;
-	private JPanel imageAfficher;
+	private JComboBox<String> comboBoxSRef;
+	private JComboBox<String> comboBoxSTest;
+	private JComboBox<String> comboBoxAuthentification;
 	private JPanel imageSRef;
 	private JPanel imageSTest;
 	private JLayeredPane panneauEnregistrer;
-	private JLayeredPane panneauAfficher;
 	private JLayeredPane panneauComparer;
 	private JPanel imageEnregistrer;
 	private JSeparator separateurEnregistrer;
-	private JSeparator separateurComparerHaut;
 	private JToggleButton boutonSimilitudes;
-	private JSeparator separateurAfficher;
-	private JLabel labelPositions;
-	private JLabel labelVitesses;
-	private JLabel labelPression;
-	private JLabel labelMinuties;
 	private JLabel labelPositionsDynamique;
 	private JLabel labelVitessesDynamique;
 	private JLabel imageDoigt;
@@ -87,7 +75,6 @@ public class Main extends JFrame {
 	Gabarit g;
 	Thread saisieSignature, affichageDynamiqueSignature, saisieGabarit,
 			affichageDynamiqueGabarit;
-	private JPanel panel;
 
 	/*
 	 * saisieSignature = new Thread() { public void run() { s = new
@@ -152,6 +139,7 @@ public class Main extends JFrame {
 		panneauEnregistrer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "escape");
 		panneauEnregistrer.getActionMap().put("escape", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent e) {
 				if (g != null)
 					g.s.terminate = true;
@@ -304,7 +292,7 @@ public class Main extends JFrame {
 		labelLogin2.setBounds(6, 6, 59, 16);
 		panneauAuthentification.add(labelLogin2);
 
-		comboBoxAuthentification = new JComboBox();
+		comboBoxAuthentification = new JComboBox<String>();
 		comboBoxAuthentification.setBounds(57, 2, 207, 27);
 		panneauAuthentification.add(comboBoxAuthentification);
 
@@ -349,7 +337,7 @@ public class Main extends JFrame {
 							 * 0, listOfFiles[i].getName() .length() - 4));
 							 */
 							comboBoxAuthentification
-									.addItem(listOfFiles[i].getName()
+									.addItem("" +listOfFiles[i].getName()
 											.subSequence(
 													0,
 													listOfFiles[i].getName()
@@ -461,7 +449,7 @@ public class Main extends JFrame {
 					for (int i = 0; i < listOfFiles.length; i++) {
 						if (listOfFiles[i].getName().endsWith(".txt")) {
 							comboBoxAuthentification
-									.addItem(listOfFiles[i].getName()
+									.addItem("" +listOfFiles[i].getName()
 											.subSequence(
 													0,
 													listOfFiles[i].getName()
@@ -517,8 +505,8 @@ public class Main extends JFrame {
 					.getSelectedItem());
 			Signature sTest = Enregistrement.ouvrir((String) comboBoxSTest
 					.getSelectedItem());
-			int n1avant, n2avant, n1apres, n2apres;
-			double lambda, theta;
+			//int n1avant, n2avant, n1apres, n2apres;
+			//double lambda, theta;
 			if (boutonSimilitudes.isSelected()) {
 				DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
 				sRef = new Signature(analyse[0]);
@@ -548,12 +536,12 @@ public class Main extends JFrame {
 				imageSTest.setOpaque(false);
 
 			} else {
-				n1avant = 0;
+				/*n1avant = 0;
 				n1apres = 0;
 				n2avant = 0;
 				n2apres = 0;
 				lambda = 1;
-				theta = 0;
+				theta = 0;*/
 
 				panneauComparer.remove(imageSRef);
 				imageSRef = new JPanel();
