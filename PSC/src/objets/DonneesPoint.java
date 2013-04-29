@@ -2,7 +2,7 @@ package objets;
 
 /* Classe DonneesPoint
  * ---------------
- * Role : Objet qui regroupe toutes les informations inh��rentes a un point
+ * Role : Objet qui regroupe toutes les informations inherentes a un point
  * --------------
  */
 

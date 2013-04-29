@@ -3,12 +3,15 @@ package minuties;
 import java.util.LinkedList;
 import java.util.List;
 
-import objets.Coordonnees;
 import objets.DonneesPoint;
 import objets.Signature;
-import affichageEtTests.Fenetre;
-import affichageEtTests.Image;
-import minutiesV1.Sommet;
+
+
+/* Classe MinutiesVectorielles
+ * ---------------
+ * Role : Trouve les minuties d'angles, appelées minuties de type 3.
+ * --------------
+ */
 
 public class MinutiesVectorielles {
 	public static DonneesAnglesSortedLinkedList construireListeAngles(

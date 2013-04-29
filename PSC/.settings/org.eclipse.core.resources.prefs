@@ -1,13 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/affichageEtTests/Fenetre.java=UTF-8
-encoding//src/affichageEtTests/FenetreTempsReel.java=UTF-8
-encoding//src/affichageEtTests/Tests.java=UTF-8
 encoding//src/comparaison/Analyse.java=UTF-8
 encoding//src/comparaison/Comparaison.java=UTF-8
-encoding//src/comparaison/Minuties.java=UTF-8
-encoding//src/gestionIO/PaveTUIO.java=UTF-8
 encoding//src/gui/Main.java=UTF-8
-encoding//src/minutiesV1/MinutiesV1.java=UTF-8
 encoding//src/objets/DonneesPoint.java=UTF-8
 encoding//src/objets/Gabarit.java=UTF-8
 encoding//src/objets/Signature.java=UTF-8

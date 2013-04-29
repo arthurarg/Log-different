@@ -1,12 +1,16 @@
 package affichageEtTests;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JComponent;
 
 import objets.Coordonnees;
 
 
 /* Classe Image
  * ---------------
- * Role : 
+ * Role : Classe auxilaire pour afficher les signatures
  * --------------
  */
 
@@ -72,4 +76,19 @@ public class Image extends BufferedImage {
 		else return a;
 	}
 
+}
+
+class ImageComponent extends JComponent {
+
+	private static final long serialVersionUID = 1225166596942897848L;
+	private BufferedImage img;
+
+    public ImageComponent(BufferedImage img) {
+        this.img = img;
+        setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+    }
+
+    public void paint(Graphics g) {
+        g.drawImage(img, 0, 0, this);
+    }   
 }

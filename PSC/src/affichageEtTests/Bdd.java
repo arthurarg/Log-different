@@ -38,12 +38,12 @@ import comparaison.Analyse;
 
 /* Classe Bdd
  * ---------------
- * Role : Gere le stockage des donnees et leur analyse
+ * Role : Gere le stockage des donnees et leur analyse pour les campagnes de test
  * --------------
  */
 
-
 public class Bdd {
+	
 	public static final String NEW_LINE = System.getProperty("line.separator" );
 	static boolean continuer = false;
 	

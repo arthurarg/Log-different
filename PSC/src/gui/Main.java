@@ -49,7 +49,7 @@ import comparaison.Analyse;
 
 /* Classe Main
  * ---------------
- * Role : Implemente l'interface graphique du programme
+ * Role : Interface graphique du programme
  * --------------
  */
 

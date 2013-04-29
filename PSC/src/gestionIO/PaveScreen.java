@@ -1,14 +1,17 @@
 package gestionIO;
 
-import java.awt.Toolkit;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import objets.Coordonnees;
 
+/* Classe PaveScreen
+ * ---------------
+ * Role : Implemente l'acquisition de signature sous Windows
+ * --------------
+ */
 
-public class PaveScreen implements Pave {
+public class PaveScreen {
 	
 	public JFrame screen;
 	MouseSpy espion;
@@ -31,7 +34,7 @@ public class PaveScreen implements Pave {
 	JPanel panneau = new JPanel();
 	screen.add(panneau);
 	
-	//Rends la fenêtre visible
+	//Rends la fenï¿½tre visible
 	screen.setVisible(true);
 	}
 	

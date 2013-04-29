@@ -1,24 +1,14 @@
 package objets;
 
-import gestionIO.Pave;
 import gestionIO.PaveGLULOGIC;
 import gestionIO.PaveScreen;
-import gestionIO.PaveTUIO;
 
-import java.awt.Cursor;
-import java.awt.KeyboardFocusManager;
-import java.awt.Point;
 import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-
-import TUIO.TuioClient;
-import affichageEtTests.FenetreTempsReel;
 
 /* Classe Signature
  * ---------------
- * Role : Caracterise une signature, tableau de DonneesPoint apres reparsing
+ * Role : Caracterise une signature, qui est un tableau de DonneesPoint apres reparsing
  * --------------
  */
 
@@ -103,7 +93,7 @@ public class Signature {
 			temps = new LinkedList<Long>();
 
 			// Acquisition de la signature
-			Pave pave = new PaveScreen();
+			PaveScreen pave = new PaveScreen();
 
 			// On attend que l'utilisateur pose son doigt sur le pavé
 			doigtPose = false;
@@ -159,45 +149,10 @@ public class Signature {
 			// this.recalibrerDonnees();
 			this.calculs();
 		}
-		if (a == Acquisition.TUIO) {
-
-			TuioClient client = new TuioClient(3333);
-			PaveTUIO demo = new PaveTUIO();
-			client.removeAllTuioListeners();
-			client.addTuioListener(demo);
-			FenetreTempsReel F = null;
-			Robot r = null;
-
-			client.connect();
-			// Prepare la fenetre et le robot qui fixe la souris
-			if (AffichageTpsReel) {
-				F = new FenetreTempsReel(demo);
-				try {
-					r = new Robot();
-				} catch (Exception e) {
-				}
-			}
-			while (demo.getY() == 0) {
-				if (AffichageTpsReel)
-					r.mouseMove(F.frame.getX() + F.frame.getWidth() / 2,
-							F.frame.getY() + F.frame.getHeight() / 2);
-				attendre(1);
-			}
-
-			client.disconnect();
-			if (AffichageTpsReel)
-				F.destroyWindow();
-
-			this.donnees = demo.getSignature();
-			// this.recalibrerDonnees();
-			this.calculs();
-		}
+		
 
 		if (a == Acquisition.GLULOGIC) {
 			Robot r = null;
-			int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-			int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-			
 
 			PaveGLULOGIC ct = new PaveGLULOGIC();
 			ct.run();

@@ -1,6 +1,12 @@
 package minuties;
 import java.util.LinkedList;
 
+/* Classe DonneesAnglesSortedLinkedList
+ * ---------------
+ * Role : Manipule une liste ordonnée d'angles
+ * --------------
+ */
+
 public class DonneesAnglesSortedLinkedList extends LinkedList<DonneesAngles>{
    
 	public boolean add(DonneesAngles d) {

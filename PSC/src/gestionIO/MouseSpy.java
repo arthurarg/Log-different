@@ -5,6 +5,13 @@ import javax.swing.event.MouseInputAdapter;
 
 import objets.Coordonnees;
 
+
+/* Classe MouseSpy
+ * ---------------
+ * Role : Permet de suivre la souris à l'écran, utilisé pour l'acquisition de signature sous Windows
+ * --------------
+ */
+
 public class MouseSpy extends MouseInputAdapter {
 	boolean estPose;
 	Coordonnees positionActuelle;
