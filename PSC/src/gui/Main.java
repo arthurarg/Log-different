@@ -68,6 +68,9 @@ public class Main extends JFrame {
 	private JToggleButton boutonSimilitudes;
 	private JLabel labelPositionsDynamique;
 	private JLabel labelVitessesDynamique;
+	private JLabel[][] imageProgression;
+	private int[] imageProgressionCurrent;
+	private JLabel imageAttente;
 	private JLabel imageDoigt1;
 	private JLabel imageDoigtOK1;
 	private JLabel imageDoigt2;
@@ -129,7 +132,7 @@ public class Main extends JFrame {
 		tabbedPane.addTab("Enregistrer", null, panneauEnregistrer, null);
 
 		imageEnregistrer = new JPanel();
-		imageEnregistrer.setBounds(41, 40, 337, 337);
+		imageEnregistrer.setBounds(41, 40, 337, 260);
 		panneauEnregistrer.add(imageEnregistrer);
 		imageEnregistrer.setOpaque(false);
 
@@ -150,6 +153,18 @@ public class Main extends JFrame {
 		separateurEnregistrer.setBounds(6, 34, 407, 12);
 		panneauEnregistrer.add(separateurEnregistrer);
 
+		
+		try {
+			imageAttente = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/attente.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageAttente.setBounds(0, 50, 400, 290);
+		panneauEnregistrer.add(imageAttente);
+		imageAttente.setVisible(false);
+		
 		try {
 			imageDoigt1 = new JLabel(new ImageIcon(ImageIO.read(new File(
 					"images/doigt.png"))));
@@ -157,7 +172,7 @@ public class Main extends JFrame {
 			System.err.println("Image non chargée");
 			return;
 		}
-		imageDoigt1.setBounds(0, 50, 400, 370);
+		imageDoigt1.setBounds(0, 50, 400, 290);
 		panneauEnregistrer.add(imageDoigt1);
 		imageDoigt1.setVisible(false);
 
@@ -168,8 +183,62 @@ public class Main extends JFrame {
 			System.err.println("Image non chargée");
 			return;
 		}
-		imageDoigtOK1.setBounds(0, 50, 400, 370);
+		imageProgressionCurrent = new int[10];
+		imageProgression = new JLabel[10][4];
+		for(int i=0;i<10;i++){
+			imageProgressionCurrent[i]=-1;
+			try {
+				imageProgression[i][0] = new JLabel(new ImageIcon(ImageIO.read(new File(
+						"images/blanc.png"))));
+			} catch (Exception ex) {
+				System.err.println("Image non chargée");
+				return;
+			}
+			imageProgression[i][0].setBounds(-2+38*i, 334, 82, 47);
+			panneauEnregistrer.add(imageProgression[i][0]);
+			
+			try {
+				imageProgression[i][1] = new JLabel(new ImageIcon(ImageIO.read(new File(
+						"images/vert.png"))));
+			} catch (Exception ex) {
+				System.err.println("Image non chargée");
+				return;
+			}
+			imageProgression[i][1].setBounds(-2+38*i, 334, 82, 47);
+			panneauEnregistrer.add(imageProgression[i][1]);
+			
+			try {
+				imageProgression[i][2] = new JLabel(new ImageIcon(ImageIO.read(new File(
+						"images/orange.png"))));
+			} catch (Exception ex) {
+				System.err.println("Image non chargée");
+				return;
+			}
+			imageProgression[i][2].setBounds(-2+38*i, 334, 82, 47);
+			panneauEnregistrer.add(imageProgression[i][2]);
+			
+			try {
+				imageProgression[i][3] = new JLabel(new ImageIcon(ImageIO.read(new File(
+						"images/rouge.png"))));
+			} catch (Exception ex) {
+				System.err.println("Image non chargée");
+				return;
+			}
+			imageProgression[i][3].setBounds(-2+38*i, 334, 82, 47);
+			panneauEnregistrer.add(imageProgression[i][3]);
+			
+			imageProgression[i][0].setVisible(false);
+			imageProgression[i][1].setVisible(false);
+			imageProgression[i][2].setVisible(false);
+			imageProgression[i][3].setVisible(false);
+		}
+
+		imageDoigtOK1.setBounds(0, 50, 400, 290);
 		panneauEnregistrer.add(imageDoigtOK1);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(6, 325, 407, 12);
+		panneauEnregistrer.add(separator);
 		imageDoigtOK1.setVisible(false);
 
 		// ////////////////////
@@ -318,6 +387,17 @@ public class Main extends JFrame {
 
 		boutonEnregistrer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					imageAttente = new JLabel(new ImageIcon(ImageIO.read(new File(
+							"images/attente.png"))));
+				} catch (Exception ex) {
+					System.err.println("Image non chargée");
+					return;
+				}
+				imageAttente.setBounds(0, 50, 400, 290);
+				panneauEnregistrer.add(imageAttente);
+				imageAttente.setVisible(false);
+				imageEnregistrer.removeAll();
 				String login = textFieldLogin.getText();
 				String myPath = "gabarits/";
 
@@ -348,12 +428,25 @@ public class Main extends JFrame {
 						// Retablis le curseur
 						getContentPane().setCursor(Cursor.getDefaultCursor());
 
-						if (g.s.terminate)
+						if (g.s.terminate){
+							for(int i=0;i<10;i++){
+								//imageProgressionCurrent[i]=-1;
+									imageProgression[i][1].setVisible(false);
+									imageProgression[i][2].setVisible(false);
+									imageProgression[i][3].setVisible(false);
+									imageProgression[i][0].setVisible(false);
+									//imageAttente.setVisible(false);
+								
+							}
 							return;
-
+						}
+							
+						
 						Enregistrement.enregistrer(textFieldLogin.getText(),
 								g.sRef);
+
 						panneauEnregistrer.remove(imageEnregistrer);
+						panneauEnregistrer.remove(imageAttente);
 						imageEnregistrer = new JPanel();
 						imageEnregistrer.setBounds(41, 40, 337, 337);
 						ImageComponent img = new ImageComponent(
@@ -361,6 +454,16 @@ public class Main extends JFrame {
 						imageEnregistrer.add(img);
 						panneauEnregistrer.add(imageEnregistrer);
 						imageEnregistrer.setOpaque(false);
+						
+						for(int i=0;i<10;i++){
+							//imageProgressionCurrent[i]=-1;
+							imageProgression[i][1].setVisible(false);
+							imageProgression[i][2].setVisible(false);
+							imageProgression[i][3].setVisible(false);
+							imageProgression[i][0].setVisible(false);
+							//imageAttente.setVisible(false);
+						
+					}
 
 					}
 				};
@@ -368,33 +471,69 @@ public class Main extends JFrame {
 					public void run() {
 						imageDoigt1.setVisible(true);
 
+						
 						while (saisieGabarit.isAlive()) {
 							//TODO on actualise la couleur des jolis petits carrés
 							if (g!=null) {
 								for (int j =0; j < g.etat.length; j++) {
+									if(g.etat[j]!=imageProgressionCurrent[j]){
+									imageProgressionCurrent[j]=g.etat[j];
+									imageProgression[j][0].setVisible(false);
+									imageProgression[j][1].setVisible(false);
+									imageProgression[j][2].setVisible(false);
+									imageProgression[j][3].setVisible(false);
 									switch(g.etat[j]) {
 									case -1: // Rouge
-										
+										imageProgression[j][3].setVisible(true);
 									break;
 									case 0: //Gris
-										
+										imageProgression[j][0].setVisible(true);
 									break;
 									case 1: // Orange
-										
+										imageProgression[j][2].setVisible(true);
 									break;
 									case 2:  // Vert
-										
+										imageProgression[j][1].setVisible(true);
 									break;
+									}
 									}
 								}
 							}
-							if (!imageDoigtOK1.isVisible() && g != null && g.s.doigtPose) {
-								imageDoigt1.setVisible(false);
-								imageDoigtOK1.setVisible(true);
+							
+							boolean bool = false;
+							if(g!=null){
+							for(int i=0; i<10; i++){
+								if(g.etat[i]==0||g.etat[i]==-1){
+									bool = true;
+									if(g.etat[i]==-1){
+									for(int j=1;j<10;j++){
+										if(g.etat[j]==1){
+											bool=false;
+										}
+									}
+									}
+								}								
 							}
-							if (!imageDoigt1.isVisible() && g != null && !g.s.doigtPose) {
-								imageDoigt1.setVisible(true);
+							}
+							
+
+							
+							if(!bool&&g!=null){
+								imageDoigt1.setVisible(false);
 								imageDoigtOK1.setVisible(false);
+								imageAttente.setVisible(true);
+							}
+							else {
+								if (!imageDoigtOK1.isVisible() && g != null && g.s.doigtPose) {
+									imageDoigt1.setVisible(false);
+									imageDoigtOK1.setVisible(true);
+									imageAttente.setVisible(false);
+								}
+								if (!imageDoigt1.isVisible() && g != null && !g.s.doigtPose) {
+									imageDoigt1.setVisible(true);
+									imageDoigtOK1.setVisible(false);
+									imageAttente.setVisible(false);
+								}
 							}
 						}
 						imageDoigt1.setVisible(false);

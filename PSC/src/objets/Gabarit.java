@@ -59,8 +59,11 @@ public class Gabarit {
 			s = new Signature(false);
 			s.init();
 			
-			if (s.terminate)
+			if (s.terminate){
+		
+			
 				return;
+			}
 			
 			tab[i] = new Signature(s.getDonnees());
 			etat[i] = 1;
@@ -89,7 +92,10 @@ public class Gabarit {
 					return;
 				
 				this.tab[marq] = new Signature(s.getDonnees());
-				etat[marq] = 1;
+				for(int i=0; i<tab.length;i++){
+					etat[i] = 1;
+				}
+				
 			}
 
 			
