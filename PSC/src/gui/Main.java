@@ -42,6 +42,7 @@ import objets.Signature;
 import affichageEtTests.Image;
 
 import comparaison.Analyse;
+import comparaison.Comparaison;
 
 /* Classe Main
  * ---------------
@@ -51,7 +52,7 @@ import comparaison.Analyse;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
-	
+
 	private JPanel contentPane;
 	private JTextField textFieldLogin;
 	private JComboBox<String> comboBoxSRef;
@@ -61,13 +62,16 @@ public class Main extends JFrame {
 	private JPanel imageSTest;
 	private JLayeredPane panneauEnregistrer;
 	private JLayeredPane panneauComparer;
+	private JLayeredPane panneauAuthentification;
 	private JPanel imageEnregistrer;
 	private JSeparator separateurEnregistrer;
 	private JToggleButton boutonSimilitudes;
 	private JLabel labelPositionsDynamique;
 	private JLabel labelVitessesDynamique;
-	private JLabel imageDoigt;
-	private JLabel imageDoigtOK;
+	private JLabel imageDoigt1;
+	private JLabel imageDoigtOK1;
+	private JLabel imageDoigt2;
+	private JLabel imageDoigtOK2;
 	private String currentSRef = "";
 	private String currentSTest = "";
 	private boolean currentSimilitudes = true;
@@ -75,30 +79,6 @@ public class Main extends JFrame {
 	Gabarit g;
 	Thread saisieSignature, affichageDynamiqueSignature, saisieGabarit,
 			affichageDynamiqueGabarit;
-
-	/*
-	 * saisieSignature = new Thread() { public void run() { s = new
-	 * Signature(false); s.init(); if (s.terminate) return;
-	 * 
-	 * Enregistrement.enregistrer(textFieldLogin.getText(), s);
-	 * panneauEnregistrer.remove(imageEnregistrer); imageEnregistrer = new
-	 * JPanel(); imageEnregistrer.setBounds(41, 40, 337, 337); ImageComponent
-	 * img = new ImageComponent( conversion_taille_337(s, 0xff000000));
-	 * imageEnregistrer.add(img); panneauEnregistrer.add(imageEnregistrer);
-	 * imageEnregistrer.setOpaque(false); } };
-	 */
-
-	/*
-	 * affichageDynamiqueSignature = new Thread() { public void run() {
-	 * imageDoigt.setVisible(true);
-	 * 
-	 * while (saisieSignature.isAlive()) { if (!imageDoigtOK.isVisible() && s!=
-	 * null && s.doigtPose) { imageDoigt.setVisible(false);
-	 * imageDoigtOK.setVisible(true); } if (!imageDoigt.isVisible() && s!= null
-	 * && !s.doigtPose) { imageDoigt.setVisible(true);
-	 * imageDoigtOK.setVisible(false); } } imageDoigt.setVisible(false);
-	 * imageDoigtOK.setVisible(false); } };
-	 */
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -140,6 +120,7 @@ public class Main extends JFrame {
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "escape");
 		panneauEnregistrer.getActionMap().put("escape", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
+
 			public void actionPerformed(ActionEvent e) {
 				if (g != null)
 					g.s.terminate = true;
@@ -161,28 +142,6 @@ public class Main extends JFrame {
 		panneauEnregistrer.add(textFieldLogin);
 		textFieldLogin.setColumns(10);
 
-		try {
-			imageDoigt = new JLabel(new ImageIcon(ImageIO.read(new File(
-					"images/doigt.png"))));
-		} catch (Exception ex) {
-			System.err.println("Image non chargée");
-			return;
-		}
-		imageDoigt.setBounds(0, 50, 400, 350);
-		panneauEnregistrer.add(imageDoigt);
-		imageDoigt.setVisible(false);
-
-		try {
-			imageDoigtOK = new JLabel(new ImageIcon(ImageIO.read(new File(
-					"images/doigtOK.png"))));
-		} catch (Exception ex) {
-			System.err.println("Image non chargée");
-			return;
-		}
-		imageDoigtOK.setBounds(0, 50, 400, 350);
-		panneauEnregistrer.add(imageDoigtOK);
-		imageDoigtOK.setVisible(false);
-
 		JButton boutonEnregistrer = new JButton("Enregistrer");
 		boutonEnregistrer.setBounds(296, 1, 117, 29);
 		panneauEnregistrer.add(boutonEnregistrer);
@@ -191,102 +150,43 @@ public class Main extends JFrame {
 		separateurEnregistrer.setBounds(6, 34, 407, 12);
 		panneauEnregistrer.add(separateurEnregistrer);
 
-		/*
-		 * // //////////////////// // Panneau Afficher // ////////////////////
-		 * 
-		 * panneauAfficher = new JLayeredPane(); tabbedPane.addTab("Afficher",
-		 * null, panneauAfficher, null);
-		 * 
-		 * JLabel labelSignature = new JLabel("Signature");
-		 * labelSignature.setBounds(6, 6, 59, 16);
-		 * panneauAfficher.add(labelSignature);
-		 * 
-		 * comboBoxAfficher = new JComboBox(); comboBoxAfficher.setBounds(77, 2,
-		 * 207, 27); panneauAfficher.add(comboBoxAfficher);
-		 * 
-		 * imageAfficher = new JPanel(); imageAfficher.setOpaque(false);
-		 * imageAfficher.setBounds(41, 40, 337, 337);
-		 * panneauAfficher.add(imageAfficher);
-		 * 
-		 * separateurAfficher = new JSeparator();
-		 * separateurAfficher.setBounds(6, 34, 407, 12);
-		 * panneauAfficher.add(separateurAfficher);
-		 * 
-		 * JButton boutonSupprimer = new JButton("Supprimer");
-		 * boutonSupprimer.setBounds(296, 1, 117, 29);
-		 * panneauAfficher.add(boutonSupprimer);
-		 * 
-		 * // //////////////////// // Panneau Comparer // ////////////////////
-		 * 
-		 * panneauComparer = new JLayeredPane(); tabbedPane.addTab("Comparer",
-		 * null, panneauComparer, null);
-		 * 
-		 * JLabel labelSRef = new JLabel("Signature r\u00E9f\u00E9rence");
-		 * labelSRef.setBounds(6, 6, 121, 16); panneauComparer.add(labelSRef);
-		 * 
-		 * JLabel labelSTest = new JLabel("Signature test");
-		 * labelSTest.setBounds(6, 34, 87, 16);
-		 * labelSTest.setForeground(Color.RED); panneauComparer.add(labelSTest);
-		 * 
-		 * comboBoxSTest = new JComboBox(); comboBoxSTest.setBounds(139, 30,
-		 * 274, 27); panneauComparer.add(comboBoxSTest);
-		 * 
-		 * comboBoxSRef = new JComboBox(); comboBoxSRef.setBounds(139, 2, 274,
-		 * 27); panneauComparer.add(comboBoxSRef);
-		 * 
-		 * boutonSimilitudes = new JToggleButton("Appliquer similitudes");
-		 * boutonSimilitudes.setBounds(96, 62, 226, 29);
-		 * panneauComparer.add(boutonSimilitudes);
-		 * boutonSimilitudes.setSelected(true);
-		 * 
-		 * imageSRef = new JPanel(); imageSRef.setBounds(109, 103, 200, 200);
-		 * panneauComparer.add(imageSRef); imageSRef.setOpaque(false);
-		 * imageSRef.setLayout(null);
-		 * 
-		 * imageSTest = new JPanel(); imageSTest.setBounds(109, 103, 200, 200);
-		 * panneauComparer.add(imageSTest); imageSTest.setOpaque(false);
-		 * 
-		 * separateurComparerHaut = new JSeparator();
-		 * separateurComparerHaut.setBounds(6, 89, 407, 12);
-		 * panneauComparer.add(separateurComparerHaut);
-		 * 
-		 * JSeparator separateurComparerBas = new JSeparator();
-		 * separateurComparerBas.setBounds(6, 304, 407, 12);
-		 * panneauComparer.add(separateurComparerBas);
-		 * 
-		 * JLabel labelScores = new JLabel("Scores"); labelScores.setBounds(6,
-		 * 315, 115, 16); panneauComparer.add(labelScores);
-		 * 
-		 * labelPositions = new JLabel("Positions");
-		 * labelPositions.setBounds(16, 338, 77, 16);
-		 * panneauComparer.add(labelPositions);
-		 * 
-		 * labelVitesses = new JLabel("Vitesses"); labelVitesses.setBounds(111,
-		 * 338, 77, 16); panneauComparer.add(labelVitesses);
-		 * 
-		 * labelPression = new JLabel("Pression"); labelPression.setBounds(200,
-		 * 338, 77, 16); panneauComparer.add(labelPression);
-		 * 
-		 * labelMinuties = new JLabel("Minuties"); labelMinuties.setBounds(289,
-		 * 338, 77, 16); panneauComparer.add(labelMinuties);
-		 * 
-		 * labelPositionsDynamique = new JLabel("");
-		 * labelPositionsDynamique.setHorizontalAlignment
-		 * (SwingConstants.CENTER); labelPositionsDynamique.setBounds(16, 358,
-		 * 60, 16); panneauComparer.add(labelPositionsDynamique);
-		 * 
-		 * labelVitessesDynamique = new JLabel("");
-		 * labelVitessesDynamique.setHorizontalAlignment(SwingConstants.CENTER);
-		 * labelVitessesDynamique.setBounds(109, 358, 60, 16);
-		 * panneauComparer.add(labelVitessesDynamique);
-		 */
+		try {
+			imageDoigt1 = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/doigt.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageDoigt1.setBounds(0, 50, 400, 370);
+		panneauEnregistrer.add(imageDoigt1);
+		imageDoigt1.setVisible(false);
 
-		// /
-		// / Authentification
-		// /
-		JLayeredPane panneauAuthentification = new JLayeredPane();
-		tabbedPane.addTab("Authentification", null, panneauAuthentification,
-				null);
+		try {
+			imageDoigtOK1 = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/doigtOK.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageDoigtOK1.setBounds(0, 50, 400, 370);
+		panneauEnregistrer.add(imageDoigtOK1);
+		imageDoigtOK1.setVisible(false);
+
+		// ////////////////////
+		// Authentification
+		// ////////////////////
+		panneauAuthentification = new JLayeredPane();
+		panneauAuthentification.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "escape");
+		panneauAuthentification.getActionMap().put("escape", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+				if (s != null)
+					s.terminate = true;
+			}
+		});
+		tabbedPane.addTab("Authentification", null, panneauAuthentification,null);
 
 		JLabel labelLogin2 = new JLabel("Login");
 		labelLogin2.setBounds(6, 6, 59, 16);
@@ -304,13 +204,91 @@ public class Main extends JFrame {
 		boutonSupprimer.setBounds(318, 1, 100, 29);
 		panneauAuthentification.add(boutonSupprimer);
 
+		try {
+			imageDoigt2 = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/doigt.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageDoigt2.setBounds(0, 50, 400, 370);
+		panneauAuthentification.add(imageDoigt2);
+		imageDoigt2.setVisible(false);
+
+		try {
+			imageDoigtOK2 = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/doigtOK.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageDoigtOK2.setBounds(0, 50, 400, 370);
+		panneauAuthentification.add(imageDoigtOK2);
+		imageDoigtOK2.setVisible(false);
+
 		// //////////////////
 		// ActionOnEvent
 		// //////////////////
 
 		boutonAuthentification.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("bite");
+
+				saisieSignature = new Thread() {
+					public void run() {
+						s = new Signature(false);
+
+						// Curseur transparent
+						BufferedImage cursorImg = new BufferedImage(16, 16,
+								BufferedImage.TYPE_INT_ARGB);
+						Cursor blankCursor = Toolkit.getDefaultToolkit()
+								.createCustomCursor(cursorImg, new Point(0, 0),
+										"blank cursor");
+						getContentPane().setCursor(blankCursor);
+
+						s.init();
+						// Retablis le curseur
+						getContentPane().setCursor(Cursor.getDefaultCursor());
+						
+						if (s.terminate)
+							return;
+
+
+
+						// Authentification réussie ??
+						if (Comparaison.comparer(Enregistrement
+								.ouvrir((String) comboBoxAuthentification
+										.getSelectedItem()), s))
+							System.out.println("yes");
+						else
+							System.out.println("nein");
+
+					}
+				};
+
+				affichageDynamiqueSignature = new Thread() {
+					public void run() {
+						imageDoigt2.setVisible(true);
+
+						while (saisieSignature.isAlive()) {
+							if (!imageDoigtOK2.isVisible() && s != null
+									&& s.doigtPose) {
+								imageDoigt2.setVisible(false);
+								imageDoigtOK2.setVisible(true);
+							}
+							if (!imageDoigt2.isVisible() && s != null
+									&& !s.doigtPose) {
+								imageDoigt2.setVisible(true);
+								imageDoigtOK2.setVisible(false);
+							}
+						}
+						imageDoigt2.setVisible(false);
+						imageDoigtOK2.setVisible(false);
+					}
+				};
+
+				saisieSignature.start();
+				affichageDynamiqueSignature.start();
+
 			}
 		});
 
@@ -318,26 +296,14 @@ public class Main extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				String myPath = "gabarits/";
 				try {
-					// comboBoxSRef.removeAllItems();
-					// comboBoxSTest.removeAllItems();
-					// comboBoxAfficher.removeAllItems();
 					comboBoxAuthentification.removeAllItems();
 					File folder = new File(myPath);
 					File[] listOfFiles = folder.listFiles();
 					for (int i = 0; i < listOfFiles.length; i++) {
 						if (listOfFiles[i].getName().endsWith(".txt")) {
-							/*
-							 * comboBoxSRef .addItem(listOfFiles[i].getName()
-							 * .subSequence( 0, listOfFiles[i].getName()
-							 * .length() - 4)); comboBoxSTest
-							 * .addItem(listOfFiles[i].getName() .subSequence(
-							 * 0, listOfFiles[i].getName() .length() - 4));
-							 * comboBoxAfficher
-							 * .addItem(listOfFiles[i].getName() .subSequence(
-							 * 0, listOfFiles[i].getName() .length() - 4));
-							 */
-							comboBoxAuthentification
-									.addItem("" +listOfFiles[i].getName()
+
+							comboBoxAuthentification.addItem(""
+									+ listOfFiles[i].getName()
 											.subSequence(
 													0,
 													listOfFiles[i].getName()
@@ -353,66 +319,93 @@ public class Main extends JFrame {
 		boutonEnregistrer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String login = textFieldLogin.getText();
+				String myPath = "gabarits/";
 
-				if (login != null && login.matches("[a-z0-9_-]{1,}")) {
-					saisieGabarit = new Thread() {
-						public void run() {
-							// Cree un curseur tranparent
-							BufferedImage cursorImg = new BufferedImage(16, 16,
-									BufferedImage.TYPE_INT_ARGB);
-							Cursor blankCursor = Toolkit.getDefaultToolkit()
-									.createCustomCursor(cursorImg,
-											new Point(0, 0), "blank cursor");
-							getContentPane().setCursor(blankCursor);
+				// Si login nul, invalide, ou deja existant, on ne fait rien
+				if (login == null || !login.matches("[a-z0-9_-]{1,}"))
+					return;
 
-							g = new Gabarit(false);
-							g.init();
+				File[] tab = new File(myPath).listFiles();
+				for (int j = 0; j < tab.length; j++) {
+					if (login.equals(tab[j].getName().subSequence(0, tab[j].getName().length() - 4)))
+							return;
+				}
+				
+				
+				saisieGabarit = new Thread() {
+					public void run() {
+						// Cree un curseur tranparent
+						BufferedImage cursorImg = new BufferedImage(16, 16,
+								BufferedImage.TYPE_INT_ARGB);
+						Cursor blankCursor = Toolkit.getDefaultToolkit()
+								.createCustomCursor(cursorImg, new Point(0, 0),
+										"blank cursor");
+						getContentPane().setCursor(blankCursor);
 
-							// Retablis le curseur
-							getContentPane().setCursor(
-									Cursor.getDefaultCursor());
+						g = new Gabarit(false);
+						g.init();
 
-							if (g.s.terminate)
-								return;
+						// Retablis le curseur
+						getContentPane().setCursor(Cursor.getDefaultCursor());
 
-							Enregistrement.enregistrer(
-									textFieldLogin.getText(), g.sRef);
-							panneauEnregistrer.remove(imageEnregistrer);
-							imageEnregistrer = new JPanel();
-							imageEnregistrer.setBounds(41, 40, 337, 337);
-							ImageComponent img = new ImageComponent(
-									conversion_taille_337(g.sRef, 0xff000000));
-							imageEnregistrer.add(img);
-							panneauEnregistrer.add(imageEnregistrer);
-							imageEnregistrer.setOpaque(false);
+						if (g.s.terminate)
+							return;
 
-						}
-					};
-					affichageDynamiqueGabarit = new Thread() {
-						public void run() {
-							imageDoigt.setVisible(true);
+						Enregistrement.enregistrer(textFieldLogin.getText(),
+								g.sRef);
+						panneauEnregistrer.remove(imageEnregistrer);
+						imageEnregistrer = new JPanel();
+						imageEnregistrer.setBounds(41, 40, 337, 337);
+						ImageComponent img = new ImageComponent(
+								conversion_taille_337(g.sRef, 0xff000000));
+						imageEnregistrer.add(img);
+						panneauEnregistrer.add(imageEnregistrer);
+						imageEnregistrer.setOpaque(false);
 
-							while (saisieGabarit.isAlive()) {
-								if (!imageDoigtOK.isVisible() && g != null
-										&& g.s.doigtPose) {
-									imageDoigt.setVisible(false);
-									imageDoigtOK.setVisible(true);
-								}
-								if (!imageDoigt.isVisible() && g != null
-										&& !g.s.doigtPose) {
-									imageDoigt.setVisible(true);
-									imageDoigtOK.setVisible(false);
+					}
+				};
+				affichageDynamiqueGabarit = new Thread() {
+					public void run() {
+						imageDoigt1.setVisible(true);
+
+						while (saisieGabarit.isAlive()) {
+							//TODO on actualise la couleur des jolis petits carrés
+							if (g!=null) {
+								for (int j =0; j < g.etat.length; j++) {
+									switch(g.etat[j]) {
+									case -1: // Rouge
+										
+									break;
+									case 0: //Gris
+										
+									break;
+									case 1: // Orange
+										
+									break;
+									case 2:  // Vert
+										
+									break;
+									}
 								}
 							}
-							imageDoigt.setVisible(false);
-							imageDoigtOK.setVisible(false);
+							if (!imageDoigtOK1.isVisible() && g != null && g.s.doigtPose) {
+								imageDoigt1.setVisible(false);
+								imageDoigtOK1.setVisible(true);
+							}
+							if (!imageDoigt1.isVisible() && g != null && !g.s.doigtPose) {
+								imageDoigt1.setVisible(true);
+								imageDoigtOK1.setVisible(false);
+							}
 						}
-					};
+						imageDoigt1.setVisible(false);
+						imageDoigtOK1.setVisible(false);
+					}
+				};
 
-					saisieGabarit.start();
-					affichageDynamiqueGabarit.start();
-				}
+				saisieGabarit.start();
+				affichageDynamiqueGabarit.start();
 			}
+
 		});
 
 		/*
@@ -448,8 +441,8 @@ public class Main extends JFrame {
 
 					for (int i = 0; i < listOfFiles.length; i++) {
 						if (listOfFiles[i].getName().endsWith(".txt")) {
-							comboBoxAuthentification
-									.addItem("" +listOfFiles[i].getName()
+							comboBoxAuthentification.addItem(""
+									+ listOfFiles[i].getName()
 											.subSequence(
 													0,
 													listOfFiles[i].getName()
@@ -505,8 +498,8 @@ public class Main extends JFrame {
 					.getSelectedItem());
 			Signature sTest = Enregistrement.ouvrir((String) comboBoxSTest
 					.getSelectedItem());
-			//int n1avant, n2avant, n1apres, n2apres;
-			//double lambda, theta;
+			// int n1avant, n2avant, n1apres, n2apres;
+			// double lambda, theta;
 			if (boutonSimilitudes.isSelected()) {
 				DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
 				sRef = new Signature(analyse[0]);
@@ -536,12 +529,10 @@ public class Main extends JFrame {
 				imageSTest.setOpaque(false);
 
 			} else {
-				/*n1avant = 0;
-				n1apres = 0;
-				n2avant = 0;
-				n2apres = 0;
-				lambda = 1;
-				theta = 0;*/
+				/*
+				 * n1avant = 0; n1apres = 0; n2avant = 0; n2apres = 0; lambda =
+				 * 1; theta = 0;
+				 */
 
 				panneauComparer.remove(imageSRef);
 				imageSRef = new JPanel();

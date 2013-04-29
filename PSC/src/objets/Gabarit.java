@@ -20,20 +20,25 @@ public class Gabarit {
 	
 	// Tableau de DonneesPoint caracteristique d'une signature
 	public Signature sRef;
-	public Signature[] tab = new Signature[nbSign];
-	
+	public Signature[] tab;	
 	public Signature s;
 
+	//Tableau d'etat, utilise pour l'interface graphique
+	// Gris : 0, Orange : 1, Vert : 2, Rouge : -1
+	public int[] etat;
 	
 	
 	public Gabarit() {
 		s = new Signature (false);
+		this.tab = new Signature[nbSign];
+		this.etat = new int[nbSign];
 		init();
 	}
 	
-	
 	public Gabarit(boolean b) {
 		s = new Signature (false);
+		this.tab = new Signature[nbSign];
+		this.etat = new int[nbSign];
 		if (b)
 			init();			
 	}
@@ -58,6 +63,7 @@ public class Gabarit {
 				return;
 			
 			tab[i] = new Signature(s.getDonnees());
+			etat[i] = 1;
 			
 			if (i==1 && tab[i].complexite()==Complexite.FAIBLE) {
 				System.out.println("Votre signature est trop simple");
@@ -83,7 +89,7 @@ public class Gabarit {
 					return;
 				
 				this.tab[marq] = new Signature(s.getDonnees());
-				
+				etat[marq] = 1;
 			}
 
 			
@@ -131,10 +137,15 @@ public class Gabarit {
 		int marqueur = -1;
 		double scoreMin = 1;
 		for (int w=0; w<this.tab.length; w++) {
-			if (!Comparaison.comparer(this.sRef,this.tab[w]) && Comparaison.mesureEcart(this.sRef, this.tab[w]) < scoreMin) {
-				marqueur = w;
-				scoreMin = Comparaison.mesureEcart(this.sRef, this.tab[w]);		
+			if (!Comparaison.comparer(this.sRef,this.tab[w])) {
+				etat[w] = -1;
+				if (Comparaison.mesureEcart(this.sRef, this.tab[w]) < scoreMin) {
+					marqueur = w;
+					scoreMin = Comparaison.mesureEcart(this.sRef, this.tab[w]);	
+				}
 			}
+			else
+				etat[w] = 2;
 		}
 		if (marqueur != -1) {
 		System.out.println("Echec de la validation pour la signature n°" + (marqueur+1));
