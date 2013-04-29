@@ -1,14 +1,13 @@
 package comparaison;
 
 import minuties.Minuties;
-import minuties.MinutiesVectorielles;
 import objets.DonneesPoint;
 import objets.Signature;
 
 
-/* Classe Analyse
+/* Classe Comparaison
  * ---------------
- * Role : Regroupe les méthodes de comparaison, qui font appel aux fonctions auxilaires de la classe Analyse
+ * Role : Implémente la fonction de comparaison entre deux signatures, et des fonctions auxilaires
  * --------------
  */
 

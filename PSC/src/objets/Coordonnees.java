@@ -2,7 +2,7 @@ package objets;
 
 /* Classe Coordonnees
  * ---------------
- * Role : ??
+ * Role : Objet de base pour manipuler des coordonnees
  * --------------
  */
 

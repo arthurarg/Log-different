@@ -1,21 +1,19 @@
 package affichageEtTests;
-import affichageEtTests.Image;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import minuties.DonneesAnglesSortedLinkedList;
 import objets.Coordonnees;
 import objets.DonneesPoint;
 import objets.Signature;
-import minuties.DonneesAnglesSortedLinkedList;
 
 
 /* Classe Fenetre
  * ---------------
- * Role : Affichage graphique de signatures et/ou de texte
+ * Role : Affichage graphique de signature
  * --------------
  */
 

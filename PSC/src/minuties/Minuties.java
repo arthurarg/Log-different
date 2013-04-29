@@ -6,8 +6,13 @@ import java.util.ListIterator;
 import objets.DonneesPoint;
 import objets.Signature;
 import objets.Signature.Complexite;
-
 import affichageEtTests.Fenetre;
+
+/* Classe Minuties
+ * ---------------
+ * Role : Permet de détecter les minuties d'une signatures
+ * --------------
+ */
 
 public class Minuties {
 	

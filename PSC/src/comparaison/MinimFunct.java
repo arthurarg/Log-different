@@ -7,7 +7,7 @@ import flanagan.math.MinimisationFunction;
 
 /* Classe MinimFunct 
  * ---------------
- * Role : 
+ * Role : Implemente la fonction de minimalisation qui permet de deduire la similitude entre deux signatures
  * --------------
  */
 
@@ -23,10 +23,7 @@ public class MinimFunct implements MinimisationFunction{
     		int n2avant = Math.max((int) Math.floor(-x[4]*sTest.size()), 0);
     		int n2apres = Math.max((int) Math.floor(-x[5]*sTest.size()), 0);
     		
-    		//int n1avant=0;
-    		//int n2avant=0;
-    		//int n1apres=0;
-    		//int n2apres=0;
+    		
     		DonneesPoint[] donneestab2 = sTest.getDonnees();
     		DonneesPoint[] tab2 = new DonneesPoint[sTest.size()-n2avant-n2apres];
     		for(int i=0;i<sTest.size()-n2avant-n2apres;i++){

@@ -8,7 +8,7 @@ import flanagan.math.Minimisation;
 
 /* Classe Analyse
  * ---------------
- * Role : ensemble des fonctions auxiliaires utilisees pour la comparaison de signatures 
+ * Role : Ensemble des fonctions auxiliaires utilisees pour la comparaison de signatures 
  *         et du traitement de l'image test (rotation, translation, etc)
  * --------------
  */
