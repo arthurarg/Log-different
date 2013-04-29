@@ -54,12 +54,13 @@ import comparaison.Analyse;
  */
 
 public class Main extends JFrame {
- 
+
 	private JPanel contentPane;
 	private JTextField textFieldLogin;
 	private JComboBox comboBoxSRef;
 	private JComboBox comboBoxSTest;
 	private JComboBox comboBoxAfficher;
+	private JComboBox comboBoxAuthentification;
 	private JPanel imageAfficher;
 	private JPanel imageSRef;
 	private JPanel imageSTest;
@@ -82,47 +83,35 @@ public class Main extends JFrame {
 	private String currentSRef = "";
 	private String currentSTest = "";
 	private boolean currentSimilitudes = true;
-	Signature s = new Signature (false);
+	Signature s = new Signature(false);
 	Gabarit g;
-	Thread saisieSignature, affichageDynamiqueSignature, saisieGabarit, affichageDynamiqueGabarit;
-	
-	/*saisieSignature = new Thread() {
-		public void run() {
-			s = new Signature(false);
-			s.init();
-			if (s.terminate)
-				return;
-			
-			Enregistrement.enregistrer(textFieldLogin.getText(), s);
-			panneauEnregistrer.remove(imageEnregistrer);
-			imageEnregistrer = new JPanel();
-			imageEnregistrer.setBounds(41, 40, 337, 337);
-			ImageComponent img = new ImageComponent(
-					conversion_taille_337(s, 0xff000000));
-			imageEnregistrer.add(img);
-			panneauEnregistrer.add(imageEnregistrer);
-			imageEnregistrer.setOpaque(false);
-		}
-	};*/
-	
-	/*affichageDynamiqueSignature = new Thread() {
-		public void run() {
-			imageDoigt.setVisible(true);
-			
-			while (saisieSignature.isAlive()) {
-				if (!imageDoigtOK.isVisible() && s!= null && s.doigtPose) {
-					imageDoigt.setVisible(false);
-					imageDoigtOK.setVisible(true);
-				}
-				if (!imageDoigt.isVisible() && s!= null && !s.doigtPose) {
-					imageDoigt.setVisible(true);
-					imageDoigtOK.setVisible(false);
-				}
-			}
-			imageDoigt.setVisible(false);
-			imageDoigtOK.setVisible(false);
-		}
-	};*/
+	Thread saisieSignature, affichageDynamiqueSignature, saisieGabarit,
+			affichageDynamiqueGabarit;
+	private JPanel panel;
+
+	/*
+	 * saisieSignature = new Thread() { public void run() { s = new
+	 * Signature(false); s.init(); if (s.terminate) return;
+	 * 
+	 * Enregistrement.enregistrer(textFieldLogin.getText(), s);
+	 * panneauEnregistrer.remove(imageEnregistrer); imageEnregistrer = new
+	 * JPanel(); imageEnregistrer.setBounds(41, 40, 337, 337); ImageComponent
+	 * img = new ImageComponent( conversion_taille_337(s, 0xff000000));
+	 * imageEnregistrer.add(img); panneauEnregistrer.add(imageEnregistrer);
+	 * imageEnregistrer.setOpaque(false); } };
+	 */
+
+	/*
+	 * affichageDynamiqueSignature = new Thread() { public void run() {
+	 * imageDoigt.setVisible(true);
+	 * 
+	 * while (saisieSignature.isAlive()) { if (!imageDoigtOK.isVisible() && s!=
+	 * null && s.doigtPose) { imageDoigt.setVisible(false);
+	 * imageDoigtOK.setVisible(true); } if (!imageDoigt.isVisible() && s!= null
+	 * && !s.doigtPose) { imageDoigt.setVisible(true);
+	 * imageDoigtOK.setVisible(false); } } imageDoigt.setVisible(false);
+	 * imageDoigtOK.setVisible(false); } };
+	 */
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -160,10 +149,11 @@ public class Main extends JFrame {
 		// Panneau Enregistrer
 		// ////////////////////
 		panneauEnregistrer = new JLayeredPane();
-		panneauEnregistrer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "escape");
+		panneauEnregistrer.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true), "escape");
 		panneauEnregistrer.getActionMap().put("escape", new AbstractAction() {
-			public void actionPerformed (ActionEvent e) {
-				if (g!=null)
+			public void actionPerformed(ActionEvent e) {
+				if (g != null)
 					g.s.terminate = true;
 			}
 		});
@@ -182,16 +172,26 @@ public class Main extends JFrame {
 		textFieldLogin.setBounds(59, 0, 225, 28);
 		panneauEnregistrer.add(textFieldLogin);
 		textFieldLogin.setColumns(10);
-		
-		try {imageDoigt = new JLabel(new ImageIcon(ImageIO.read(new File("images/doigt.png")))); }
-		catch (Exception ex) {System.err.println("Image non chargée"); return;}
-		imageDoigt.setBounds(0,50,400,350);
+
+		try {
+			imageDoigt = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/doigt.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageDoigt.setBounds(0, 50, 400, 350);
 		panneauEnregistrer.add(imageDoigt);
 		imageDoigt.setVisible(false);
-		
-		try {imageDoigtOK = new JLabel(new ImageIcon(ImageIO.read(new File("images/doigtOK.png")))); }
-		catch (Exception ex) {System.err.println("Image non chargée"); return;}
-		imageDoigtOK.setBounds(0,50,400,350);
+
+		try {
+			imageDoigtOK = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/doigtOK.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageDoigtOK.setBounds(0, 50, 400, 350);
 		panneauEnregistrer.add(imageDoigtOK);
 		imageDoigtOK.setVisible(false);
 
@@ -203,140 +203,152 @@ public class Main extends JFrame {
 		separateurEnregistrer.setBounds(6, 34, 407, 12);
 		panneauEnregistrer.add(separateurEnregistrer);
 
-		// ////////////////////
-		// Panneau Afficher
-		// ////////////////////
+		/*
+		 * // //////////////////// // Panneau Afficher // ////////////////////
+		 * 
+		 * panneauAfficher = new JLayeredPane(); tabbedPane.addTab("Afficher",
+		 * null, panneauAfficher, null);
+		 * 
+		 * JLabel labelSignature = new JLabel("Signature");
+		 * labelSignature.setBounds(6, 6, 59, 16);
+		 * panneauAfficher.add(labelSignature);
+		 * 
+		 * comboBoxAfficher = new JComboBox(); comboBoxAfficher.setBounds(77, 2,
+		 * 207, 27); panneauAfficher.add(comboBoxAfficher);
+		 * 
+		 * imageAfficher = new JPanel(); imageAfficher.setOpaque(false);
+		 * imageAfficher.setBounds(41, 40, 337, 337);
+		 * panneauAfficher.add(imageAfficher);
+		 * 
+		 * separateurAfficher = new JSeparator();
+		 * separateurAfficher.setBounds(6, 34, 407, 12);
+		 * panneauAfficher.add(separateurAfficher);
+		 * 
+		 * JButton boutonSupprimer = new JButton("Supprimer");
+		 * boutonSupprimer.setBounds(296, 1, 117, 29);
+		 * panneauAfficher.add(boutonSupprimer);
+		 * 
+		 * // //////////////////// // Panneau Comparer // ////////////////////
+		 * 
+		 * panneauComparer = new JLayeredPane(); tabbedPane.addTab("Comparer",
+		 * null, panneauComparer, null);
+		 * 
+		 * JLabel labelSRef = new JLabel("Signature r\u00E9f\u00E9rence");
+		 * labelSRef.setBounds(6, 6, 121, 16); panneauComparer.add(labelSRef);
+		 * 
+		 * JLabel labelSTest = new JLabel("Signature test");
+		 * labelSTest.setBounds(6, 34, 87, 16);
+		 * labelSTest.setForeground(Color.RED); panneauComparer.add(labelSTest);
+		 * 
+		 * comboBoxSTest = new JComboBox(); comboBoxSTest.setBounds(139, 30,
+		 * 274, 27); panneauComparer.add(comboBoxSTest);
+		 * 
+		 * comboBoxSRef = new JComboBox(); comboBoxSRef.setBounds(139, 2, 274,
+		 * 27); panneauComparer.add(comboBoxSRef);
+		 * 
+		 * boutonSimilitudes = new JToggleButton("Appliquer similitudes");
+		 * boutonSimilitudes.setBounds(96, 62, 226, 29);
+		 * panneauComparer.add(boutonSimilitudes);
+		 * boutonSimilitudes.setSelected(true);
+		 * 
+		 * imageSRef = new JPanel(); imageSRef.setBounds(109, 103, 200, 200);
+		 * panneauComparer.add(imageSRef); imageSRef.setOpaque(false);
+		 * imageSRef.setLayout(null);
+		 * 
+		 * imageSTest = new JPanel(); imageSTest.setBounds(109, 103, 200, 200);
+		 * panneauComparer.add(imageSTest); imageSTest.setOpaque(false);
+		 * 
+		 * separateurComparerHaut = new JSeparator();
+		 * separateurComparerHaut.setBounds(6, 89, 407, 12);
+		 * panneauComparer.add(separateurComparerHaut);
+		 * 
+		 * JSeparator separateurComparerBas = new JSeparator();
+		 * separateurComparerBas.setBounds(6, 304, 407, 12);
+		 * panneauComparer.add(separateurComparerBas);
+		 * 
+		 * JLabel labelScores = new JLabel("Scores"); labelScores.setBounds(6,
+		 * 315, 115, 16); panneauComparer.add(labelScores);
+		 * 
+		 * labelPositions = new JLabel("Positions");
+		 * labelPositions.setBounds(16, 338, 77, 16);
+		 * panneauComparer.add(labelPositions);
+		 * 
+		 * labelVitesses = new JLabel("Vitesses"); labelVitesses.setBounds(111,
+		 * 338, 77, 16); panneauComparer.add(labelVitesses);
+		 * 
+		 * labelPression = new JLabel("Pression"); labelPression.setBounds(200,
+		 * 338, 77, 16); panneauComparer.add(labelPression);
+		 * 
+		 * labelMinuties = new JLabel("Minuties"); labelMinuties.setBounds(289,
+		 * 338, 77, 16); panneauComparer.add(labelMinuties);
+		 * 
+		 * labelPositionsDynamique = new JLabel("");
+		 * labelPositionsDynamique.setHorizontalAlignment
+		 * (SwingConstants.CENTER); labelPositionsDynamique.setBounds(16, 358,
+		 * 60, 16); panneauComparer.add(labelPositionsDynamique);
+		 * 
+		 * labelVitessesDynamique = new JLabel("");
+		 * labelVitessesDynamique.setHorizontalAlignment(SwingConstants.CENTER);
+		 * labelVitessesDynamique.setBounds(109, 358, 60, 16);
+		 * panneauComparer.add(labelVitessesDynamique);
+		 */
 
-		panneauAfficher = new JLayeredPane();
-		tabbedPane.addTab("Afficher", null, panneauAfficher, null);
+		// /
+		// / Authentification
+		// /
+		JLayeredPane panneauAuthentification = new JLayeredPane();
+		tabbedPane.addTab("Authentification", null, panneauAuthentification,
+				null);
 
-		JLabel labelSignature = new JLabel("Signature");
-		labelSignature.setBounds(6, 6, 59, 16);
-		panneauAfficher.add(labelSignature);
+		JLabel labelLogin2 = new JLabel("Login");
+		labelLogin2.setBounds(6, 6, 59, 16);
+		panneauAuthentification.add(labelLogin2);
 
-		comboBoxAfficher = new JComboBox();
-		comboBoxAfficher.setBounds(77, 2, 207, 27);
-		panneauAfficher.add(comboBoxAfficher);
+		comboBoxAuthentification = new JComboBox();
+		comboBoxAuthentification.setBounds(57, 2, 207, 27);
+		panneauAuthentification.add(comboBoxAuthentification);
 
-		imageAfficher = new JPanel();
-		imageAfficher.setOpaque(false);
-		imageAfficher.setBounds(41, 40, 337, 337);
-		panneauAfficher.add(imageAfficher);
-
-		separateurAfficher = new JSeparator();
-		separateurAfficher.setBounds(6, 34, 407, 12);
-		panneauAfficher.add(separateurAfficher);
+		JButton boutonAuthentification = new JButton("OK");
+		boutonAuthentification.setBounds(266, 1, 50, 29);
+		panneauAuthentification.add(boutonAuthentification);
 
 		JButton boutonSupprimer = new JButton("Supprimer");
-		boutonSupprimer.setBounds(296, 1, 117, 29);
-		panneauAfficher.add(boutonSupprimer);
-
-		// ////////////////////
-		// Panneau Comparer
-		// ////////////////////
-
-		panneauComparer = new JLayeredPane();
-		tabbedPane.addTab("Comparer", null, panneauComparer, null);
-
-		JLabel labelSRef = new JLabel("Signature r\u00E9f\u00E9rence");
-		labelSRef.setBounds(6, 6, 121, 16);
-		panneauComparer.add(labelSRef);
-
-		JLabel labelSTest = new JLabel("Signature test");
-		labelSTest.setBounds(6, 34, 87, 16);
-		labelSTest.setForeground(Color.RED);
-		panneauComparer.add(labelSTest);
-
-		comboBoxSTest = new JComboBox();
-		comboBoxSTest.setBounds(139, 30, 274, 27);
-		panneauComparer.add(comboBoxSTest);
-
-		comboBoxSRef = new JComboBox();
-		comboBoxSRef.setBounds(139, 2, 274, 27);
-		panneauComparer.add(comboBoxSRef);
-
-		boutonSimilitudes = new JToggleButton("Appliquer similitudes");
-		boutonSimilitudes.setBounds(96, 62, 226, 29);
-		panneauComparer.add(boutonSimilitudes);
-		boutonSimilitudes.setSelected(true);
-
-		imageSRef = new JPanel();
-		imageSRef.setBounds(109, 103, 200, 200);
-		panneauComparer.add(imageSRef);
-		imageSRef.setOpaque(false);
-		imageSRef.setLayout(null);
-
-		imageSTest = new JPanel();
-		imageSTest.setBounds(109, 103, 200, 200);
-		panneauComparer.add(imageSTest);
-		imageSTest.setOpaque(false);
-
-		separateurComparerHaut = new JSeparator();
-		separateurComparerHaut.setBounds(6, 89, 407, 12);
-		panneauComparer.add(separateurComparerHaut);
-
-		JSeparator separateurComparerBas = new JSeparator();
-		separateurComparerBas.setBounds(6, 304, 407, 12);
-		panneauComparer.add(separateurComparerBas);
-
-		JLabel labelScores = new JLabel("Scores");
-		labelScores.setBounds(6, 315, 115, 16);
-		panneauComparer.add(labelScores);
-
-		labelPositions = new JLabel("Positions");
-		labelPositions.setBounds(16, 338, 77, 16);
-		panneauComparer.add(labelPositions);
-
-		labelVitesses = new JLabel("Vitesses");
-		labelVitesses.setBounds(111, 338, 77, 16);
-		panneauComparer.add(labelVitesses);
-
-		labelPression = new JLabel("Pression");
-		labelPression.setBounds(200, 338, 77, 16);
-		panneauComparer.add(labelPression);
-
-		labelMinuties = new JLabel("Minuties");
-		labelMinuties.setBounds(289, 338, 77, 16);
-		panneauComparer.add(labelMinuties);
-
-		labelPositionsDynamique = new JLabel("");
-		labelPositionsDynamique.setHorizontalAlignment(SwingConstants.CENTER);
-		labelPositionsDynamique.setBounds(16, 358, 60, 16);
-		panneauComparer.add(labelPositionsDynamique);
-		
-		labelVitessesDynamique = new JLabel("");
-		labelVitessesDynamique.setHorizontalAlignment(SwingConstants.CENTER);
-		labelVitessesDynamique.setBounds(109, 358, 60, 16);
-		panneauComparer.add(labelVitessesDynamique);
+		boutonSupprimer.setBounds(318, 1, 100, 29);
+		panneauAuthentification.add(boutonSupprimer);
 
 		// //////////////////
 		// ActionOnEvent
 		// //////////////////
 
+		boutonAuthentification.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("bite");
+			}
+		});
+
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				String myPath = "gabarits/";
 				try {
-					comboBoxSRef.removeAllItems();
-					comboBoxSTest.removeAllItems();
-					comboBoxAfficher.removeAllItems();
+					// comboBoxSRef.removeAllItems();
+					// comboBoxSTest.removeAllItems();
+					// comboBoxAfficher.removeAllItems();
+					comboBoxAuthentification.removeAllItems();
 					File folder = new File(myPath);
 					File[] listOfFiles = folder.listFiles();
 					for (int i = 0; i < listOfFiles.length; i++) {
 						if (listOfFiles[i].getName().endsWith(".txt")) {
-							comboBoxSRef
-									.addItem(listOfFiles[i].getName()
-											.subSequence(
-													0,
-													listOfFiles[i].getName()
-															.length() - 4));
-							comboBoxSTest
-									.addItem(listOfFiles[i].getName()
-											.subSequence(
-													0,
-													listOfFiles[i].getName()
-															.length() - 4));
-							comboBoxAfficher
+							/*
+							 * comboBoxSRef .addItem(listOfFiles[i].getName()
+							 * .subSequence( 0, listOfFiles[i].getName()
+							 * .length() - 4)); comboBoxSTest
+							 * .addItem(listOfFiles[i].getName() .subSequence(
+							 * 0, listOfFiles[i].getName() .length() - 4));
+							 * comboBoxAfficher
+							 * .addItem(listOfFiles[i].getName() .subSequence(
+							 * 0, listOfFiles[i].getName() .length() - 4));
+							 */
+							comboBoxAuthentification
 									.addItem(listOfFiles[i].getName()
 											.subSequence(
 													0,
@@ -350,31 +362,33 @@ public class Main extends JFrame {
 			}
 		});
 
-
-		
 		boutonEnregistrer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String login = textFieldLogin.getText();
 
-				if (login != null && login.matches("[a-z0-9_-]{1,}")) {	
+				if (login != null && login.matches("[a-z0-9_-]{1,}")) {
 					saisieGabarit = new Thread() {
 						public void run() {
-							//Cree un curseur tranparent
-							BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-							Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-							    cursorImg, new Point(0, 0), "blank cursor");
+							// Cree un curseur tranparent
+							BufferedImage cursorImg = new BufferedImage(16, 16,
+									BufferedImage.TYPE_INT_ARGB);
+							Cursor blankCursor = Toolkit.getDefaultToolkit()
+									.createCustomCursor(cursorImg,
+											new Point(0, 0), "blank cursor");
 							getContentPane().setCursor(blankCursor);
-							
+
 							g = new Gabarit(false);
 							g.init();
-							
-							//Retablis le curseur
-							getContentPane().setCursor(Cursor.getDefaultCursor());
-							
+
+							// Retablis le curseur
+							getContentPane().setCursor(
+									Cursor.getDefaultCursor());
+
 							if (g.s.terminate)
 								return;
-							
-							Enregistrement.enregistrer(textFieldLogin.getText(), g.sRef);
+
+							Enregistrement.enregistrer(
+									textFieldLogin.getText(), g.sRef);
 							panneauEnregistrer.remove(imageEnregistrer);
 							imageEnregistrer = new JPanel();
 							imageEnregistrer.setBounds(41, 40, 337, 337);
@@ -383,20 +397,21 @@ public class Main extends JFrame {
 							imageEnregistrer.add(img);
 							panneauEnregistrer.add(imageEnregistrer);
 							imageEnregistrer.setOpaque(false);
-							
-							
+
 						}
 					};
 					affichageDynamiqueGabarit = new Thread() {
 						public void run() {
 							imageDoigt.setVisible(true);
-							
+
 							while (saisieGabarit.isAlive()) {
-								if (!imageDoigtOK.isVisible() && g!= null && g.s.doigtPose) {
+								if (!imageDoigtOK.isVisible() && g != null
+										&& g.s.doigtPose) {
 									imageDoigt.setVisible(false);
 									imageDoigtOK.setVisible(true);
 								}
-								if (!imageDoigt.isVisible() && g!= null && !g.s.doigtPose) {
+								if (!imageDoigt.isVisible() && g != null
+										&& !g.s.doigtPose) {
 									imageDoigt.setVisible(true);
 									imageDoigtOK.setVisible(false);
 								}
@@ -405,32 +420,29 @@ public class Main extends JFrame {
 							imageDoigtOK.setVisible(false);
 						}
 					};
-					
+
 					saisieGabarit.start();
-					affichageDynamiqueGabarit.start();			
+					affichageDynamiqueGabarit.start();
 				}
 			}
 		});
 
-		comboBoxAfficher.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					Signature s = Enregistrement
-							.ouvrir((String) comboBoxAfficher.getSelectedItem());
-
-					panneauAfficher.remove(imageAfficher);
-					imageAfficher = new JPanel();
-					imageAfficher.setBounds(41, 40, 337, 337);
-					imageAfficher.add(new ImageComponent(conversion_taille_337(
-							s, 0xff000000)));
-					imageAfficher.setOpaque(false);
-					panneauAfficher.add(imageAfficher);
-
-				}
-
-			}
-		});
+		/*
+		 * comboBoxAfficher.addItemListener(new ItemListener() { public void
+		 * itemStateChanged(ItemEvent e) {
+		 * 
+		 * if (e.getStateChange() == ItemEvent.SELECTED) { Signature s =
+		 * Enregistrement .ouvrir((String) comboBoxAfficher.getSelectedItem());
+		 * 
+		 * panneauAfficher.remove(imageAfficher); imageAfficher = new JPanel();
+		 * imageAfficher.setBounds(41, 40, 337, 337); imageAfficher.add(new
+		 * ImageComponent(conversion_taille_337( s, 0xff000000)));
+		 * imageAfficher.setOpaque(false); panneauAfficher.add(imageAfficher);
+		 * 
+		 * }
+		 * 
+		 * } });
+		 */
 
 		boutonSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -438,30 +450,17 @@ public class Main extends JFrame {
 				String myPath = "gabarits/";
 				try {
 					File folder = new File(myPath
-							+ (String) comboBoxAfficher.getSelectedItem()
-							+ ".txt");
+							+ (String) comboBoxAuthentification
+									.getSelectedItem() + ".txt");
 					folder.delete();
-					comboBoxSRef.removeAllItems();
-					comboBoxSTest.removeAllItems();
-					comboBoxAfficher.removeAllItems();
+
+					comboBoxAuthentification.removeAllItems();
 					folder = new File(myPath);
 					File[] listOfFiles = folder.listFiles();
 
 					for (int i = 0; i < listOfFiles.length; i++) {
 						if (listOfFiles[i].getName().endsWith(".txt")) {
-							comboBoxSRef
-									.addItem(listOfFiles[i].getName()
-											.subSequence(
-													0,
-													listOfFiles[i].getName()
-															.length() - 4));
-							comboBoxSTest
-									.addItem(listOfFiles[i].getName()
-											.subSequence(
-													0,
-													listOfFiles[i].getName()
-															.length() - 4));
-							comboBoxAfficher
+							comboBoxAuthentification
 									.addItem(listOfFiles[i].getName()
 											.subSequence(
 													0,
@@ -475,36 +474,32 @@ public class Main extends JFrame {
 			}
 		});
 
-		comboBoxSRef.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-
-					mettreAJour();
-
-				}
-
-			}
-		});
-
-		boutonSimilitudes.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				mettreAJour();
-			}
-		});
-
-		comboBoxSTest.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-
-					mettreAJour();
-
-				}
-
-			}
-		});
-
+		/*
+		 * comboBoxSRef.addItemListener(new ItemListener() { public void
+		 * itemStateChanged(ItemEvent e) {
+		 * 
+		 * if (e.getStateChange() == ItemEvent.SELECTED) {
+		 * 
+		 * mettreAJour();
+		 * 
+		 * }
+		 * 
+		 * } });
+		 * 
+		 * boutonSimilitudes.addChangeListener(new ChangeListener() { public
+		 * void stateChanged(ChangeEvent e) { mettreAJour(); } });
+		 * 
+		 * comboBoxSTest.addItemListener(new ItemListener() { public void
+		 * itemStateChanged(ItemEvent e) {
+		 * 
+		 * if (e.getStateChange() == ItemEvent.SELECTED) {
+		 * 
+		 * mettreAJour();
+		 * 
+		 * }
+		 * 
+		 * } });
+		 */
 	}
 
 	void mettreAJour() {
@@ -528,16 +523,14 @@ public class Main extends JFrame {
 				DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
 				sRef = new Signature(analyse[0]);
 				sTest = new Signature(analyse[1]);
-				/*n1avant = Math.max(
-						(int) Math.floor(infos[2] * sRef.size()), 0);
-				n1apres = Math.max(
-						(int) Math.floor(infos[3] * sRef.size()), 0);
-				n2avant = Math.max(
-						(int) Math.floor(-infos[2] * sRef.size()), 0);
-				n2apres = Math.max(
-						(int) Math.floor(-infos[3] * sRef.size()), 0);
-				theta = infos[0];
-				lambda = infos[1];*/
+				/*
+				 * n1avant = Math.max( (int) Math.floor(infos[2] * sRef.size()),
+				 * 0); n1apres = Math.max( (int) Math.floor(infos[3] *
+				 * sRef.size()), 0); n2avant = Math.max( (int)
+				 * Math.floor(-infos[2] * sRef.size()), 0); n2apres = Math.max(
+				 * (int) Math.floor(-infos[3] * sRef.size()), 0); theta =
+				 * infos[0]; lambda = infos[1];
+				 */
 				panneauComparer.remove(imageSRef);
 				imageSRef = new JPanel();
 				imageSRef.setBounds(109, 103, 200, 200);
@@ -581,14 +574,13 @@ public class Main extends JFrame {
 			}
 
 			labelPositionsDynamique
-			.setText(""
-					+ ((double) Math.round(Analyse.scorePositions(
-							sTest, sRef) * 1000)) / 1000);
+					.setText(""
+							+ ((double) Math.round(Analyse.scorePositions(
+									sTest, sRef) * 1000)) / 1000);
 			labelVitessesDynamique
-			.setText(""
-					+ ((double) Math.round(Analyse.scoreVitesses(
-							sTest, sRef) * 1000)) / 1000);
-
+					.setText(""
+							+ ((double) Math.round(Analyse.scoreVitesses(sTest,
+									sRef) * 1000)) / 1000);
 
 		} catch (Exception e) {
 		}
@@ -599,11 +591,10 @@ public class Main extends JFrame {
 
 		Image r = new Image(200, 200, BufferedImage.TYPE_INT_ARGB);
 		DonneesPoint[] tab = s.getDonnees();
-		
+
 		for (int i = 0; i < tab.length - 1; i++) {
 			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
-			Coordonnees b = new Coordonnees(tab[i + 1].x,
-					tab[i + 1].y);
+			Coordonnees b = new Coordonnees(tab[i + 1].x, tab[i + 1].y);
 
 			r.tracerSegment(a.fois(194).plus(1, 1), b.fois(194).plus(1, 1), rgb);
 		}
@@ -615,11 +606,10 @@ public class Main extends JFrame {
 
 		Image r = new Image(337, 337, BufferedImage.TYPE_INT_ARGB);
 		DonneesPoint[] tab = s.getDonnees();
-		
+
 		for (int i = 0; i < tab.length - 1; i++) {
 			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
-			Coordonnees b = new Coordonnees(tab[i + 1].x,
-					tab[i + 1].y);
+			Coordonnees b = new Coordonnees(tab[i + 1].x, tab[i + 1].y);
 			r.tracerSegment(a.fois(330).plus(1, 1), b.fois(330).plus(1, 1), rgb);
 		}
 
