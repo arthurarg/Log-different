@@ -71,6 +71,8 @@ public class Main extends JFrame {
 	private JLabel[][] imageProgression;
 	private int[] imageProgressionCurrent;
 	private JLabel imageAttente;
+	private JLabel imageSucces;
+	private JLabel imageEchec;
 	private JLabel imageDoigt1;
 	private JLabel imageDoigtOK1;
 	private JLabel imageDoigt2;
@@ -294,6 +296,30 @@ public class Main extends JFrame {
 		imageDoigtOK2.setBounds(0, 50, 400, 370);
 		panneauAuthentification.add(imageDoigtOK2);
 		imageDoigtOK2.setVisible(false);
+		
+		try {
+			imageSucces = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/succes.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageSucces.setBounds(35, 40, 400, 370);
+		panneauAuthentification.add(imageSucces);
+		imageSucces.setVisible(false);
+		
+		try {
+			imageEchec = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/echec.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		imageEchec.setBounds(35, 40, 400, 370);
+		panneauAuthentification.add(imageEchec);
+		imageEchec.setVisible(false);
+		
+
 
 		// //////////////////
 		// ActionOnEvent
@@ -304,6 +330,9 @@ public class Main extends JFrame {
 
 				saisieSignature = new Thread() {
 					public void run() {
+						imageEchec.setVisible(false);
+						imageSucces.setVisible(false);
+
 						s = new Signature(false);
 
 						// Curseur transparent
@@ -327,9 +356,9 @@ public class Main extends JFrame {
 						if (Comparaison.comparer(Enregistrement
 								.ouvrir((String) comboBoxAuthentification
 										.getSelectedItem()), s))
-							System.out.println("yes");
+							imageSucces.setVisible(true);
 						else
-							System.out.println("nein");
+							imageEchec.setVisible(true);
 
 					}
 				};
@@ -354,7 +383,8 @@ public class Main extends JFrame {
 						imageDoigtOK2.setVisible(false);
 					}
 				};
-
+				try {Thread.sleep(100);}
+				catch (Exception e2){};
 				saisieSignature.start();
 				affichageDynamiqueSignature.start();
 
