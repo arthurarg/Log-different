@@ -59,19 +59,11 @@ public class Gabarit {
 			s = new Signature(false);
 			s.init();
 			
-			if (s.terminate){
-		
-			
+			if (s.terminate)
 				return;
-			}
-			
+					
 			tab[i] = new Signature(s.getDonnees());
 			etat[i] = 1;
-			
-			if (i==1 && tab[i].complexite()==Complexite.FAIBLE) {
-				System.out.println("Votre signature est trop simple");
-				i--;
-			}
 		}
 		constructGabarit();
 	}
@@ -132,11 +124,7 @@ public class Gabarit {
 		if (marq!= -1) {
 			this.sRef = null;
 			System.out.println("Echec de l'enregistrement du gabarit : signatures trop diffèrentes");
-		}
-		if (sRef.complexite()==Complexite.FAIBLE) {
-			this.sRef = null;
-			System.out.println("Echec de l'enregistrement du gabarit : signature trop simple");
-		}	 		
+		}		
 	}
 	
 	public int validationGabarit() {

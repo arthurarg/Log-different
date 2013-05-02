@@ -2,6 +2,8 @@ package gui;
 
 import gestionIO.Enregistrement;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -13,9 +15,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -73,6 +80,7 @@ public class Main extends JFrame {
 	private JLabel labelVitessesDynamique;
 	private JLabel[][] imageProgression;
 	private int[] imageProgressionCurrent;
+	private JLabel complexite;
 	private JLabel imageAttente;
 	private JLabel imageSucces;
 	private JLabel imageEchec;
@@ -165,7 +173,8 @@ public class Main extends JFrame {
 		separateurEnregistrer = new JSeparator();
 		separateurEnregistrer.setBounds(6, 34, 407, 12);
 		panneauEnregistrer.add(separateurEnregistrer);
-
+		
+		complexite = new JLabel();
 		
 		try {
 			imageAttente = new JLabel(new ImageIcon(ImageIO.read(new File(
@@ -196,6 +205,7 @@ public class Main extends JFrame {
 			System.err.println("Image non chargée");
 			return;
 		}
+		
 		imageProgressionCurrent = new int[10];
 		imageProgression = new JLabel[10][4];
 		for(int i=0;i<10;i++){
@@ -437,8 +447,11 @@ public class Main extends JFrame {
 				}
 				imageAttente.setBounds(0, 50, 400, 290);
 				panneauEnregistrer.add(imageAttente);
+				
 				imageAttente.setVisible(false);
 				imageEnregistrer.removeAll();
+				if (complexite.isVisible())
+					complexite.setVisible(false);
 				String login = textFieldLogin.getText();
 				String myPath = "gabarits/";
 
@@ -476,13 +489,10 @@ public class Main extends JFrame {
 
 						if (g.s.terminate){
 							for(int i=0;i<10;i++){
-								//imageProgressionCurrent[i]=-1;
-									imageProgression[i][1].setVisible(false);
-									imageProgression[i][2].setVisible(false);
-									imageProgression[i][3].setVisible(false);
-									imageProgression[i][0].setVisible(false);
-									//imageAttente.setVisible(false);
-								
+								imageProgression[i][1].setVisible(false);
+								imageProgression[i][2].setVisible(false);
+								imageProgression[i][3].setVisible(false);
+								imageProgression[i][0].setVisible(false);
 							}
 							return;
 						}
@@ -501,15 +511,40 @@ public class Main extends JFrame {
 						panneauEnregistrer.add(imageEnregistrer);
 						imageEnregistrer.setOpaque(false);
 						
+						
 						for(int i=0;i<10;i++){
-							//imageProgressionCurrent[i]=-1;
 							imageProgression[i][1].setVisible(false);
 							imageProgression[i][2].setVisible(false);
 							imageProgression[i][3].setVisible(false);
 							imageProgression[i][0].setVisible(false);
-							//imageAttente.setVisible(false);
+						}
 						
-					}
+						String str = " Complexite : ";
+						int score = g.sRef.complexite();
+						if (score<3)
+							str+= "Faible";
+						else if (score<5)
+							str+="Moyen";
+						else if (score<7)
+							str+="Fort";
+						else {
+							str+="God Like";
+							try {
+								AudioClip clip = Applet.newAudioClip(
+								new File("sons/godlike.wav").toURI().toURL());
+								clip.play();
+							} catch (MalformedURLException murle) {
+								System.out.println(murle);
+							}
+
+						}
+						str+= " (Score " + Math.min(score, 10) + "/10)";
+						
+						
+						complexite = new JLabel(str);
+						complexite.setBounds(20, 334, 300, 16);
+						panneauEnregistrer.add(complexite);
+						complexite.setVisible(true);
 
 					}
 				};
@@ -585,7 +620,8 @@ public class Main extends JFrame {
 						imageDoigtOK1.setVisible(false);
 					}
 				};
-
+				try {Thread.sleep(100);}
+				catch (Exception ex1) {};
 				saisieGabarit.start();
 				affichageDynamiqueGabarit.start();
 			}

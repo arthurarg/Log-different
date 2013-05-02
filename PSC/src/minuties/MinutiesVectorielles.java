@@ -128,10 +128,9 @@ public class MinutiesVectorielles {
 			}
 		}
 
-
-
-return nMinuties;
+	return nMinuties;
 	}
+	
 
 	static double comparerListeDonneesAngles(Signature sRef, Signature sTest,
 			List<DonneesAngles> lRef, List<DonneesAngles> lTest) {
