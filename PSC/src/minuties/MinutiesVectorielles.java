@@ -77,7 +77,7 @@ public class MinutiesVectorielles {
 			}
 		}
 
-		while (lTest.get(nMinutiesTest).angle < Math.PI / 3 && nMinutiesRef < 6) {
+		while (lTest.get(nMinutiesTest).angle < Math.PI / 3 && nMinutiesRef < 6  && nMinutiesTest<lRef.size()-1) {
 			nMinutiesTest++;
 		}
 		if (nMinutiesTest != 0) {
@@ -114,7 +114,7 @@ public class MinutiesVectorielles {
 		int nMinuties = 0;
 
 
-		while (lRef.get(nMinuties).angle < Math.PI / 3 && nMinuties < 6) {
+		while (lRef.get(nMinuties).angle < Math.PI / 3 && nMinuties < 6 && nMinuties<lRef.size()-1) {
 			nMinuties++;
 		}
 		if (nMinuties != 0) {
