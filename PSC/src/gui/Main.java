@@ -81,6 +81,10 @@ public class Main extends JFrame {
 	private JLabel[][] imageProgression;
 	private int[] imageProgressionCurrent;
 	private JLabel complexite;
+	private JLabel imageFort;
+	private JLabel imageMoyen;
+	private JLabel imageFaible;
+	private JLabel imageGodlike;
 	private JLabel imageAttente;
 	private JLabel imageSucces;
 	private JLabel imageEchec;
@@ -153,7 +157,7 @@ public class Main extends JFrame {
 		tabbedPane.addTab("Enregistrer", null, panneauEnregistrer, null);
 
 		imageEnregistrer = new JPanel();
-		imageEnregistrer.setBounds(41, 40, 337, 260);
+		imageEnregistrer.setBounds(41, 40, 337, 284);
 		panneauEnregistrer.add(imageEnregistrer);
 		imageEnregistrer.setOpaque(false);
 
@@ -175,6 +179,55 @@ public class Main extends JFrame {
 		panneauEnregistrer.add(separateurEnregistrer);
 		
 		complexite = new JLabel();
+		
+		imageFort = new JLabel();
+		try {
+			imageFort = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/fort.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		panneauEnregistrer.add(imageFort);
+		imageFort.setBounds(179, 336, 300, 40);
+		imageFort.setVisible(false);
+		
+		
+		imageFaible = new JLabel();
+		try {
+			imageFaible = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/faible.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		panneauEnregistrer.add(imageFaible);
+		imageFaible.setBounds(179, 336, 300, 40);
+		imageFaible.setVisible(false);
+		
+		imageMoyen = new JLabel();
+		try {
+			imageMoyen = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/moyen.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		panneauEnregistrer.add(imageMoyen);
+		imageMoyen.setBounds(179, 336, 300, 40);
+		imageMoyen.setVisible(false);
+		
+		imageGodlike = new JLabel();
+		try {
+			imageGodlike = new JLabel(new ImageIcon(ImageIO.read(new File(
+					"images/godlike.png"))));
+		} catch (Exception ex) {
+			System.err.println("Image non chargée");
+			return;
+		}
+		panneauEnregistrer.add(imageGodlike);
+		imageGodlike.setBounds(179, 336, 300, 40);
+		imageGodlike.setVisible(false);
 		
 		try {
 			imageAttente = new JLabel(new ImageIcon(ImageIO.read(new File(
@@ -452,6 +505,15 @@ public class Main extends JFrame {
 				imageEnregistrer.removeAll();
 				if (complexite.isVisible())
 					complexite.setVisible(false);
+				if(imageFort.isVisible())
+					imageFort.setVisible(false);
+				if(imageFaible.isVisible())
+					imageFaible.setVisible(false);
+				if(imageMoyen.isVisible())
+					imageMoyen.setVisible(false);
+				if(imageGodlike.isVisible())
+					imageGodlike.setVisible(false);
+				
 				String login = textFieldLogin.getText();
 				String myPath = "gabarits/";
 
@@ -489,6 +551,7 @@ public class Main extends JFrame {
 
 						if (g.s.terminate){
 							for(int i=0;i<10;i++){
+								imageProgressionCurrent[i]=-1;
 								imageProgression[i][1].setVisible(false);
 								imageProgression[i][2].setVisible(false);
 								imageProgression[i][3].setVisible(false);
@@ -506,7 +569,7 @@ public class Main extends JFrame {
 						imageEnregistrer = new JPanel();
 						imageEnregistrer.setBounds(41, 40, 337, 337);
 						ImageComponent img = new ImageComponent(
-								conversion_taille_337(g.sRef, 0xff000000));
+								conversion_taille_284(g.sRef, 0xff000000));
 						imageEnregistrer.add(img);
 						panneauEnregistrer.add(imageEnregistrer);
 						imageEnregistrer.setOpaque(false);
@@ -519,16 +582,16 @@ public class Main extends JFrame {
 							imageProgression[i][0].setVisible(false);
 						}
 						
-						String str = " Complexite : ";
+						String str = " Complexité : ";
 						int score = g.sRef.complexite();
 						if (score<3)
-							str+= "Faible";
+							{str+= "Faible";imageFaible.setVisible(true);}							
 						else if (score<5)
-							str+="Moyen";
+							{str+="Moyen";imageMoyen.setVisible(true);}	
 						else if (score<7)
-							str+="Fort";
+							{str+="Fort";imageFort.setVisible(true);}	
 						else {
-							str+="God Like";
+							{str+="God Like";imageGodlike.setVisible(true);}	
 							try {
 								AudioClip clip = Applet.newAudioClip(
 								new File("sons/godlike.wav").toURI().toURL());
@@ -542,7 +605,7 @@ public class Main extends JFrame {
 						
 						
 						complexite = new JLabel(str);
-						complexite.setBounds(20, 334, 300, 16);
+						complexite.setBounds(20, 348, 300, 16);
 						panneauEnregistrer.add(complexite);
 						complexite.setVisible(true);
 
@@ -746,15 +809,15 @@ public class Main extends JFrame {
 		return r;
 	}
 
-	Image conversion_taille_337(Signature s, int rgb) {
+	Image conversion_taille_284(Signature s, int rgb) {
 
-		Image r = new Image(337, 337, BufferedImage.TYPE_INT_ARGB);
+		Image r = new Image(284, 284, BufferedImage.TYPE_INT_ARGB);
 		DonneesPoint[] tab = s.getDonnees();
 
 		for (int i = 0; i < tab.length - 1; i++) {
 			Coordonnees a = new Coordonnees(tab[i].x, tab[i].y);
 			Coordonnees b = new Coordonnees(tab[i + 1].x, tab[i + 1].y);
-			r.tracerSegment(a.fois(330).plus(1, 1), b.fois(330).plus(1, 1), rgb);
+			r.tracerSegment(a.fois(280).plus(1, 1), b.fois(280).plus(1, 1), rgb);
 		}
 
 		return r;
