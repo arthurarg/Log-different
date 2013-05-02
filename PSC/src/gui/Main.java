@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.reflect.Field;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -51,6 +52,8 @@ import comparaison.Comparaison;
  */
 
 public class Main extends JFrame {
+	
+	
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
@@ -89,6 +92,14 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					//Declare le lib path
+					// Comme ça, on peut lancer le programme avec un petit double clic
+					// Merci à http://blog.cedarsoft.com/2010/11/setting-java-library-path-programmatically/
+					System.setProperty( "java.library.path", "lib/");
+					Field fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
+					fieldSysPath.setAccessible( true );
+					fieldSysPath.set( null, null );
+					
 					Main frame = new Main();
 					frame.setVisible(true);
 
@@ -434,7 +445,12 @@ public class Main extends JFrame {
 				// Si login nul, invalide, ou deja existant, on ne fait rien
 				if (login == null || !login.matches("[a-z0-9_-]{1,}"))
 					return;
-
+				
+				//Creation du dossier si nécessaire
+				File Folder = new File(myPath);
+				if (!Folder.exists())
+					Folder.mkdir();
+				
 				File[] tab = new File(myPath).listFiles();
 				for (int j = 0; j < tab.length; j++) {
 					if (login.equals(tab[j].getName().subSequence(0, tab[j].getName().length() - 4)))
@@ -503,7 +519,6 @@ public class Main extends JFrame {
 
 						
 						while (saisieGabarit.isAlive()) {
-							//TODO on actualise la couleur des jolis petits carrés
 							if (g!=null) {
 								for (int j =0; j < g.etat.length; j++) {
 									if(g.etat[j]!=imageProgressionCurrent[j]){
@@ -577,22 +592,6 @@ public class Main extends JFrame {
 
 		});
 
-		/*
-		 * comboBoxAfficher.addItemListener(new ItemListener() { public void
-		 * itemStateChanged(ItemEvent e) {
-		 * 
-		 * if (e.getStateChange() == ItemEvent.SELECTED) { Signature s =
-		 * Enregistrement .ouvrir((String) comboBoxAfficher.getSelectedItem());
-		 * 
-		 * panneauAfficher.remove(imageAfficher); imageAfficher = new JPanel();
-		 * imageAfficher.setBounds(41, 40, 337, 337); imageAfficher.add(new
-		 * ImageComponent(conversion_taille_337( s, 0xff000000)));
-		 * imageAfficher.setOpaque(false); panneauAfficher.add(imageAfficher);
-		 * 
-		 * }
-		 * 
-		 * } });
-		 */
 
 		boutonSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -624,32 +623,6 @@ public class Main extends JFrame {
 			}
 		});
 
-		/*
-		 * comboBoxSRef.addItemListener(new ItemListener() { public void
-		 * itemStateChanged(ItemEvent e) {
-		 * 
-		 * if (e.getStateChange() == ItemEvent.SELECTED) {
-		 * 
-		 * mettreAJour();
-		 * 
-		 * }
-		 * 
-		 * } });
-		 * 
-		 * boutonSimilitudes.addChangeListener(new ChangeListener() { public
-		 * void stateChanged(ChangeEvent e) { mettreAJour(); } });
-		 * 
-		 * comboBoxSTest.addItemListener(new ItemListener() { public void
-		 * itemStateChanged(ItemEvent e) {
-		 * 
-		 * if (e.getStateChange() == ItemEvent.SELECTED) {
-		 * 
-		 * mettreAJour();
-		 * 
-		 * }
-		 * 
-		 * } });
-		 */
 	}
 
 	void mettreAJour() {
@@ -667,20 +640,11 @@ public class Main extends JFrame {
 					.getSelectedItem());
 			Signature sTest = Enregistrement.ouvrir((String) comboBoxSTest
 					.getSelectedItem());
-			// int n1avant, n2avant, n1apres, n2apres;
-			// double lambda, theta;
 			if (boutonSimilitudes.isSelected()) {
 				DonneesPoint[][] analyse = Analyse.similitudes(sRef, sTest);
 				sRef = new Signature(analyse[0]);
 				sTest = new Signature(analyse[1]);
-				/*
-				 * n1avant = Math.max( (int) Math.floor(infos[2] * sRef.size()),
-				 * 0); n1apres = Math.max( (int) Math.floor(infos[3] *
-				 * sRef.size()), 0); n2avant = Math.max( (int)
-				 * Math.floor(-infos[2] * sRef.size()), 0); n2apres = Math.max(
-				 * (int) Math.floor(-infos[3] * sRef.size()), 0); theta =
-				 * infos[0]; lambda = infos[1];
-				 */
+
 				panneauComparer.remove(imageSRef);
 				imageSRef = new JPanel();
 				imageSRef.setBounds(109, 103, 200, 200);
@@ -697,12 +661,8 @@ public class Main extends JFrame {
 				panneauComparer.add(imageSTest);
 				imageSTest.setOpaque(false);
 
-			} else {
-				/*
-				 * n1avant = 0; n1apres = 0; n2avant = 0; n2apres = 0; lambda =
-				 * 1; theta = 0;
-				 */
-
+			} 
+			else {
 				panneauComparer.remove(imageSRef);
 				imageSRef = new JPanel();
 				imageSRef.setBounds(109, 103, 200, 200);
