@@ -105,6 +105,33 @@ public class MinutiesVectorielles {
 					lTest.subList(0, nMinutiesTest));
 		}
 	}
+	
+	public static double nombreMinuties(Signature s) {
+		DonneesAnglesSortedLinkedList lRef = MinutiesVectorielles.construireListeAngles(
+				s, 0.05);
+
+
+		int nMinuties = 0;
+
+
+		while (lRef.get(nMinuties).angle < Math.PI / 3 && nMinuties < 6) {
+			nMinuties++;
+		}
+		if (nMinuties != 0) {
+			double maxRef = lRef.get(nMinuties).angle
+					- lRef.get(nMinuties - 1).angle;
+			for (int p = nMinuties + 1; p < lRef.size() && p < 7; p++) {
+				if (maxRef < lRef.get(p).angle - lRef.get(p - 1).angle) {
+					maxRef = lRef.get(p).angle - lRef.get(p - 1).angle;
+					nMinuties = p;
+				}
+			}
+		}
+
+
+
+return nMinuties;
+	}
 
 	static double comparerListeDonneesAngles(Signature sRef, Signature sTest,
 			List<DonneesAngles> lRef, List<DonneesAngles> lTest) {
